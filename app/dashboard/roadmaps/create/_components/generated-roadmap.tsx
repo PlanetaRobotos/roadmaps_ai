@@ -1,7 +1,7 @@
 // Shared component to display the generated path
 interface Path {
   topic: string;
-  steps: string[];
+  lessons: string[];
 }
 
 export default function GeneratedRoadmap({ path }: { path: Path }) {
@@ -9,9 +9,9 @@ export default function GeneratedRoadmap({ path }: { path: Path }) {
     <div className="rounded-lg bg-white p-6 shadow-md">
       <h2 className="mb-4 text-xl font-bold">{path.topic}</h2>
       <ul>
-        {path.steps.map((step, index) => (
+        {path.lessons.map((lesson, index) => (
           <li key={index} className="mb-2">
-            {index + 1}. {step}
+            {index + 1}. {lesson}
           </li>
         ))}
       </ul>

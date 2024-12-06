@@ -1,7 +1,8 @@
 'use client';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { RoadmapCreateRequest, RoadmapsClient } from '@/app/api/client';
+import { DifficultyLevel, RoadmapCreateRequest } from '@/app/api/client';
+import { useRoadmapsClient } from '@/services/RoadmapsClientProvider';
 import { useRouter } from 'next/navigation';
 import {
   Form,
@@ -16,49 +17,44 @@ import {
   Select,
   SelectItem,
   SelectTrigger,
-  SelectContent
+  SelectContent,
+  SelectValue
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-
-const roadmapsClient = new RoadmapsClient('http://localhost:5501');
 
 interface RoadmapFormData {
   title: string;
   topic: string;
-  difficulty: string;
+  difficulty: DifficultyLevel;
   estimatedDuration: number;
 }
 
 export default function CreateRoadmapPage() {
+  const roadmapsClient = useRoadmapsClient();
   const form = useForm<RoadmapFormData>({
     defaultValues: {
       title: '',
       topic: '',
-      difficulty: 'Beginner',
+      difficulty: DifficultyLevel.Beginner,
       estimatedDuration: 1 // in hours
     }
   });
   const router = useRouter();
 
   const onSubmit: SubmitHandler<RoadmapFormData> = async (data) => {
-    try {
-      // Create an instance of RoadmapCreateRequest and initialize it
-      const requestBody = new RoadmapCreateRequest();
-      requestBody.init({
-        title: data.title,
-        topic: data.topic,
-        difficulty: data.difficulty,
-        estimatedDuration: data.estimatedDuration
-      });
+    const requestBody = new RoadmapCreateRequest();
+    requestBody.init({
+      title: data.title,
+      topic: data.topic,
+      difficulty: data.difficulty,
+      estimatedDuration: data.estimatedDuration
+    });
 
-      // Send the request to the backend
-      const createdRoadmap = await roadmapsClient.create(requestBody);
-      console.log('Roadmap created:', createdRoadmap);
+    // Send the request to the backend
+    const createdRoadmap = await roadmapsClient.create(requestBody);
+    console.log('Roadmap created:', createdRoadmap);
 
-      router.push('/dashboard'); // Redirect on success
-    } catch (error) {
-      console.error('Error creating roadmap:', error);
-    }
+    router.push('/dashboard'); // Redirect on success
   };
 
   return (
@@ -103,28 +99,27 @@ export default function CreateRoadmapPage() {
 
             {/* Difficulty Field */}
             <FormField
-              name="difficulty"
               control={form.control}
+              name="difficulty"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Difficulty</FormLabel>
-                  <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger placeholder="Select difficulty" />
-                      <SelectContent>
-                        <SelectItem value="Beginner">Beginner</SelectItem>
-                        <SelectItem value="Intermediate">
-                          Intermediate
-                        </SelectItem>
-                        <SelectItem value="Advanced">Advanced</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select difficulty" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Beginner">Beginner</SelectItem>
+                      <SelectItem value="Intermediate">Intermediate</SelectItem>
+                      <SelectItem value="Advanced">Advanced</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             {/* Estimated Duration Field */}
             <FormField
               name="estimatedDuration"

@@ -6,21 +6,21 @@ import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 
 export default function InputFormPage() {
-  const [step, setStep] = useState(1);
+  const [lesson, setLesson] = useState(1);
   const [formData, setFormData] = useState({
     topic: '',
     time: 30,
     experience: 'Beginner'
   });
 
-  const handleNext = () => setStep((prev) => prev + 1);
-  const handleBack = () => setStep((prev) => prev - 1);
+  const handleNext = () => setLesson((prev) => prev + 1);
+  const handleBack = () => setLesson((prev) => prev - 1);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6 text-center">
-      {step === 1 && (
+      {lesson === 1 && (
         <>
           <h1 className="mb-4 text-2xl font-bold">
             What do you want to learn?
@@ -37,7 +37,7 @@ export default function InputFormPage() {
         </>
       )}
 
-      {step === 2 && (
+      {lesson === 2 && (
         <>
           <h1 className="mb-4 text-2xl font-bold">
             How much time can you spend per day?
@@ -45,7 +45,7 @@ export default function InputFormPage() {
           <Slider
             min={15}
             max={120}
-            step={15}
+            lesson={15}
             value={[formData.time]}
             onValueChange={(value) =>
               setFormData({ ...formData, time: value[0] })
@@ -59,7 +59,7 @@ export default function InputFormPage() {
         </>
       )}
 
-      {step === 3 && (
+      {lesson === 3 && (
         <>
           <h1 className="mb-4 text-2xl font-bold">
             What is your experience level?
@@ -82,7 +82,7 @@ export default function InputFormPage() {
         </>
       )}
 
-      {step === 4 && (
+      {lesson === 4 && (
         <>
           <h1 className="mb-4 text-2xl font-bold">Review Your Selections</h1>
           <p className="mb-2">Topic: {formData.topic}</p>

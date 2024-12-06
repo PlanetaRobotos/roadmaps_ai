@@ -8,6 +8,516 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
+export class LessonsClient {
+  private http: {
+    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
+  };
+  private baseUrl: string;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+    undefined;
+
+  constructor(
+    baseUrl?: string,
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+  ) {
+    this.http = http ? http : (window as any);
+    this.baseUrl = baseUrl ?? '';
+  }
+
+  /**
+   * @return Success
+   */
+  getById(
+    id: string,
+    roadmapId: string,
+    moduleId: string
+  ): Promise<LessonModel> {
+    let url_ =
+      this.baseUrl +
+      '/api/v1/roadmaps/{roadmapId}/modules/{moduleId}/lessons/{id}';
+    if (id === undefined || id === null)
+      throw new Error("The parameter 'id' must be defined.");
+    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    if (roadmapId === undefined || roadmapId === null)
+      throw new Error("The parameter 'roadmapId' must be defined.");
+    url_ = url_.replace('{roadmapId}', encodeURIComponent('' + roadmapId));
+    if (moduleId === undefined || moduleId === null)
+      throw new Error("The parameter 'moduleId' must be defined.");
+    url_ = url_.replace('{moduleId}', encodeURIComponent('' + moduleId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json'
+      }
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processGetById(_response);
+    });
+  }
+
+  protected processGetById(response: Response): Promise<LessonModel> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result200 = LessonModel.fromJS(resultData200);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<LessonModel>(null as any);
+  }
+
+  /**
+   * @param body (optional)
+   * @return No Content
+   */
+  update(
+    id: string,
+    roadmapId: string,
+    moduleId: string,
+    body: LessonUpdateRequest | undefined
+  ): Promise<void> {
+    let url_ =
+      this.baseUrl +
+      '/api/v1/roadmaps/{roadmapId}/modules/{moduleId}/lessons/{id}';
+    if (id === undefined || id === null)
+      throw new Error("The parameter 'id' must be defined.");
+    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    if (roadmapId === undefined || roadmapId === null)
+      throw new Error("The parameter 'roadmapId' must be defined.");
+    url_ = url_.replace('{roadmapId}', encodeURIComponent('' + roadmapId));
+    if (moduleId === undefined || moduleId === null)
+      throw new Error("The parameter 'moduleId' must be defined.");
+    url_ = url_.replace('{moduleId}', encodeURIComponent('' + moduleId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(body);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processUpdate(_response);
+    });
+  }
+
+  protected processUpdate(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 204) {
+      return response.text().then((_responseText) => {
+        return;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+
+  /**
+   * @return No Content
+   */
+  delete(id: string, roadmapId: string, moduleId: string): Promise<void> {
+    let url_ =
+      this.baseUrl +
+      '/api/v1/roadmaps/{roadmapId}/modules/{moduleId}/lessons/{id}';
+    if (id === undefined || id === null)
+      throw new Error("The parameter 'id' must be defined.");
+    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    if (roadmapId === undefined || roadmapId === null)
+      throw new Error("The parameter 'roadmapId' must be defined.");
+    url_ = url_.replace('{roadmapId}', encodeURIComponent('' + roadmapId));
+    if (moduleId === undefined || moduleId === null)
+      throw new Error("The parameter 'moduleId' must be defined.");
+    url_ = url_.replace('{moduleId}', encodeURIComponent('' + moduleId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'DELETE',
+      headers: {}
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processDelete(_response);
+    });
+  }
+
+  protected processDelete(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 204) {
+      return response.text().then((_responseText) => {
+        return;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+
+  /**
+   * @param search (optional)
+   * @param includeColumns (optional)
+   * @param filters (optional)
+   * @param sorts (optional)
+   * @param page (optional)
+   * @param pageSize (optional)
+   * @return Success
+   */
+  filter(
+    search: string | undefined,
+    includeColumns: boolean | undefined,
+    filters: string | undefined,
+    sorts: string | undefined,
+    page: number | undefined,
+    pageSize: number | undefined,
+    roadmapId: string,
+    moduleId: string
+  ): Promise<LessonModelFiltered> {
+    let url_ =
+      this.baseUrl + '/api/v1/roadmaps/{roadmapId}/modules/{moduleId}/lessons?';
+    if (roadmapId === undefined || roadmapId === null)
+      throw new Error("The parameter 'roadmapId' must be defined.");
+    url_ = url_.replace('{roadmapId}', encodeURIComponent('' + roadmapId));
+    if (moduleId === undefined || moduleId === null)
+      throw new Error("The parameter 'moduleId' must be defined.");
+    url_ = url_.replace('{moduleId}', encodeURIComponent('' + moduleId));
+    if (search === null)
+      throw new Error("The parameter 'search' cannot be null.");
+    else if (search !== undefined)
+      url_ += 'search=' + encodeURIComponent('' + search) + '&';
+    if (includeColumns === null)
+      throw new Error("The parameter 'includeColumns' cannot be null.");
+    else if (includeColumns !== undefined)
+      url_ += 'includeColumns=' + encodeURIComponent('' + includeColumns) + '&';
+    if (filters === null)
+      throw new Error("The parameter 'filters' cannot be null.");
+    else if (filters !== undefined)
+      url_ += 'filters=' + encodeURIComponent('' + filters) + '&';
+    if (sorts === null)
+      throw new Error("The parameter 'sorts' cannot be null.");
+    else if (sorts !== undefined)
+      url_ += 'sorts=' + encodeURIComponent('' + sorts) + '&';
+    if (page === null) throw new Error("The parameter 'page' cannot be null.");
+    else if (page !== undefined)
+      url_ += 'page=' + encodeURIComponent('' + page) + '&';
+    if (pageSize === null)
+      throw new Error("The parameter 'pageSize' cannot be null.");
+    else if (pageSize !== undefined)
+      url_ += 'pageSize=' + encodeURIComponent('' + pageSize) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json'
+      }
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processFilter(_response);
+    });
+  }
+
+  protected processFilter(response: Response): Promise<LessonModelFiltered> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result200 = LessonModelFiltered.fromJS(resultData200);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<LessonModelFiltered>(null as any);
+  }
+
+  /**
+   * @param body (optional)
+   * @return Created
+   */
+  generatedPage(
+    roadmapId: string,
+    moduleId: string,
+    body: LessonCreateRequest | undefined
+  ): Promise<LessonModel> {
+    let url_ =
+      this.baseUrl + '/api/v1/roadmaps/{roadmapId}/modules/{moduleId}/lessons';
+    if (roadmapId === undefined || roadmapId === null)
+      throw new Error("The parameter 'roadmapId' must be defined.");
+    url_ = url_.replace('{roadmapId}', encodeURIComponent('' + roadmapId));
+    if (moduleId === undefined || moduleId === null)
+      throw new Error("The parameter 'moduleId' must be defined.");
+    url_ = url_.replace('{moduleId}', encodeURIComponent('' + moduleId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(body);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      }
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processGeneratedPage(_response);
+    });
+  }
+
+  protected processGeneratedPage(response: Response): Promise<LessonModel> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 201) {
+      return response.text().then((_responseText) => {
+        let result201: any = null;
+        let resultData201 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result201 = LessonModel.fromJS(resultData201);
+        return result201;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<LessonModel>(null as any);
+  }
+}
+
 export class RoadmapsClient {
   private http: {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
@@ -929,6 +1439,277 @@ export interface IErrorDto {
   errors?: { [key: string]: any } | undefined;
 }
 
+export class LessonCreateRequest implements ILessonCreateRequest {
+  id?: string;
+  title?: string;
+  completed?: boolean;
+  order?: number;
+  description?: string | undefined;
+  content?: string | undefined;
+  example?: string | undefined;
+  resources?: string[] | undefined;
+
+  constructor(data?: ILessonCreateRequest) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.id = _data['id'];
+      this.title = _data['title'];
+      this.completed = _data['completed'];
+      this.order = _data['order'];
+      this.description = _data['description'];
+      this.content = _data['content'];
+      this.example = _data['example'];
+      if (Array.isArray(_data['resources'])) {
+        this.resources = [] as any;
+        for (let item of _data['resources']) this.resources!.push(item);
+      }
+    }
+  }
+
+  static fromJS(data: any): LessonCreateRequest {
+    data = typeof data === 'object' ? data : {};
+    let result = new LessonCreateRequest();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['id'] = this.id;
+    data['title'] = this.title;
+    data['completed'] = this.completed;
+    data['order'] = this.order;
+    data['description'] = this.description;
+    data['content'] = this.content;
+    data['example'] = this.example;
+    if (Array.isArray(this.resources)) {
+      data['resources'] = [];
+      for (let item of this.resources) data['resources'].push(item);
+    }
+    return data;
+  }
+}
+
+export interface ILessonCreateRequest {
+  id?: string;
+  title?: string;
+  completed?: boolean;
+  order?: number;
+  description?: string | undefined;
+  content?: string | undefined;
+  example?: string | undefined;
+  resources?: string[] | undefined;
+}
+
+export class LessonModel implements ILessonModel {
+  id?: string;
+  title?: string;
+  completed?: boolean;
+  order?: number;
+  description?: string | undefined;
+  content?: string | undefined;
+  example?: string | undefined;
+  resources?: string[] | undefined;
+
+  constructor(data?: ILessonModel) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.id = _data['id'];
+      this.title = _data['title'];
+      this.completed = _data['completed'];
+      this.order = _data['order'];
+      this.description = _data['description'];
+      this.content = _data['content'];
+      this.example = _data['example'];
+      if (Array.isArray(_data['resources'])) {
+        this.resources = [] as any;
+        for (let item of _data['resources']) this.resources!.push(item);
+      }
+    }
+  }
+
+  static fromJS(data: any): LessonModel {
+    data = typeof data === 'object' ? data : {};
+    let result = new LessonModel();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['id'] = this.id;
+    data['title'] = this.title;
+    data['completed'] = this.completed;
+    data['order'] = this.order;
+    data['description'] = this.description;
+    data['content'] = this.content;
+    data['example'] = this.example;
+    if (Array.isArray(this.resources)) {
+      data['resources'] = [];
+      for (let item of this.resources) data['resources'].push(item);
+    }
+    return data;
+  }
+}
+
+export interface ILessonModel {
+  id?: string;
+  title?: string;
+  completed?: boolean;
+  order?: number;
+  description?: string | undefined;
+  content?: string | undefined;
+  example?: string | undefined;
+  resources?: string[] | undefined;
+}
+
+export class LessonModelFiltered implements ILessonModelFiltered {
+  data?: LessonModel[];
+  total?: number;
+  columns?: string[] | undefined;
+
+  constructor(data?: ILessonModelFiltered) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      if (Array.isArray(_data['data'])) {
+        this.data = [] as any;
+        for (let item of _data['data'])
+          this.data!.push(LessonModel.fromJS(item));
+      }
+      this.total = _data['total'];
+      if (Array.isArray(_data['columns'])) {
+        this.columns = [] as any;
+        for (let item of _data['columns']) this.columns!.push(item);
+      }
+    }
+  }
+
+  static fromJS(data: any): LessonModelFiltered {
+    data = typeof data === 'object' ? data : {};
+    let result = new LessonModelFiltered();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    if (Array.isArray(this.data)) {
+      data['data'] = [];
+      for (let item of this.data) data['data'].push(item.toJSON());
+    }
+    data['total'] = this.total;
+    if (Array.isArray(this.columns)) {
+      data['columns'] = [];
+      for (let item of this.columns) data['columns'].push(item);
+    }
+    return data;
+  }
+}
+
+export interface ILessonModelFiltered {
+  data?: LessonModel[];
+  total?: number;
+  columns?: string[] | undefined;
+}
+
+export class LessonUpdateRequest implements ILessonUpdateRequest {
+  title?: string;
+  completed?: boolean;
+  order?: number;
+  description?: string | undefined;
+  content?: string | undefined;
+  example?: string | undefined;
+  resources?: string[] | undefined;
+  lessonId?: string | undefined;
+  lessonCompleted?: boolean | undefined;
+
+  constructor(data?: ILessonUpdateRequest) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.title = _data['title'];
+      this.completed = _data['completed'];
+      this.order = _data['order'];
+      this.description = _data['description'];
+      this.content = _data['content'];
+      this.example = _data['example'];
+      if (Array.isArray(_data['resources'])) {
+        this.resources = [] as any;
+        for (let item of _data['resources']) this.resources!.push(item);
+      }
+      this.lessonId = _data['lessonId'];
+      this.lessonCompleted = _data['lessonCompleted'];
+    }
+  }
+
+  static fromJS(data: any): LessonUpdateRequest {
+    data = typeof data === 'object' ? data : {};
+    let result = new LessonUpdateRequest();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['title'] = this.title;
+    data['completed'] = this.completed;
+    data['order'] = this.order;
+    data['description'] = this.description;
+    data['content'] = this.content;
+    data['example'] = this.example;
+    if (Array.isArray(this.resources)) {
+      data['resources'] = [];
+      for (let item of this.resources) data['resources'].push(item);
+    }
+    data['lessonId'] = this.lessonId;
+    data['lessonCompleted'] = this.lessonCompleted;
+    return data;
+  }
+}
+
+export interface ILessonUpdateRequest {
+  title?: string;
+  completed?: boolean;
+  order?: number;
+  description?: string | undefined;
+  content?: string | undefined;
+  example?: string | undefined;
+  resources?: string[] | undefined;
+  lessonId?: string | undefined;
+  lessonCompleted?: boolean | undefined;
+}
+
 export class PatchOperation implements IPatchOperation {
   op?: PatchOperationOp;
   path?: string;
@@ -988,12 +1769,13 @@ export interface IPatchOperation {
 }
 
 export class RoadmapCreateRequest implements IRoadmapCreateRequest {
-  title?: string;
-  topic?: string;
+  title?: string | undefined;
+  topic?: string | undefined;
   difficulty?: DifficultyLevel;
-  estimatedDuration?: number;
+  estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
+  modules?: RoadmapModuleModel[];
 
   constructor(data?: IRoadmapCreateRequest) {
     if (data) {
@@ -1014,6 +1796,11 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
       if (Array.isArray(_data['tags'])) {
         this.tags = [] as any;
         for (let item of _data['tags']) this.tags!.push(item);
+      }
+      if (Array.isArray(_data['modules'])) {
+        this.modules = [] as any;
+        for (let item of _data['modules'])
+          this.modules!.push(RoadmapModuleModel.fromJS(item));
       }
     }
   }
@@ -1036,28 +1823,33 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
       data['tags'] = [];
       for (let item of this.tags) data['tags'].push(item);
     }
+    if (Array.isArray(this.modules)) {
+      data['modules'] = [];
+      for (let item of this.modules) data['modules'].push(item.toJSON());
+    }
     return data;
   }
 }
 
 export interface IRoadmapCreateRequest {
-  title?: string;
-  topic?: string;
+  title?: string | undefined;
+  topic?: string | undefined;
   difficulty?: DifficultyLevel;
-  estimatedDuration?: number;
+  estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
+  modules?: RoadmapModuleModel[];
 }
 
 export class RoadmapModel implements IRoadmapModel {
-  title?: string;
-  topic?: string;
+  title?: string | undefined;
+  topic?: string | undefined;
   difficulty?: DifficultyLevel;
-  estimatedDuration?: number;
+  estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
+  modules?: RoadmapModuleModel[];
   id?: string;
-  created?: Date;
 
   constructor(data?: IRoadmapModel) {
     if (data) {
@@ -1079,10 +1871,12 @@ export class RoadmapModel implements IRoadmapModel {
         this.tags = [] as any;
         for (let item of _data['tags']) this.tags!.push(item);
       }
+      if (Array.isArray(_data['modules'])) {
+        this.modules = [] as any;
+        for (let item of _data['modules'])
+          this.modules!.push(RoadmapModuleModel.fromJS(item));
+      }
       this.id = _data['id'];
-      this.created = _data['created']
-        ? new Date(_data['created'].toString())
-        : <any>undefined;
     }
   }
 
@@ -1104,23 +1898,24 @@ export class RoadmapModel implements IRoadmapModel {
       data['tags'] = [];
       for (let item of this.tags) data['tags'].push(item);
     }
+    if (Array.isArray(this.modules)) {
+      data['modules'] = [];
+      for (let item of this.modules) data['modules'].push(item.toJSON());
+    }
     data['id'] = this.id;
-    data['created'] = this.created
-      ? this.created.toISOString()
-      : <any>undefined;
     return data;
   }
 }
 
 export interface IRoadmapModel {
-  title?: string;
-  topic?: string;
+  title?: string | undefined;
+  topic?: string | undefined;
   difficulty?: DifficultyLevel;
-  estimatedDuration?: number;
+  estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
+  modules?: RoadmapModuleModel[];
   id?: string;
-  created?: Date;
 }
 
 export class RoadmapModelFiltered implements IRoadmapModelFiltered {
@@ -1180,14 +1975,71 @@ export interface IRoadmapModelFiltered {
   columns?: string[] | undefined;
 }
 
-export class RoadmapUpdateRequest implements IRoadmapUpdateRequest {
+export class RoadmapModuleModel implements IRoadmapModuleModel {
+  id?: string;
   title?: string;
-  topic?: string;
+  order?: number;
+  lessons?: LessonModel[];
+
+  constructor(data?: IRoadmapModuleModel) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.id = _data['id'];
+      this.title = _data['title'];
+      this.order = _data['order'];
+      if (Array.isArray(_data['lessons'])) {
+        this.lessons = [] as any;
+        for (let item of _data['lessons'])
+          this.lessons!.push(LessonModel.fromJS(item));
+      }
+    }
+  }
+
+  static fromJS(data: any): RoadmapModuleModel {
+    data = typeof data === 'object' ? data : {};
+    let result = new RoadmapModuleModel();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['id'] = this.id;
+    data['title'] = this.title;
+    data['order'] = this.order;
+    if (Array.isArray(this.lessons)) {
+      data['lessons'] = [];
+      for (let item of this.lessons) data['lessons'].push(item.toJSON());
+    }
+    return data;
+  }
+}
+
+export interface IRoadmapModuleModel {
+  id?: string;
+  title?: string;
+  order?: number;
+  lessons?: LessonModel[];
+}
+
+export class RoadmapUpdateRequest implements IRoadmapUpdateRequest {
+  title?: string | undefined;
+  topic?: string | undefined;
   difficulty?: DifficultyLevel;
-  estimatedDuration?: number;
+  estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
-  zoneId?: string;
+  modules?: RoadmapModuleModel[];
+  lessonId?: string | undefined;
+  lessonCompleted?: boolean | undefined;
 
   constructor(data?: IRoadmapUpdateRequest) {
     if (data) {
@@ -1209,7 +2061,13 @@ export class RoadmapUpdateRequest implements IRoadmapUpdateRequest {
         this.tags = [] as any;
         for (let item of _data['tags']) this.tags!.push(item);
       }
-      this.zoneId = _data['zoneId'];
+      if (Array.isArray(_data['modules'])) {
+        this.modules = [] as any;
+        for (let item of _data['modules'])
+          this.modules!.push(RoadmapModuleModel.fromJS(item));
+      }
+      this.lessonId = _data['lessonId'];
+      this.lessonCompleted = _data['lessonCompleted'];
     }
   }
 
@@ -1231,19 +2089,26 @@ export class RoadmapUpdateRequest implements IRoadmapUpdateRequest {
       data['tags'] = [];
       for (let item of this.tags) data['tags'].push(item);
     }
-    data['zoneId'] = this.zoneId;
+    if (Array.isArray(this.modules)) {
+      data['modules'] = [];
+      for (let item of this.modules) data['modules'].push(item.toJSON());
+    }
+    data['lessonId'] = this.lessonId;
+    data['lessonCompleted'] = this.lessonCompleted;
     return data;
   }
 }
 
 export interface IRoadmapUpdateRequest {
-  title?: string;
-  topic?: string;
+  title?: string | undefined;
+  topic?: string | undefined;
   difficulty?: DifficultyLevel;
-  estimatedDuration?: number;
+  estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
-  zoneId?: string;
+  modules?: RoadmapModuleModel[];
+  lessonId?: string | undefined;
+  lessonCompleted?: boolean | undefined;
 }
 
 export class ServerInfoModel implements IServerInfoModel {
