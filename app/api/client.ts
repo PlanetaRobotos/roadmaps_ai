@@ -27,23 +27,11 @@ export class LessonsClient {
   /**
    * @return Success
    */
-  getById(
-    id: string,
-    roadmapId: string,
-    moduleId: string
-  ): Promise<LessonModel> {
-    let url_ =
-      this.baseUrl +
-      '/api/v1/roadmaps/{roadmapId}/modules/{moduleId}/lessons/{id}';
+  getById(id: string): Promise<LessonModel> {
+    let url_ = this.baseUrl + '/v1/lessons/{id}';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace('{id}', encodeURIComponent('' + id));
-    if (roadmapId === undefined || roadmapId === null)
-      throw new Error("The parameter 'roadmapId' must be defined.");
-    url_ = url_.replace('{roadmapId}', encodeURIComponent('' + roadmapId));
-    if (moduleId === undefined || moduleId === null)
-      throw new Error("The parameter 'moduleId' must be defined.");
-    url_ = url_.replace('{moduleId}', encodeURIComponent('' + moduleId));
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -123,24 +111,11 @@ export class LessonsClient {
    * @param body (optional)
    * @return No Content
    */
-  update(
-    id: string,
-    roadmapId: string,
-    moduleId: string,
-    body: LessonUpdateRequest | undefined
-  ): Promise<void> {
-    let url_ =
-      this.baseUrl +
-      '/api/v1/roadmaps/{roadmapId}/modules/{moduleId}/lessons/{id}';
+  update(id: string, body: LessonUpdateRequest | undefined): Promise<void> {
+    let url_ = this.baseUrl + '/v1/lessons/{id}';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace('{id}', encodeURIComponent('' + id));
-    if (roadmapId === undefined || roadmapId === null)
-      throw new Error("The parameter 'roadmapId' must be defined.");
-    url_ = url_.replace('{roadmapId}', encodeURIComponent('' + roadmapId));
-    if (moduleId === undefined || moduleId === null)
-      throw new Error("The parameter 'moduleId' must be defined.");
-    url_ = url_.replace('{moduleId}', encodeURIComponent('' + moduleId));
     url_ = url_.replace(/[?&]$/, '');
 
     const content_ = JSON.stringify(body);
@@ -216,19 +191,11 @@ export class LessonsClient {
   /**
    * @return No Content
    */
-  delete(id: string, roadmapId: string, moduleId: string): Promise<void> {
-    let url_ =
-      this.baseUrl +
-      '/api/v1/roadmaps/{roadmapId}/modules/{moduleId}/lessons/{id}';
+  delete(id: string): Promise<void> {
+    let url_ = this.baseUrl + '/v1/lessons/{id}';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace('{id}', encodeURIComponent('' + id));
-    if (roadmapId === undefined || roadmapId === null)
-      throw new Error("The parameter 'roadmapId' must be defined.");
-    url_ = url_.replace('{roadmapId}', encodeURIComponent('' + roadmapId));
-    if (moduleId === undefined || moduleId === null)
-      throw new Error("The parameter 'moduleId' must be defined.");
-    url_ = url_.replace('{moduleId}', encodeURIComponent('' + moduleId));
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -311,18 +278,9 @@ export class LessonsClient {
     filters: string | undefined,
     sorts: string | undefined,
     page: number | undefined,
-    pageSize: number | undefined,
-    roadmapId: string,
-    moduleId: string
+    pageSize: number | undefined
   ): Promise<LessonModelFiltered> {
-    let url_ =
-      this.baseUrl + '/api/v1/roadmaps/{roadmapId}/modules/{moduleId}/lessons?';
-    if (roadmapId === undefined || roadmapId === null)
-      throw new Error("The parameter 'roadmapId' must be defined.");
-    url_ = url_.replace('{roadmapId}', encodeURIComponent('' + roadmapId));
-    if (moduleId === undefined || moduleId === null)
-      throw new Error("The parameter 'moduleId' must be defined.");
-    url_ = url_.replace('{moduleId}', encodeURIComponent('' + moduleId));
+    let url_ = this.baseUrl + '/v1/lessons?';
     if (search === null)
       throw new Error("The parameter 'search' cannot be null.");
     else if (search !== undefined)
@@ -425,19 +383,8 @@ export class LessonsClient {
    * @param body (optional)
    * @return Created
    */
-  generatedPage(
-    roadmapId: string,
-    moduleId: string,
-    body: LessonCreateRequest | undefined
-  ): Promise<LessonModel> {
-    let url_ =
-      this.baseUrl + '/api/v1/roadmaps/{roadmapId}/modules/{moduleId}/lessons';
-    if (roadmapId === undefined || roadmapId === null)
-      throw new Error("The parameter 'roadmapId' must be defined.");
-    url_ = url_.replace('{roadmapId}', encodeURIComponent('' + roadmapId));
-    if (moduleId === undefined || moduleId === null)
-      throw new Error("The parameter 'moduleId' must be defined.");
-    url_ = url_.replace('{moduleId}', encodeURIComponent('' + moduleId));
+  generatedPage(body: LessonCreateRequest | undefined): Promise<LessonModel> {
+    let url_ = this.baseUrl + '/v1/lessons';
     url_ = url_.replace(/[?&]$/, '');
 
     const content_ = JSON.stringify(body);
@@ -1439,15 +1386,79 @@ export interface IErrorDto {
   errors?: { [key: string]: any } | undefined;
 }
 
+export class LessonContent implements ILessonContent {
+  mainContent?: string | undefined;
+  resources?: string[] | undefined;
+  examples?: string[] | undefined;
+  quizzes?: string[] | undefined;
+
+  constructor(data?: ILessonContent) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.mainContent = _data['mainContent'];
+      if (Array.isArray(_data['resources'])) {
+        this.resources = [] as any;
+        for (let item of _data['resources']) this.resources!.push(item);
+      }
+      if (Array.isArray(_data['examples'])) {
+        this.examples = [] as any;
+        for (let item of _data['examples']) this.examples!.push(item);
+      }
+      if (Array.isArray(_data['quizzes'])) {
+        this.quizzes = [] as any;
+        for (let item of _data['quizzes']) this.quizzes!.push(item);
+      }
+    }
+  }
+
+  static fromJS(data: any): LessonContent {
+    data = typeof data === 'object' ? data : {};
+    let result = new LessonContent();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['mainContent'] = this.mainContent;
+    if (Array.isArray(this.resources)) {
+      data['resources'] = [];
+      for (let item of this.resources) data['resources'].push(item);
+    }
+    if (Array.isArray(this.examples)) {
+      data['examples'] = [];
+      for (let item of this.examples) data['examples'].push(item);
+    }
+    if (Array.isArray(this.quizzes)) {
+      data['quizzes'] = [];
+      for (let item of this.quizzes) data['quizzes'].push(item);
+    }
+    return data;
+  }
+}
+
+export interface ILessonContent {
+  mainContent?: string | undefined;
+  resources?: string[] | undefined;
+  examples?: string[] | undefined;
+  quizzes?: string[] | undefined;
+}
+
 export class LessonCreateRequest implements ILessonCreateRequest {
   id?: string;
   title?: string;
   completed?: boolean;
   order?: number;
   description?: string | undefined;
-  content?: string | undefined;
-  example?: string | undefined;
-  resources?: string[] | undefined;
+  content?: LessonContent;
 
   constructor(data?: ILessonCreateRequest) {
     if (data) {
@@ -1465,12 +1476,9 @@ export class LessonCreateRequest implements ILessonCreateRequest {
       this.completed = _data['completed'];
       this.order = _data['order'];
       this.description = _data['description'];
-      this.content = _data['content'];
-      this.example = _data['example'];
-      if (Array.isArray(_data['resources'])) {
-        this.resources = [] as any;
-        for (let item of _data['resources']) this.resources!.push(item);
-      }
+      this.content = _data['content']
+        ? LessonContent.fromJS(_data['content'])
+        : <any>undefined;
     }
   }
 
@@ -1488,12 +1496,7 @@ export class LessonCreateRequest implements ILessonCreateRequest {
     data['completed'] = this.completed;
     data['order'] = this.order;
     data['description'] = this.description;
-    data['content'] = this.content;
-    data['example'] = this.example;
-    if (Array.isArray(this.resources)) {
-      data['resources'] = [];
-      for (let item of this.resources) data['resources'].push(item);
-    }
+    data['content'] = this.content ? this.content.toJSON() : <any>undefined;
     return data;
   }
 }
@@ -1504,9 +1507,7 @@ export interface ILessonCreateRequest {
   completed?: boolean;
   order?: number;
   description?: string | undefined;
-  content?: string | undefined;
-  example?: string | undefined;
-  resources?: string[] | undefined;
+  content?: LessonContent;
 }
 
 export class LessonModel implements ILessonModel {
@@ -1515,9 +1516,7 @@ export class LessonModel implements ILessonModel {
   completed?: boolean;
   order?: number;
   description?: string | undefined;
-  content?: string | undefined;
-  example?: string | undefined;
-  resources?: string[] | undefined;
+  content?: LessonContent;
 
   constructor(data?: ILessonModel) {
     if (data) {
@@ -1535,12 +1534,9 @@ export class LessonModel implements ILessonModel {
       this.completed = _data['completed'];
       this.order = _data['order'];
       this.description = _data['description'];
-      this.content = _data['content'];
-      this.example = _data['example'];
-      if (Array.isArray(_data['resources'])) {
-        this.resources = [] as any;
-        for (let item of _data['resources']) this.resources!.push(item);
-      }
+      this.content = _data['content']
+        ? LessonContent.fromJS(_data['content'])
+        : <any>undefined;
     }
   }
 
@@ -1558,12 +1554,7 @@ export class LessonModel implements ILessonModel {
     data['completed'] = this.completed;
     data['order'] = this.order;
     data['description'] = this.description;
-    data['content'] = this.content;
-    data['example'] = this.example;
-    if (Array.isArray(this.resources)) {
-      data['resources'] = [];
-      for (let item of this.resources) data['resources'].push(item);
-    }
+    data['content'] = this.content ? this.content.toJSON() : <any>undefined;
     return data;
   }
 }
@@ -1574,9 +1565,7 @@ export interface ILessonModel {
   completed?: boolean;
   order?: number;
   description?: string | undefined;
-  content?: string | undefined;
-  example?: string | undefined;
-  resources?: string[] | undefined;
+  content?: LessonContent;
 }
 
 export class LessonModelFiltered implements ILessonModelFiltered {
@@ -1641,9 +1630,7 @@ export class LessonUpdateRequest implements ILessonUpdateRequest {
   completed?: boolean;
   order?: number;
   description?: string | undefined;
-  content?: string | undefined;
-  example?: string | undefined;
-  resources?: string[] | undefined;
+  content?: LessonContent;
   lessonId?: string | undefined;
   lessonCompleted?: boolean | undefined;
 
@@ -1662,12 +1649,9 @@ export class LessonUpdateRequest implements ILessonUpdateRequest {
       this.completed = _data['completed'];
       this.order = _data['order'];
       this.description = _data['description'];
-      this.content = _data['content'];
-      this.example = _data['example'];
-      if (Array.isArray(_data['resources'])) {
-        this.resources = [] as any;
-        for (let item of _data['resources']) this.resources!.push(item);
-      }
+      this.content = _data['content']
+        ? LessonContent.fromJS(_data['content'])
+        : <any>undefined;
       this.lessonId = _data['lessonId'];
       this.lessonCompleted = _data['lessonCompleted'];
     }
@@ -1686,12 +1670,7 @@ export class LessonUpdateRequest implements ILessonUpdateRequest {
     data['completed'] = this.completed;
     data['order'] = this.order;
     data['description'] = this.description;
-    data['content'] = this.content;
-    data['example'] = this.example;
-    if (Array.isArray(this.resources)) {
-      data['resources'] = [];
-      for (let item of this.resources) data['resources'].push(item);
-    }
+    data['content'] = this.content ? this.content.toJSON() : <any>undefined;
     data['lessonId'] = this.lessonId;
     data['lessonCompleted'] = this.lessonCompleted;
     return data;
@@ -1703,9 +1682,7 @@ export interface ILessonUpdateRequest {
   completed?: boolean;
   order?: number;
   description?: string | undefined;
-  content?: string | undefined;
-  example?: string | undefined;
-  resources?: string[] | undefined;
+  content?: LessonContent;
   lessonId?: string | undefined;
   lessonCompleted?: boolean | undefined;
 }

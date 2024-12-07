@@ -1,21 +1,18 @@
 ﻿'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { getLessonById } from '@/lib/api'; // Function to fetch lesson data
 import LessonHeader from '@/components/lessons/lesson-header';
 import LessonContent from '@/components/lessons/lesson-content';
-import LessonResources from '@/components/lessons/lesson-resources';
-import LessonNavigation from '@/components/lessons/lesson-navigation';
+import { getLessonById } from '@/services/roadmapsService';
+import { LessonModel } from '@/app/api/client';
 
 export default function LessonPage({
   params
 }: {
   params: { lessonId: string };
 }) {
-  const [lesson, setLesson] = useState(null);
+  const [lesson, setLesson] = useState<LessonModel>();
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
     async function fetchLesson() {
@@ -24,23 +21,25 @@ export default function LessonPage({
         setLesson(data);
       } catch (error) {
         console.error('Failed to fetch lesson:', error);
-        router.push('/404');
       } finally {
         setLoading(false);
       }
     }
     fetchLesson();
-  }, [params.lessonId, router]);
+  }, [params.lessonId]);
 
   if (loading) return <div>Loading...</div>;
   if (!lesson) return <div>Lesson not found.</div>;
 
   return (
     <div className="lesson-page">
-      <LessonHeader title={lesson.title} description={lesson.description} />
-      <LessonContent content={lesson.content} />
-      <LessonResources resources={lesson.resources} />
-      <LessonNavigation />
+      <LessonHeader title={lesson.title!} description={lesson.description!} />
+      <LessonContent
+        mainContent={lesson.content?.mainContent}
+        resources={lesson.content?.resources}
+        examples={lesson.content?.examples}
+        quizzes={lesson.content?.quizzes}
+      />
     </div>
   );
 }

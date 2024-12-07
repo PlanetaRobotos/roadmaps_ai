@@ -1,4 +1,4 @@
-﻿import { getRoadmapsClient } from '@/services/roadmapsClient';
+﻿import { getLessonsClient, getRoadmapsClient } from '@/services/roadmapsClient';
 import { RoadmapUpdateRequest } from '@/app/api/client';
 
 export const getRoadmapById = async (id: string) => {
@@ -19,4 +19,6 @@ export const updateLessonStatus = async (
   return await getRoadmapsClient().update(roadmapId, requestBody);
 };
 
-export const getLessonById = async (roadmapId: string, lessonId: string) => {};
+export const getLessonById = async (lessonId: string) => {
+  return await getLessonsClient().getById(lessonId);
+};

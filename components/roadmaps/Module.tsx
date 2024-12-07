@@ -14,10 +14,15 @@ interface ModuleProps {
       completed: boolean;
     }[];
   };
+  roadmapId: string;
   onLessonToggle: (lessonId: string, completed: boolean) => void;
 }
 
-export default function Module({ module, onLessonToggle }: ModuleProps) {
+export default function Module({
+  module,
+  roadmapId,
+  onLessonToggle
+}: ModuleProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Calculate progress as a percentage
@@ -51,6 +56,7 @@ export default function Module({ module, onLessonToggle }: ModuleProps) {
               <Lesson
                 key={lesson.id}
                 lesson={lesson}
+                roadmapId={roadmapId}
                 onToggle={(completed) => onLessonToggle(lesson.id, completed)}
               />
             ))}

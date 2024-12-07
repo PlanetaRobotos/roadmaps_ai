@@ -37,6 +37,7 @@ export function Roadmap({ roadmap, onLessonToggle }: RoadmapProps) {
             <Module
               key={module.id}
               module={module}
+              roadmapId={roadmap.id}
               onLessonToggle={(lessonId, completed) =>
                 onLessonToggle(roadmap.id, module.id, lessonId, completed)
               }

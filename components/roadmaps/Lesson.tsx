@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
+import Link from 'next/link';
 
 interface LessonProps {
   lesson: {
@@ -8,10 +9,11 @@ interface LessonProps {
     order: number;
     completed: boolean;
   };
+  roadmapId: string;
   onToggle: (completed: boolean) => void;
 }
 
-export default function Lesson({ lesson, onToggle }: LessonProps) {
+export default function Lesson({ lesson, roadmapId, onToggle }: LessonProps) {
   return (
     <li className="flex items-center space-x-2">
       <Checkbox
@@ -21,13 +23,14 @@ export default function Lesson({ lesson, onToggle }: LessonProps) {
           lesson.completed ? 'incomplete' : 'complete'
         }`}
       />
-      <span
+      <Link
+        href={`/dashboard/roadmaps/${roadmapId}/lessons/${lesson.id}`}
         className={`${
           lesson.completed ? 'text-gray-500 line-through' : ''
         } text-sm`}
       >
         {lesson.title}
-      </span>
+      </Link>
       <p>{lesson.order}</p>
     </li>
   );
