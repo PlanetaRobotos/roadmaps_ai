@@ -45,7 +45,7 @@ export default function InputFormPage() {
           <Slider
             min={15}
             max={120}
-            lesson={15}
+            step={15}
             value={[formData.time]}
             onValueChange={(value) =>
               setFormData({ ...formData, time: value[0] })

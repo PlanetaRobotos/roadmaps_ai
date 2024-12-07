@@ -1,7 +1,7 @@
 import RoadmapCard from './roadmap-card';
 // import { mockRoadmaps } from './mockRoadmaps';
 import { useEffect, useState } from 'react';
-import { RoadmapsClient, RoadmapModel } from '@/app/api/client';
+import { RoadmapModel } from '@/app/api/client';
 import { useRoadmapsClient } from '@/services/RoadmapsClientProvider';
 
 export default function RoadmapsList() {
