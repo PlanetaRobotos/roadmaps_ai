@@ -1,17 +1,32 @@
 ﻿// src/services/clients/RoadmapsClientProvider.tsx
 'use client';
 
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getRoadmapsClient } from './roadmapsClient';
+import { RoadmapsClient } from '@/app/api/client';
 
-const RoadmapsClientContext = createContext(getRoadmapsClient());
+const RoadmapsClientContext = createContext<RoadmapsClient | undefined>(
+  undefined
+);
 
 export const RoadmapsClientProvider = ({
   children
 }: {
   children: React.ReactNode;
 }) => {
-  const roadmapsClient = getRoadmapsClient();
+  const [roadmapsClient, setRoadmapsClient] = useState<RoadmapsClient | null>(
+    null
+  );
+
+  useEffect(() => {
+    const client = getRoadmapsClient();
+    setRoadmapsClient(client);
+  }, []);
+
+  if (!roadmapsClient) {
+    return null; // Optionally, return a loading indicator here
+  }
+
   return (
     <RoadmapsClientContext.Provider value={roadmapsClient}>
       {children}
@@ -21,5 +36,11 @@ export const RoadmapsClientProvider = ({
 
 // Hook to access the client
 export const useRoadmapsClient = () => {
-  return useContext(RoadmapsClientContext);
+  const context = useContext(RoadmapsClientContext);
+  if (!context) {
+    throw new Error(
+      'useRoadmapsClient must be used within a RoadmapsClientProvider'
+    );
+  }
+  return context;
 };
