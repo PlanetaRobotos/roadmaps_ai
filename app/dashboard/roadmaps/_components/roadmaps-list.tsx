@@ -2,12 +2,12 @@ import RoadmapCard from './roadmap-card';
 // import { mockRoadmaps } from './mockRoadmaps';
 import { useEffect, useState } from 'react';
 import { RoadmapsClient, RoadmapModel } from '@/app/api/client';
-
-const roadmapsClient = new RoadmapsClient('http://localhost:5501');
+import { useRoadmapsClient } from '@/services/RoadmapsClientProvider';
 
 export default function RoadmapsList() {
   const [roadmaps, setRoadmaps] = useState<RoadmapModel[]>([]);
   const [loading, setLoading] = useState(true);
+  const roadmapsClient = useRoadmapsClient();
 
   useEffect(() => {
     async function fetchRoadmaps() {
