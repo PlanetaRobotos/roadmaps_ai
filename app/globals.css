@@ -40,38 +40,26 @@
   }
 
   .dark {
-    --background: 253 43% 3%;
-    --foreground: 253 31% 98%;
-    --muted: 253 7% 13%;
-    --muted-foreground: 253 13% 63%;
-    --popover: 253 43% 3%;
-    --popover-foreground: 253 31% 98%;
-    --card: 253 43% 4%;
-    --card-foreground: 253 31% 99%;
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --primary: 253 91% 58%;
-    --primary-foreground: 253 91% 98%;
-    --secondary: 253 7% 9%;
-    --secondary-foreground: 253 7% 69%;
-    --accent: 253 13% 14%;
-    --accent-foreground: 253 13% 74%;
-    --destructive: 339.2 90.36% 51.18%;
-    --destructive-foreground: 0 0% 100%;
-    --ring: 253 91% 58%;
-    --chart-1: 253 91% 58%;
-    --chart-2: 253 13% 74%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --sidebar-background: 253 43% 4%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 253 91% 58%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 253 91% 58%;
+    --background: 238.7 50% 10%;
+    --foreground: 238.7 5% 90%;
+    --card: 238.7 50% 10%;
+    --card-foreground: 238.7 5% 90%;
+    --popover: 238.7 50% 5%;
+    --popover-foreground: 238.7 5% 90%;
+    --primary: 238.7 83.5% 66.7%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 238.7 30% 20%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 200.7 30% 25%;
+    --muted-foreground: 238.7 5% 60%;
+    --accent: 200.7 30% 40%;
+    --accent-foreground: 238.7 5% 90%;
+    --destructive: 0 100% 30%;
+    --destructive-foreground: 238.7 5% 90%;
+    --border: 238.7 30% 40%;
+    --input: 238.7 30% 28%;
+    --ring: 238.7 83.5% 66.7%;
+    --radius: 0.5rem;
   }
 }
 
@@ -79,6 +67,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply box-border bg-background text-foreground;
   }
@@ -89,6 +78,7 @@
     min-height: 100vh; /* Fallback */
     min-height: 100dvh;
   }
+
   .h-screen {
     height: 100vh; /* Fallback */
     height: 100dvh;
@@ -99,6 +89,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
