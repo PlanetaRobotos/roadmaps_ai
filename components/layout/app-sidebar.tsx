@@ -44,6 +44,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
 import { Icons } from '../icons';
+import { SignOut } from '@/components/signout-button';
 
 export const company = {
   name: 'Acme Inc',
@@ -197,15 +198,16 @@ export default function AppSidebar() {
                     <CreditCard />
                     Billing
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Bell />
-                    Notifications
-                  </DropdownMenuItem>
+                  {/*<DropdownMenuItem>*/}
+                  {/*  <Bell />*/}
+                  {/*  Notifications*/}
+                  {/*</DropdownMenuItem>*/}
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <LogOut />
                   Log out
+                  {/*<SignOut />*/}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

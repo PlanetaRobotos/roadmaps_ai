@@ -123,32 +123,56 @@ export type Product = {
 
 export const navItems: NavItem[] = [
   {
-    title: 'Dashboard',
+    title: 'Home',
     url: '/dashboard/overview',
-    icon: 'dashboard',
+    icon: 'house',
     isActive: false,
     shortcut: ['d', 'd'],
     items: [] // Empty array as there are no child items for Dashboard
   },
   {
-    title: 'Account',
-    url: '#', // Placeholder as there is no direct link for the parent
-    icon: 'billing',
-    isActive: true,
-
-    items: [
-      {
-        title: 'Profile',
-        url: '/dashboard/profile',
-        icon: 'userPen',
-        shortcut: ['m', 'm']
-      },
-      {
-        title: 'Login',
-        shortcut: ['l', 'l'],
-        url: '/',
-        icon: 'login'
-      }
-    ]
+    title: 'Create',
+    url: '/dashboard/roadmaps/create',
+    icon: 'badgePlus',
+    isActive: false,
+    shortcut: ['u', 'u'],
+    items: []
+  },
+  {
+    title: 'Library',
+    url: '/dashboard/roadmaps/library',
+    icon: 'book',
+    isActive: false,
+    shortcut: ['d', 'd'],
+    items: [] // Empty array as there are no child items for Dashboard
+  },
+  {
+    title: 'My Progress',
+    url: '/dashboard/roadmaps/progress',
+    icon: 'chart',
+    isActive: false,
+    shortcut: ['d', 'd'],
+    items: [] // Empty array as there are no child items for Dashboard
   }
+  // {
+  //   title: 'Account',
+  //   url: '#', // Placeholder as there is no direct link for the parent
+  //   icon: 'billing',
+  //   isActive: true,
+  //
+  //   items: [
+  //     {
+  //       title: 'Profile',
+  //       url: '/dashboard/profile',
+  //       icon: 'userPen',
+  //       shortcut: ['m', 'm']
+  //     },
+  //     {
+  //       title: 'Login',
+  //       shortcut: ['l', 'l'],
+  //       url: '/',
+  //       icon: 'login'
+  //     }
+  //   ]
+  // }
 ];

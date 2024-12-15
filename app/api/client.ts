@@ -1313,21 +1313,319 @@ export class UsersClient {
     }
     return Promise.resolve<void>(null as any);
   }
+
+  /**
+   * @param userIdQuery (optional)
+   * @param search (optional)
+   * @param includeColumns (optional)
+   * @param filters (optional)
+   * @param sorts (optional)
+   * @param page (optional)
+   * @param pageSize (optional)
+   * @return Success
+   */
+  getUserRoadmaps(
+    userIdPath: number,
+    userIdQuery: number | undefined,
+    search: string | undefined,
+    includeColumns: boolean | undefined,
+    filters: string | undefined,
+    sorts: string | undefined,
+    page: number | undefined,
+    pageSize: number | undefined
+  ): Promise<UserRoadmapModelFiltered> {
+    let url_ = this.baseUrl + '/v1/users/{userId}/roadmaps?';
+    if (userIdPath === undefined || userIdPath === null)
+      throw new Error("The parameter 'userIdPath' must be defined.");
+    url_ = url_.replace('{userId}', encodeURIComponent('' + userIdPath));
+    if (userIdQuery === null)
+      throw new Error("The parameter 'userIdQuery' cannot be null.");
+    else if (userIdQuery !== undefined)
+      url_ += 'userId=' + encodeURIComponent('' + userIdQuery) + '&';
+    if (search === null)
+      throw new Error("The parameter 'search' cannot be null.");
+    else if (search !== undefined)
+      url_ += 'search=' + encodeURIComponent('' + search) + '&';
+    if (includeColumns === null)
+      throw new Error("The parameter 'includeColumns' cannot be null.");
+    else if (includeColumns !== undefined)
+      url_ += 'includeColumns=' + encodeURIComponent('' + includeColumns) + '&';
+    if (filters === null)
+      throw new Error("The parameter 'filters' cannot be null.");
+    else if (filters !== undefined)
+      url_ += 'filters=' + encodeURIComponent('' + filters) + '&';
+    if (sorts === null)
+      throw new Error("The parameter 'sorts' cannot be null.");
+    else if (sorts !== undefined)
+      url_ += 'sorts=' + encodeURIComponent('' + sorts) + '&';
+    if (page === null) throw new Error("The parameter 'page' cannot be null.");
+    else if (page !== undefined)
+      url_ += 'page=' + encodeURIComponent('' + page) + '&';
+    if (pageSize === null)
+      throw new Error("The parameter 'pageSize' cannot be null.");
+    else if (pageSize !== undefined)
+      url_ += 'pageSize=' + encodeURIComponent('' + pageSize) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json'
+      }
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processGetUserRoadmaps(_response);
+    });
+  }
+
+  protected processGetUserRoadmaps(
+    response: Response
+  ): Promise<UserRoadmapModelFiltered> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result200 = UserRoadmapModelFiltered.fromJS(resultData200);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<UserRoadmapModelFiltered>(null as any);
+  }
+
+  /**
+   * @return Success
+   */
+  getUserRoadmapById(
+    userId: number,
+    roadmapId: string
+  ): Promise<UserRoadmapModel> {
+    let url_ = this.baseUrl + '/v1/users/{userId}/roadmaps/{roadmapId}';
+    if (userId === undefined || userId === null)
+      throw new Error("The parameter 'userId' must be defined.");
+    url_ = url_.replace('{userId}', encodeURIComponent('' + userId));
+    if (roadmapId === undefined || roadmapId === null)
+      throw new Error("The parameter 'roadmapId' must be defined.");
+    url_ = url_.replace('{roadmapId}', encodeURIComponent('' + roadmapId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json'
+      }
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processGetUserRoadmapById(_response);
+    });
+  }
+
+  protected processGetUserRoadmapById(
+    response: Response
+  ): Promise<UserRoadmapModel> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result200 = UserRoadmapModel.fromJS(resultData200);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<UserRoadmapModel>(null as any);
+  }
+
+  /**
+   * @return Created
+   */
+  addUserRoadmap(userId: number, roadmapId: string): Promise<UserRoadmapModel> {
+    let url_ = this.baseUrl + '/v1/users/{userId}/roadmaps/{roadmapId}';
+    if (userId === undefined || userId === null)
+      throw new Error("The parameter 'userId' must be defined.");
+    url_ = url_.replace('{userId}', encodeURIComponent('' + userId));
+    if (roadmapId === undefined || roadmapId === null)
+      throw new Error("The parameter 'roadmapId' must be defined.");
+    url_ = url_.replace('{roadmapId}', encodeURIComponent('' + roadmapId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json'
+      }
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processAddUserRoadmap(_response);
+    });
+  }
+
+  protected processAddUserRoadmap(
+    response: Response
+  ): Promise<UserRoadmapModel> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 201) {
+      return response.text().then((_responseText) => {
+        let result201: any = null;
+        let resultData201 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result201 = UserRoadmapModel.fromJS(resultData201);
+        return result201;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<UserRoadmapModel>(null as any);
+  }
 }
 
-export enum DifficultyLevel {
-  None = 'None',
-  Beginner = 'Beginner',
-  Intermediate = 'Intermediate',
-  Advanced = 'Advanced'
-}
-
-/** Record that represents a default HTTP error response. */
 export class ErrorDto implements IErrorDto {
   status?: number;
   type?: string;
   message?: string;
-  /** A set of additional errors. */
   errors?: { [key: string]: any } | undefined;
 
   constructor(data?: IErrorDto) {
@@ -1377,12 +1675,10 @@ export class ErrorDto implements IErrorDto {
   }
 }
 
-/** Record that represents a default HTTP error response. */
 export interface IErrorDto {
   status?: number;
   type?: string;
   message?: string;
-  /** A set of additional errors. */
   errors?: { [key: string]: any } | undefined;
 }
 
@@ -1748,7 +2044,6 @@ export interface IPatchOperation {
 export class RoadmapCreateRequest implements IRoadmapCreateRequest {
   title?: string | undefined;
   topic?: string | undefined;
-  difficulty?: DifficultyLevel;
   estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
@@ -1767,7 +2062,6 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
     if (_data) {
       this.title = _data['title'];
       this.topic = _data['topic'];
-      this.difficulty = _data['difficulty'];
       this.estimatedDuration = _data['estimatedDuration'];
       this.description = _data['description'];
       if (Array.isArray(_data['tags'])) {
@@ -1793,7 +2087,6 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
     data = typeof data === 'object' ? data : {};
     data['title'] = this.title;
     data['topic'] = this.topic;
-    data['difficulty'] = this.difficulty;
     data['estimatedDuration'] = this.estimatedDuration;
     data['description'] = this.description;
     if (Array.isArray(this.tags)) {
@@ -1811,7 +2104,6 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
 export interface IRoadmapCreateRequest {
   title?: string | undefined;
   topic?: string | undefined;
-  difficulty?: DifficultyLevel;
   estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
@@ -1821,7 +2113,6 @@ export interface IRoadmapCreateRequest {
 export class RoadmapModel implements IRoadmapModel {
   title?: string | undefined;
   topic?: string | undefined;
-  difficulty?: DifficultyLevel;
   estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
@@ -1841,7 +2132,6 @@ export class RoadmapModel implements IRoadmapModel {
     if (_data) {
       this.title = _data['title'];
       this.topic = _data['topic'];
-      this.difficulty = _data['difficulty'];
       this.estimatedDuration = _data['estimatedDuration'];
       this.description = _data['description'];
       if (Array.isArray(_data['tags'])) {
@@ -1868,7 +2158,6 @@ export class RoadmapModel implements IRoadmapModel {
     data = typeof data === 'object' ? data : {};
     data['title'] = this.title;
     data['topic'] = this.topic;
-    data['difficulty'] = this.difficulty;
     data['estimatedDuration'] = this.estimatedDuration;
     data['description'] = this.description;
     if (Array.isArray(this.tags)) {
@@ -1887,7 +2176,6 @@ export class RoadmapModel implements IRoadmapModel {
 export interface IRoadmapModel {
   title?: string | undefined;
   topic?: string | undefined;
-  difficulty?: DifficultyLevel;
   estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
@@ -2010,7 +2298,6 @@ export interface IRoadmapModuleModel {
 export class RoadmapUpdateRequest implements IRoadmapUpdateRequest {
   title?: string | undefined;
   topic?: string | undefined;
-  difficulty?: DifficultyLevel;
   estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
@@ -2031,7 +2318,6 @@ export class RoadmapUpdateRequest implements IRoadmapUpdateRequest {
     if (_data) {
       this.title = _data['title'];
       this.topic = _data['topic'];
-      this.difficulty = _data['difficulty'];
       this.estimatedDuration = _data['estimatedDuration'];
       this.description = _data['description'];
       if (Array.isArray(_data['tags'])) {
@@ -2059,7 +2345,6 @@ export class RoadmapUpdateRequest implements IRoadmapUpdateRequest {
     data = typeof data === 'object' ? data : {};
     data['title'] = this.title;
     data['topic'] = this.topic;
-    data['difficulty'] = this.difficulty;
     data['estimatedDuration'] = this.estimatedDuration;
     data['description'] = this.description;
     if (Array.isArray(this.tags)) {
@@ -2079,7 +2364,6 @@ export class RoadmapUpdateRequest implements IRoadmapUpdateRequest {
 export interface IRoadmapUpdateRequest {
   title?: string | undefined;
   topic?: string | undefined;
-  difficulty?: DifficultyLevel;
   estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
@@ -2178,6 +2462,167 @@ export interface IUserCreateRequest {
   firstName?: string;
   lastName?: string;
   email?: string;
+}
+
+export class UserModel implements IUserModel {
+  id?: number;
+  userName?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+
+  constructor(data?: IUserModel) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.id = _data['id'];
+      this.userName = _data['userName'];
+      this.firstName = _data['firstName'];
+      this.lastName = _data['lastName'];
+      this.email = _data['email'];
+    }
+  }
+
+  static fromJS(data: any): UserModel {
+    data = typeof data === 'object' ? data : {};
+    let result = new UserModel();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['id'] = this.id;
+    data['userName'] = this.userName;
+    data['firstName'] = this.firstName;
+    data['lastName'] = this.lastName;
+    data['email'] = this.email;
+    return data;
+  }
+}
+
+export interface IUserModel {
+  id?: number;
+  userName?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+}
+
+export class UserRoadmapModel implements IUserRoadmapModel {
+  userId?: number;
+  roadmapId?: string;
+  user?: UserModel;
+  roadmap?: RoadmapModel;
+
+  constructor(data?: IUserRoadmapModel) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.userId = _data['userId'];
+      this.roadmapId = _data['roadmapId'];
+      this.user = _data['user']
+        ? UserModel.fromJS(_data['user'])
+        : <any>undefined;
+      this.roadmap = _data['roadmap']
+        ? RoadmapModel.fromJS(_data['roadmap'])
+        : <any>undefined;
+    }
+  }
+
+  static fromJS(data: any): UserRoadmapModel {
+    data = typeof data === 'object' ? data : {};
+    let result = new UserRoadmapModel();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['userId'] = this.userId;
+    data['roadmapId'] = this.roadmapId;
+    data['user'] = this.user ? this.user.toJSON() : <any>undefined;
+    data['roadmap'] = this.roadmap ? this.roadmap.toJSON() : <any>undefined;
+    return data;
+  }
+}
+
+export interface IUserRoadmapModel {
+  userId?: number;
+  roadmapId?: string;
+  user?: UserModel;
+  roadmap?: RoadmapModel;
+}
+
+export class UserRoadmapModelFiltered implements IUserRoadmapModelFiltered {
+  data?: UserRoadmapModel[];
+  total?: number;
+  columns?: string[] | undefined;
+
+  constructor(data?: IUserRoadmapModelFiltered) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      if (Array.isArray(_data['data'])) {
+        this.data = [] as any;
+        for (let item of _data['data'])
+          this.data!.push(UserRoadmapModel.fromJS(item));
+      }
+      this.total = _data['total'];
+      if (Array.isArray(_data['columns'])) {
+        this.columns = [] as any;
+        for (let item of _data['columns']) this.columns!.push(item);
+      }
+    }
+  }
+
+  static fromJS(data: any): UserRoadmapModelFiltered {
+    data = typeof data === 'object' ? data : {};
+    let result = new UserRoadmapModelFiltered();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    if (Array.isArray(this.data)) {
+      data['data'] = [];
+      for (let item of this.data) data['data'].push(item.toJSON());
+    }
+    data['total'] = this.total;
+    if (Array.isArray(this.columns)) {
+      data['columns'] = [];
+      for (let item of this.columns) data['columns'].push(item);
+    }
+    return data;
+  }
+}
+
+export interface IUserRoadmapModelFiltered {
+  data?: UserRoadmapModel[];
+  total?: number;
+  columns?: string[] | undefined;
 }
 
 export class UserUpdateRequest implements IUserUpdateRequest {

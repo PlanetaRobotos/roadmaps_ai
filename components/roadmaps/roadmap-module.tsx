@@ -43,8 +43,9 @@ export default function Module({
         tabIndex={0}
       >
         <h2 className="text-lg font-semibold">{module.title}</h2>
-        <p>{module.order}</p>
-        <span>{progress.toFixed(0)}% Complete</span>
+        <span className="text-xl font-semibold opacity-50">
+          {progress.toFixed(0)}%
+        </span>
       </div>
       <Progress value={progress} className="my-2" />
       {isExpanded && (

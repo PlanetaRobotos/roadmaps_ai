@@ -2,7 +2,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getRoadmapsClient } from './roadmapsClient';
+import { RoadmapsClientInst } from './roadmapsClient';
 import { RoadmapsClient } from '@/app/api/client';
 
 const RoadmapsClientContext = createContext<RoadmapsClient | undefined>(
@@ -19,7 +19,7 @@ export const RoadmapsClientProvider = ({
   );
 
   useEffect(() => {
-    const client = getRoadmapsClient();
+    const client = RoadmapsClientInst();
     setRoadmapsClient(client);
   }, []);
 

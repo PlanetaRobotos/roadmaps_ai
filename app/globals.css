@@ -1,3 +1,8 @@
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+@import 'swiper/css/effect-coverflow';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -93,4 +98,14 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

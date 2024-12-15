@@ -1,43 +1,67 @@
 import { NextAuthConfig } from 'next-auth';
-import CredentialProvider from 'next-auth/providers/credentials';
-import GithubProvider from 'next-auth/providers/github';
+import Google from 'next-auth/providers/google';
+import Mailgun from 'next-auth/providers/mailgun';
 
-const authConfig = {
+export default {
   providers: [
-    GithubProvider({
-      clientId: process.env.GITHUB_ID ?? '',
-      clientSecret: process.env.GITHUB_SECRET ?? ''
+    Mailgun({
+      server: {
+        host: process.env.EMAIL_SERVER_HOST,
+        port: Number(process.env.EMAIL_SERVER_PORT),
+        auth: {
+          user: process.env.EMAIL_SERVER_USER,
+          pass: process.env.EMAIL_SERVER_PASSWORD
+        }
+      },
+      from: process.env.EMAIL_FROM
+      // sendVerificationRequest
     }),
-    CredentialProvider({
+    Google
+    /*CredentialProvider({
+      name: 'Credentials',
       credentials: {
         email: {
-          type: 'email'
-        },
-        password: {
-          type: 'password'
+          label: 'Email',
+          type: 'email',
+          placeholder: 'example@gmail.com'
         }
       },
       async authorize(credentials, req) {
         const user = {
           id: '1',
-          name: 'John',
+          name: 'John Doe',
           email: credentials?.email as string
         };
         if (user) {
-          // Any object returned will be saved in `user` property of the JWT
           return user;
         } else {
-          // If you return null then an error will be displayed advising the user to check their details.
           return null;
-
-          // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
         }
       }
-    })
+    })*/
   ],
   pages: {
-    signIn: '/' //sigin page
-  }
+    signIn: '/signin', //sigin page
+    verifyRequest: '/auth/verify-request', // Verification message page
+    error: '/auth/error' // Error page
+  },
+  callbacks: {
+    async session({ session, token, user }) {
+      // You can pass additional data to the session here
+      return session;
+    },
+    async signIn({ user, account, profile, email, credentials }) {
+      if (account != null && account.provider === 'google') {
+        if (profile != undefined) {
+          if (profile.email_verified === true) {
+            console.log('Email verified');
+            return true;
+          }
+        }
+      }
+      return true;
+    }
+  },
+  // Optional: Enable debug messages in the console if you are having problems
+  debug: process.env.NODE_ENV === 'development'
 } satisfies NextAuthConfig;
-
-export default authConfig;
