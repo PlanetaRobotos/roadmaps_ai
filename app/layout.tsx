@@ -1,4 +1,3 @@
-import { auth } from '@/auth';
 import Providers from '@/components/layout/providers';
 import { Toaster } from '@/components/ui/sonner';
 import type { Metadata } from 'next';
@@ -6,6 +5,7 @@ import { Lato } from 'next/font/google';
 import NextTopLoader from 'nextjs-toploader';
 import './globals.css';
 import { RoadmapsClientProvider } from '@/services/RoadmapsClientProvider';
+import { AuthProvider } from '@/context/auth-context';
 
 export const metadata: Metadata = {
   title: 'Next Shadcn',
@@ -23,7 +23,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
   return (
     <html
       lang="en"
@@ -32,10 +31,12 @@ export default async function RootLayout({
     >
       <body className={'overflow-hidden'}>
         <NextTopLoader showSpinner={false} />
-        <Providers session={session}>
+        {/*<Providers>*/}
+        <AuthProvider>
           <Toaster />
           <RoadmapsClientProvider>{children}</RoadmapsClientProvider>
-        </Providers>
+        </AuthProvider>
+        {/*</Providers>*/}
       </body>
     </html>
   );

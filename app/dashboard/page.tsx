@@ -1,12 +1,7 @@
-import { auth } from '@/auth';
+import DashboardView from '@/app/dashboard/_components/dashboard-view';
 import { redirect } from 'next/navigation';
 
-export default async function Dashboard() {
-  const session = await auth();
-
-  if (!session?.user) {
-    return redirect('/');
-  } else {
-    redirect('/dashboard/overview');
-  }
+export default function DashboardPage() {
+  // return <DashboardView />;
+  redirect('/dashboard/overview');
 }

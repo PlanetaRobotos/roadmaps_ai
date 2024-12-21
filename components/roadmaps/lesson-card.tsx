@@ -2,34 +2,30 @@
 import { LessonCard } from '@/types/roadmap-types';
 import { useRoadmapStore } from '@/store/useRoadmapStore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface LessonCardProps {
   lesson: LessonCard;
 }
 
 const LessonCard: React.FC<LessonCardProps> = ({ lesson }) => {
-  /*  const toggleLessonCompletion = useRoadmapStore((state) => state.toggleLessonCompletion);
-    const handleCheckboxChange = () => {
-      toggleLessonCompletion(lesson.roadmapId, lesson.id, !lesson.completed); // Assuming moduleId is not needed here
-    };*/
-
   return (
-    <Card className="h-full w-full max-w-md rounded-lg bg-white shadow-lg">
-      <CardHeader className="p-6">
-        <CardTitle
-          className={`text-xl font-semibold ${
-            lesson.completed ? 'text-gray-500 line-through' : ''
-          }`}
-        >
+    <Card className="flex h-full w-full flex-col rounded-lg border bg-white shadow-lg">
+      <CardHeader className="border-b bg-gray-50 p-4">
+        <CardTitle className="truncate text-center text-2xl font-bold text-gray-800">
           {lesson.title}
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-6">
-        <p className="text-gray-700">{lesson.description}</p>
-        <div
-          className="prose mt-4 max-w-none"
-          dangerouslySetInnerHTML={{ __html: lesson.content }}
-        ></div>
+      <CardContent className="flex flex-grow flex-col justify-between p-4">
+        <ScrollArea className="h-full">
+          <div className="prose prose-gray mt-2 h-[40vh] max-w-none p-2 leading-relaxed md:px-6">
+            {/*<p>{lesson.description}</p>*/}
+            <div
+              dangerouslySetInnerHTML={{ __html: lesson.content }}
+              className="mt-4"
+            ></div>
+          </div>
+        </ScrollArea>
       </CardContent>
     </Card>
   );

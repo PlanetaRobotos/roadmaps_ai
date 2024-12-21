@@ -34,7 +34,12 @@ import {
   House,
   ChartLine,
   BookCopy,
-  BadgePlus
+  BadgePlus,
+  ExternalLink,
+  Maximize2,
+  Bookmark,
+  Share,
+  Heart
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -72,6 +77,11 @@ export const Icons = {
   chart: ChartLine,
   book: BookCopy,
   badgePlus: BadgePlus,
+  link: ExternalLink,
+  maximize: Maximize2,
+  save: Bookmark,
+  share: Share,
+  like: Heart,
 
   gitHub: ({ ...props }: LucideProps) => (
     <svg

@@ -1,34 +1,29 @@
 ﻿import { ClientRoadmap, RoadmapCard } from '@/types/roadmap-types';
 import { RoadmapModel } from '@/app/api/client';
-import { log } from 'node:util';
 
 export const transformRoadmapToItems = (
   roadmap: RoadmapModel
 ): ClientRoadmap => {
   const items: RoadmapCard[] = [];
 
-  console.log('Transforming roadmap:', roadmap);
-
   items.push({
+    id: roadmap.id!,
     type: 'hero',
-    title: `Welcome to "${roadmap.title}"`,
-    contentTop: roadmap.description
+    title: `${roadmap.title}`,
+    contentBottom: roadmap.description
   });
 
   try {
     roadmap
       .modules!.sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
       .forEach((module) => {
-        console.log('Processing Module:', module);
-        console.log('Processing Lesson:', module?.lessons);
-
+        console.log('Module:', module);
         module
           .lessons!.sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
           .forEach((lesson) => {
             try {
-              console.log('Processing Lesson:', lesson);
-
               items.push({
+                id: lesson.id!,
                 roadmapId: roadmap.id!,
                 type: 'lesson',
                 title: lesson.title!,
@@ -37,7 +32,17 @@ export const transformRoadmapToItems = (
                 completed: lesson.completed!
               });
 
-              console.log('Lesson added:', lesson.title);
+              if (lesson.quizzes && lesson.quizzes.length > 0) {
+                lesson.quizzes.forEach((quiz) => {
+                  items.push({
+                    id: quiz.id!,
+                    type: 'quiz',
+                    question: quiz.question!,
+                    options: quiz.answers!,
+                    correctAnswer: quiz.correctAnswerIndex!
+                  });
+                });
+              }
             } catch (lessonError) {
               console.error(
                 `Error processing lesson "${lesson.title}":`,
@@ -50,26 +55,11 @@ export const transformRoadmapToItems = (
     console.error('Unexpected error in transformRoadmapToItems:', error);
   }
 
-  //TODO Add Quizzes if any
-  // if (
-  //   lesson.content?.quizzes &&
-  //   lesson.content.quizzes.length > 0
-  // ) {
-  //   lesson.content.quizzes.forEach((quiz) => {
-  //     items.push({
-  //       id: quiz.id,
-  //       type: 'quiz',
-  //       question: quiz.question,
-  //       options: quiz.options,
-  //       correctAnswers: quiz.correctAnswers
-  //     });
-  //   });
-  // }
-
   console.log('Items:', items);
 
   // Optional: Add an Outro Hero Card
   items.push({
+    id: 'outro',
     type: 'hero',
     title: `Congratulations on Completing "${roadmap.title}"!`,
     contentBottom: "You've successfully navigated through the roadmap."

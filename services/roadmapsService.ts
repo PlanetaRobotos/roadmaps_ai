@@ -6,7 +6,8 @@
 import {
   RoadmapCreateRequest,
   RoadmapUpdateRequest,
-  UserCreateRequest
+  UserCreateRequest,
+  UserQuizResultUpdateRequest
 } from '@/app/api/client';
 import { async } from 'q';
 import { undefined } from 'zod';
@@ -88,10 +89,46 @@ export const getUserRoadmaps = async (userId: number) => {
     );
 
     console.log('User roadmaps:', result);
-    const roadmaps = result.data!.map((roadmap) => roadmap.roadmap!);
+    const roadmaps = result.data!.map((userRoadmap) => userRoadmap.roadmap!);
     return roadmaps;
   } catch (error) {
     console.error('Error fetching user roadmaps:', error);
     throw error;
   }
+};
+
+export const getUserQuizzes = async (userId: number) => {
+  try {
+    const result = await UserClientInst().getUserQuizzes(
+      userId,
+      undefined,
+      undefined, // search
+      undefined, // includeColumns
+      undefined, // filters
+      undefined, // sorts
+      undefined, // page
+      undefined // pageSize
+    );
+
+    console.log('User quizzes:', result);
+    const quizzes = result.data!;
+    return quizzes;
+  } catch (error) {
+    console.error('Error fetching user roadmaps:', error);
+    throw error;
+  }
+};
+
+export const updateQuizStatus = async (
+  userId: number,
+  quizId: string,
+  selectedIndex: number
+) => {
+  const requestBody = new UserQuizResultUpdateRequest();
+  requestBody.init({
+    quizId: quizId,
+    answerIndex: selectedIndex
+  });
+
+  return await UserClientInst().updateUserQuiz(userId, quizId, requestBody);
 };

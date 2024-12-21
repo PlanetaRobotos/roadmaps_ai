@@ -39,12 +39,12 @@ import {
   GalleryVerticalEnd,
   LogOut
 } from 'lucide-react';
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
 import { Icons } from '../icons';
-import { SignOut } from '@/components/signout-button';
+// import { SignOut } from '@/components/signout-button';
 
 export const company = {
   name: 'Acme Inc',
@@ -53,7 +53,7 @@ export const company = {
 };
 
 export default function AppSidebar() {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
   const pathname = usePathname();
 
   return (
@@ -140,19 +140,19 @@ export default function AppSidebar() {
                 >
                   <Avatar className="h-8 w-8 rounded-lg">
                     <AvatarImage
-                      src={session?.user?.image || ''}
-                      alt={session?.user?.name || ''}
+                    // src={session?.user?.image || ''}
+                    // alt={session?.user?.name || ''}
                     />
                     <AvatarFallback className="rounded-lg">
-                      {session?.user?.name?.slice(0, 2)?.toUpperCase() || 'CN'}
+                      {/*{session?.user?.name?.slice(0, 2)?.toUpperCase() || 'CN'}*/}
                     </AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">
-                      {session?.user?.name || ''}
+                      {/*{session?.user?.name || ''}*/}
                     </span>
                     <span className="truncate text-xs">
-                      {session?.user?.email || ''}
+                      {/*{session?.user?.email || ''}*/}
                     </span>
                   </div>
                   <ChevronsUpDown className="ml-auto size-4" />
@@ -168,21 +168,20 @@ export default function AppSidebar() {
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <Avatar className="h-8 w-8 rounded-lg">
                       <AvatarImage
-                        src={session?.user?.image || ''}
-                        alt={session?.user?.name || ''}
+                      // src={session?.user?.image || ''}
+                      // alt={session?.user?.name || ''}
                       />
                       <AvatarFallback className="rounded-lg">
-                        {session?.user?.name?.slice(0, 2)?.toUpperCase() ||
-                          'CN'}
+                        {/*{session?.user?.name?.slice(0, 2)?.toUpperCase() ||                          'CN'}*/}
                       </AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold">
-                        {session?.user?.name || ''}
+                        {/*{session?.user?.name || ''}*/}
                       </span>
                       <span className="truncate text-xs">
                         {' '}
-                        {session?.user?.email || ''}
+                        {/*{session?.user?.email || ''}*/}
                       </span>
                     </div>
                   </div>

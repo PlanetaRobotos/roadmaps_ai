@@ -18,6 +18,9 @@ export default function DashboardLayout({
   // Persisting the sidebar state in the cookie.
   const cookieStore = cookies();
   const defaultOpen = cookieStore.get('sidebar:state')?.value === 'true';
+
+  // return children;
+
   return (
     <KBar>
       <SidebarProvider defaultOpen={defaultOpen}>

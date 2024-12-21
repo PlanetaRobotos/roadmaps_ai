@@ -16,12 +16,13 @@ export interface Quiz {
   id: string;
   question: string;
   options: string[];
-  correctAnswers: number[];
+  correctAnswer: number;
 }
 
 export type RoadmapCard = HeroCard | LessonCard | QuizCard;
 
 export interface HeroCard {
+  id: string;
   type: 'hero';
   title: string;
   contentTop?: string;
@@ -29,7 +30,7 @@ export interface HeroCard {
 }
 
 export interface LessonCard {
-  // id: string;
+  id: string;
   roadmapId: string;
   type: 'lesson';
   title: string;
@@ -39,9 +40,9 @@ export interface LessonCard {
 }
 
 export interface QuizCard {
-  // id: string;
+  id: string;
   type: 'quiz';
   question: string;
   options: string[];
-  correctAnswers: number[];
+  correctAnswer: number;
 }

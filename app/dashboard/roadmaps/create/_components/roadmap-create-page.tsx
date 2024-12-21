@@ -5,8 +5,8 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import SearchInput from '@/app/dashboard/roadmaps/_components/search-input';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useRoadmapStore } from '@/store/useRoadmapStore'; // For animations
-import RoadmapPreview from '@/components/roadmaps/roadmap-preview';
+import { useRoadmapStore } from '@/store/useRoadmapStore';
+import { useRouter } from 'next/navigation';
 
 interface RoadmapFormData {
   title: string;
@@ -14,6 +14,7 @@ interface RoadmapFormData {
 }
 
 export default function RoadmapCreatePage() {
+  const router = useRouter();
   const {
     handleSubmit,
     control,
@@ -41,17 +42,8 @@ export default function RoadmapCreatePage() {
     setTitle(data.title);
     setSelectedTime(data.estimatedDuration);
     generateRoadmap();
-    reset();
-  };
-
-  const saveRoadmap = () => {
-    // Implement your save logic here
-    alert('Roadmap saved successfully!');
-  };
-
-  const shareRoadmap = () => {
-    // Implement your share logic here (e.g., copy to clipboard, share via social media)
-    alert('Roadmap shared successfully!');
+    router.push(`$/dashboard/roadmaps/edit/${roadmapPreview?.id}`);
+    // reset();
   };
 
   return (
@@ -169,53 +161,6 @@ export default function RoadmapCreatePage() {
               </div>
             )}
           </motion.form>
-        )}
-
-        {/* Roadmap Preview Section */}
-        {roadmapPreview && (
-          <motion.div
-            className="w-full max-w-md space-y-6 rounded-lg bg-white p-8 shadow-md"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h3 className="mb-4 text-center text-xl font-semibold">
-              Your Roadmap
-            </h3>
-            <RoadmapPreview roadmapItems={roadmapPreview} />
-            <div className="mt-6 flex justify-center space-x-4">
-              <Button
-                type="button"
-                variant="default"
-                onClick={saveRoadmap}
-                className="px-6 py-3"
-              >
-                Save
-              </Button>
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={shareRoadmap}
-                className="px-6 py-3"
-              >
-                Share
-              </Button>
-            </div>
-            <div className="mt-4 flex justify-center">
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => {
-                  reset(); // Reset react-hook-form
-                  resetRoadmap(); // Reset Zustand store
-                }}
-                className="px-6 py-3"
-              >
-                Create Another Roadmap
-              </Button>
-            </div>
-          </motion.div>
         )}
       </AnimatePresence>
     </div>

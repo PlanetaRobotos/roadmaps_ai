@@ -8,6 +8,7 @@ import {
   updateLessonStatus
 } from '@/services/roadmapsService';
 import { transformRoadmapToItems } from '@/utils/transformRoadmap';
+import { useRouter } from 'next/navigation';
 
 interface RoadmapState {
   title: string;
@@ -19,11 +20,6 @@ interface RoadmapState {
   setRoadmapPreview: (preview: ClientRoadmap) => void;
   generateRoadmap: () => void;
   reset: () => void;
-  // toggleLessonCompletion: (
-  //   roadmapId: string,
-  //   lessonId: string,
-  //   completed: boolean
-  // ) => void;
 }
 
 export const useRoadmapStore = create<RoadmapState>((set, get) => ({
@@ -53,22 +49,10 @@ export const useRoadmapStore = create<RoadmapState>((set, get) => ({
         estimatedDuration: selectedTime
       });
 
-      console.log('Start Roadmap gen');
+      const roadmapModel = await createRoadmap(requestBody);
 
-      const roadmap = await createRoadmap(requestBody);
-
-      for (const mod of roadmap.modules!) {
-        for (const lesson of mod.lessons!) {
-          console.log('Lesson:', lesson.title);
-
-          const result = await getLessonById(lesson.id!);
-        }
-      }
-
-      console.log('Roadmap generated', roadmap);
-
-      const items = transformRoadmapToItems(roadmap);
-      set({ roadmapPreview: items });
+      const cards = transformRoadmapToItems(roadmapModel);
+      set({ roadmapPreview: cards });
     } catch (error) {
       console.error('Error generating roadmap:', error);
       alert('Failed to generate roadmap. Please try again.');
@@ -83,26 +67,4 @@ export const useRoadmapStore = create<RoadmapState>((set, get) => ({
       roadmapPreview: null,
       isGenerating: false
     })
-  // toggleLessonCompletion: async (roadmapId, lessonId, completed) => {
-  //   try {
-  //     console.log(
-  //       'Start toggle lesson completion:',
-  //       roadmapId,
-  //       lessonId,
-  //       completed
-  //     );
-  //
-  //     await updateLessonStatus(roadmapId, lessonId, completed);
-  //
-  //     console.log('Lesson completion updated:', lessonId, completed);
-  //
-  //     // Update the roadmap with modified lessons
-  //     // set();
-  //   } catch (error) {
-  //     console.error('Error with update lesson completion', error);
-  //     alert('Failed to update lesson completion. Please try again.');
-  //   } finally {
-  //     set({ isGenerating: false });
-  //   }
-  // }
 }));

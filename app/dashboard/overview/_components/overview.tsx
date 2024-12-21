@@ -7,12 +7,11 @@ import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
 import React from 'react';
-import { SignOut } from '@/components/signout-button';
 
 export default function OverViewPage() {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
 
   return (
     <PageContainer scrollable>
@@ -32,7 +31,6 @@ export default function OverViewPage() {
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsContent value="overview" className="space-y-4">
             {/*<RoadmapsList roadmaps={libraryRoadmaps} loading={loadingLibrary} />*/}
-            <SignOut />
           </TabsContent>
         </Tabs>
       </div>

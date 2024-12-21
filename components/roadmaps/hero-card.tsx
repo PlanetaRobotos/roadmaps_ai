@@ -8,17 +8,15 @@ interface HeroCardProps {
 
 const HeroCard: React.FC<HeroCardProps> = ({ hero }) => {
   return (
-    <Card className="h-full w-full max-w-md rounded-lg text-white shadow-lg">
-      <CardHeader className="p-6">
-        {hero.contentTop && (
-          <p className="mb-4 text-center">{hero.contentTop}</p>
-        )}
-        <CardTitle className="text-center text-2xl">{hero.title}</CardTitle>
+    <Card className="animate-fadeIn flex h-full w-full flex-col items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg">
+      <CardHeader className="">
+        <CardTitle className="text-center text-4xl font-extrabold">
+          {hero.title}
+        </CardTitle>
       </CardHeader>
-      <CardContent className="p-6">
-        {hero.contentBottom && (
-          <p className="text-center">{hero.contentBottom}</p>
-        )}
+      <CardContent className="text-center text-lg leading-relaxed opacity-90">
+        {hero.contentTop && <p>{hero.contentTop}</p>}
+        {hero.contentBottom && <p className="mt-2">{hero.contentBottom}</p>}
       </CardContent>
     </Card>
   );
