@@ -1,6 +1,5 @@
 import React from 'react';
 import MagicLinkLogin from './magic-link';
-import GoogleLoginButton from './google-login-button';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import UserAuthForm from './user-auth-form';
