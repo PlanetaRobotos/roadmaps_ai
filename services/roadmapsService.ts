@@ -9,8 +9,6 @@ import {
   UserCreateRequest,
   UserQuizResultUpdateRequest
 } from '@/app/api/client';
-import { async } from 'q';
-import { undefined } from 'zod';
 
 export const getRoadmapById = async (id: string) => {
   console.log('id', id);
