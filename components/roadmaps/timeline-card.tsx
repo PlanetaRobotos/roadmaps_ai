@@ -5,10 +5,10 @@ import LessonCard from './lesson-card';
 import QuizCard from './quiz-card';
 import HeroCard from './hero-card';
 import { motion } from 'framer-motion';
-import { Lesson, Quiz } from '@/types/roadmap-types';
+import { Quiz } from '@/types/roadmap-types';
 
 interface TimelineCardProps {
-  item: Lesson | Quiz | Hero;
+  item: Quiz;
   moduleId: string;
 }
 
@@ -27,13 +27,13 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, moduleId }) => {
       transition={{ duration: 0.5 }}
       variants={variants}
     >
-      {item.type === 'lesson' ? (
-        <LessonCard lesson={item} moduleId={moduleId} />
-      ) : item.type === 'quiz' ? (
-        <QuizCard quiz={item} moduleId={moduleId} />
-      ) : item.type === 'hero' ? (
-        <HeroCard hero={item} />
-      ) : null}
+      {/*{item.type === 'lesson' ? (*/}
+      {/*  <LessonCard lesson={item} />*/}
+      {/*) : item.type === 'quiz' ? (*/}
+      {/*  <QuizCard quiz={item} />*/}
+      {/*) : item.type === 'hero' ? (*/}
+      {/*  <HeroCard hero={item} />*/}
+      {/*) : null}*/}
     </motion.div>
   );
 };
