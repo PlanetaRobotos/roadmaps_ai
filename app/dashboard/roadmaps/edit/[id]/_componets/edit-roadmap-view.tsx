@@ -62,48 +62,46 @@ export default function EditRoadmapView({
   if (loading) return <div>Loading...</div>;
   if (!roadmap) return <div>Course not found. {roadmapId}</div>;
 
-  return <RoadmapView roadmapItems={roadmap} />;
+  // return <RoadmapView roadmapItems={roadmap} />;
 
-  // return (
-  //   <motion.div
-  //     className=""
-  //     initial={{ opacity: 0, y: 50 }}
-  //     animate={{ opacity: 1, y: 0 }}
-  //     exit={{ opacity: 0, y: -50 }}
-  //     transition={{ duration: 0.5 }}
-  //   >
-  //     <h3 className="text-center text-xl font-semibold">Edit Roadmap</h3>
-  //     <RoadmapView roadmapItems={roadmap} />
-  //     <div className="flex justify-center space-x-4">
-  //       <Button
-  //         type="button"
-  //         variant="default"
-  //         onClick={saveRoadmap}
-  //         className="px-6 py-3"
-  //       >
-  //         Save
-  //       </Button>
-  //       <Button
-  //         type="button"
-  //         variant="secondary"
-  //         onClick={shareRoadmap}
-  //         className="px-6 py-3"
-  //       >
-  //         Share
-  //       </Button>
-  //     </div>
-  //     <div className="mt-4 flex justify-center">
-  //       <Button
-  //         type="button"
-  //         variant="secondary"
-  //         onClick={() => {
-  //           reset();
-  //         }}
-  //         className="px-6 py-3"
-  //       >
-  //         Create Another Roadmap
-  //       </Button>
-  //     </div>
-  //   </motion.div>
-  // );
+  return (
+    <div className="mx-auto flex h-[85vh] max-h-[700px] w-[95vw] max-w-xl flex-col space-y-5">
+      <h3 className="mr-2 text-center text-xl font-semibold">Edit Roadmap</h3>
+      <div className="relative w-full flex-1">
+        <RoadmapView roadmapItems={roadmap} />
+      </div>
+      <div className="w-full">
+        <div className="flex justify-center space-x-4">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={saveRoadmap}
+            className="w-1/3 px-6 py-3"
+          >
+            Copy Link
+          </Button>
+          <Button
+            type="button"
+            variant="default"
+            onClick={shareRoadmap}
+            className="w-1/3 px-6 py-3"
+          >
+            Share
+          </Button>
+        </div>
+      </div>
+      {/*<div className="mt-4 flex justify-center">*/}
+      {/*  <Button*/}
+      {/*    type="button"*/}
+      {/*    variant="secondary"*/}
+      {/*    onClick={() => {*/}
+      {/*      reset();*/}
+      {/*    }}*/}
+      {/*    className="px-6 py-3"*/}
+      {/*  >*/}
+      {/*    Create Another Roadmap*/}
+      {/*  </Button>*/}
+      {/*</div>*/}
+    </div>
+  );
 }

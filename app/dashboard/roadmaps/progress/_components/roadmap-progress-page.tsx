@@ -2,23 +2,25 @@
 
 import PageContainer from '@/components/layout/page-container';
 import RoadmapsList from '@/app/dashboard/roadmaps/_components/roadmaps-list';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { RoadmapModel } from '@/app/api/client';
 import { getUserRoadmaps } from '@/services/roadmapsService';
+import { AuthContext } from '@/context/auth-context';
 
 function ProgressViewPage() {
-  const userId = 1; // Assume we have this userId
+  const { user } = useContext(AuthContext);
   const [progressRoadmaps, setProgressRoadmaps] = useState<RoadmapModel[]>([]);
   const [loadingProgress, setLoadingProgress] = useState(true);
 
   useEffect(() => {
-    getUserRoadmaps(userId).then((result) => {
+    if (!user) return;
+
+    getUserRoadmaps(user.id!).then((result) => {
       console.log('User progress roadmaps:', result);
       setProgressRoadmaps(result ?? []);
       setLoadingProgress(false);
     });
-  }, [userId]);
+  }, [user]);
 
   return (
     <PageContainer scrollable>

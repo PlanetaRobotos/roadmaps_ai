@@ -18,20 +18,24 @@ interface RoadmapViewProps {
 
 const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmapItems }) => {
   return (
-    <Carousel className="mx-auto w-full max-w-[90vw]">
-      <CarouselContent>
-        {roadmapItems.cards.map((card, index) => (
-          <CarouselItem key={index}>
-            <div className="flex h-[80vh] w-full max-w-[90vw] items-center justify-center">
-              {card.type === 'hero' && <HeroCard hero={card} />}
-              {card.type === 'lesson' && <LessonCard lesson={card} />}
-              {card.type === 'quiz' && <QuizCard quiz={card} />}
-            </div>
-          </CarouselItem>
-        ))}
+    <Carousel className="mx-auto h-full w-full">
+      <CarouselContent className="h-full">
+        {roadmapItems.cards
+          // .filter((card) => card.type === 'quiz')
+          // .flatMap((card) => [card, card]) // Double the lesson cards
+          .map((card, index) => (
+            // console.log('card', index),
+            <CarouselItem key={index}>
+              <div className="fixed h-full w-[94%]">
+                {card.type === 'hero' && <HeroCard hero={card} />}
+                {card.type === 'lesson' && <LessonCard lesson={card} />}
+                {card.type === 'quiz' && <QuizCard quiz={card} />}
+              </div>
+            </CarouselItem>
+          ))}
       </CarouselContent>
-      {/*<CarouselPrevious />*/}
-      {/*<CarouselNext />*/}
+      {/*<CarouselPrevious className="hidden md:block"/>*/}
+      {/*<CarouselNext className="hidden md:block" />*/}
     </Carousel>
   );
 };

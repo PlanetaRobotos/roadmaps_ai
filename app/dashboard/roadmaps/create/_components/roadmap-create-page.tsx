@@ -1,12 +1,14 @@
 'use client';
 
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import SearchInput from '@/app/dashboard/roadmaps/_components/search-input';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRoadmapStore } from '@/store/useRoadmapStore';
 import { useRouter } from 'next/navigation';
+import axios from '@/lib/axios';
+import { AuthContext } from '@/context/auth-context';
 
 interface RoadmapFormData {
   title: string;
@@ -15,6 +17,8 @@ interface RoadmapFormData {
 
 export default function RoadmapCreatePage() {
   const router = useRouter();
+  const { user } = useContext(AuthContext);
+
   const {
     handleSubmit,
     control,
@@ -39,13 +43,15 @@ export default function RoadmapCreatePage() {
   } = useRoadmapStore();
 
   const onSubmit: SubmitHandler<RoadmapFormData> = async (data) => {
-    setTitle(data.title);
-    setSelectedTime(data.estimatedDuration);
-    generateRoadmap();
-    router.push(`$/dashboard/roadmaps/edit/${roadmapPreview?.id}`);
-    // reset();
-  };
+    const newRoadmap = await generateRoadmap();
+    console.log('newRoadmap:', newRoadmap);
 
+    if (newRoadmap) {
+      await axios.post(`/v1/users/${user?.id}/roadmaps/${newRoadmap.id}`);
+
+      router.push(`/dashboard/roadmaps/edit/${newRoadmap.id}`);
+    }
+  };
   return (
     <div className="flex min-h-screen items-center justify-center  p-4">
       <AnimatePresence>
@@ -122,9 +128,8 @@ export default function RoadmapCreatePage() {
             {title && selectedTime && !roadmapPreview && (
               <div className="mt-6 flex justify-center">
                 <Button
-                  type="button"
+                  type="submit"
                   variant="default"
-                  onClick={() => generateRoadmap()} // Corrected: No parameters
                   className="px-6 py-3"
                   disabled={isGenerating} // Disable while generating
                 >

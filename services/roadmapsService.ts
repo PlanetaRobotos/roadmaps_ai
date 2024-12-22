@@ -108,7 +108,6 @@ export const getUserQuizzes = async (userId: number) => {
       undefined // pageSize
     );
 
-    console.log('User quizzes:', result);
     const quizzes = result.data!;
     return quizzes;
   } catch (error) {

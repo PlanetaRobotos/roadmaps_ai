@@ -8,13 +8,9 @@ export const metadata = {
 };
 
 export default function Page({ params }: { params: { id: string } }) {
-  const userId = 1;
-
   return (
-    <PageContainer>
-      <div className="space-y-2">
-        <RoadmapViewPage roadmapId={params.id} userId={userId} />
-      </div>
+    <PageContainer scrollable={false}>
+      <RoadmapViewPage roadmapId={params.id} />
     </PageContainer>
   );
 }

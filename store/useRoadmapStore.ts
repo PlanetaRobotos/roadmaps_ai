@@ -2,13 +2,9 @@
 import create from 'zustand';
 import { ClientRoadmap } from '@/types/roadmap-types';
 import { RoadmapCreateRequest } from '@/app/api/client';
-import {
-  createRoadmap,
-  getLessonById,
-  updateLessonStatus
-} from '@/services/roadmapsService';
+import { createRoadmap } from '@/services/roadmapsService';
 import { transformRoadmapToItems } from '@/utils/transformRoadmap';
-import { useRouter } from 'next/navigation';
+import { API_BASE_URL } from '@/config/apiConfig';
 
 interface RoadmapState {
   title: string;
@@ -18,7 +14,7 @@ interface RoadmapState {
   setTitle: (title: string) => void;
   setSelectedTime: (time: number) => void;
   setRoadmapPreview: (preview: ClientRoadmap) => void;
-  generateRoadmap: () => void;
+  generateRoadmap: () => Promise<ClientRoadmap | null>;
   reset: () => void;
 }
 
@@ -31,11 +27,11 @@ export const useRoadmapStore = create<RoadmapState>((set, get) => ({
   setSelectedTime: (time: number) => set({ selectedTime: time }),
   setRoadmapPreview: (preview: ClientRoadmap) =>
     set({ roadmapPreview: preview }),
-  generateRoadmap: async () => {
+  generateRoadmap: async (): Promise<ClientRoadmap | null> => {
     const { title, selectedTime } = get();
     if (!title || !selectedTime) {
       console.log('Cannot generate roadmap: Missing title or selected time.');
-      return;
+      return null;
     }
 
     console.log('Generating roadmap for:', title, selectedTime);
@@ -53,9 +49,12 @@ export const useRoadmapStore = create<RoadmapState>((set, get) => ({
 
       const cards = transformRoadmapToItems(roadmapModel);
       set({ roadmapPreview: cards });
+
+      return cards;
     } catch (error) {
       console.error('Error generating roadmap:', error);
       alert('Failed to generate roadmap. Please try again.');
+      return null;
     } finally {
       set({ isGenerating: false });
     }

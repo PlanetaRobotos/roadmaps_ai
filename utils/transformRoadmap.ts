@@ -69,6 +69,7 @@ export const transformRoadmapToItems = (
 
   return {
     id: roadmap.id!,
+    description: roadmap.description!,
     cards: items
   };
 };
