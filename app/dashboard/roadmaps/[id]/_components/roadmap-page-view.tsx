@@ -60,7 +60,6 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
       title: 'Check out this post!',
       text: 'A cat silhouette sitting on the moon.'
     });
-    // toast.message('Shared', { description: 'Post has been shared!' });
   };
 
   /*  const handleFullscreen = () => {

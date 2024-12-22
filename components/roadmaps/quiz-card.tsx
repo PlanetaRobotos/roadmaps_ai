@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Quiz } from '@/types/roadmap-types';
 import { Button } from '@/components/ui/button';
@@ -9,7 +9,7 @@ import { Separator } from '@/components/ui/separator';
 interface QuizCardProps {
   quiz: Quiz;
   userId?: number;
-  // selectedIndex?: number;
+  initialSelectedIndex?: number | null;
   updateQuizStatus?: (
     userId: number,
     quizId: string,
@@ -20,32 +20,20 @@ interface QuizCardProps {
 const QuizCard: React.FC<QuizCardProps> = ({
   quiz,
   userId,
-  updateQuizStatus
+  updateQuizStatus,
+  initialSelectedIndex
 }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  // Handler for when a user selects an option
-  const handleOptionSelect = async (option: string) => {
-    // Evaluate correctness:
-    const selectedIndex = quiz.options.indexOf(option);
-    const correct = selectedIndex === quiz.correctAnswer;
-
-    setSelectedOption(option);
-    setIsCorrect(correct);
-
-    if (userId && updateQuizStatus) {
-      try {
-        setLoading(true);
-        await updateQuizStatus(userId, quiz.id, selectedIndex);
-      } catch (error) {
-        console.error('Failed to update quiz status:', error);
-      } finally {
-        setLoading(false);
-      }
+  useEffect(() => {
+    if (initialSelectedIndex !== undefined && initialSelectedIndex !== null) {
+      const previouslySelectedOption = quiz.options[initialSelectedIndex];
+      setSelectedOption(previouslySelectedOption);
+      setIsCorrect(initialSelectedIndex === quiz.correctAnswer);
     }
-  };
+  }, [initialSelectedIndex, quiz.options, quiz.correctAnswer]);
 
   const getButtonVariant = (
     option: string
@@ -86,6 +74,26 @@ const QuizCard: React.FC<QuizCardProps> = ({
     }
     // Everyone else => ghost/faded
     return 'ghost';
+  };
+
+  const handleOptionSelect = async (option: string) => {
+    // Evaluate correctness:
+    const selectedIndex = quiz.options.indexOf(option);
+    const correct = selectedIndex === quiz.correctAnswer;
+
+    setSelectedOption(option);
+    setIsCorrect(correct);
+
+    if (userId && updateQuizStatus) {
+      try {
+        setLoading(true);
+        await updateQuizStatus(userId, quiz.id, selectedIndex);
+      } catch (error) {
+        console.error('Failed to update quiz status:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
   };
 
   return (
