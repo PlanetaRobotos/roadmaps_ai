@@ -7,7 +7,6 @@ import { transformRoadmapToItems } from '@/utils/transformRoadmap';
 import RoadmapView from '@/components/roadmaps/roadmap-view';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { roadmapTest } from '@/app/dashboard/roadmaps/edit/[id]/roadmapTest';
 
 interface EditRoadmapViewProps {
   roadmapId: string;
