@@ -14,7 +14,6 @@ export default function GoogleSignInButton() {
       console.error('Google login error:', error);
     }
   };
-
   return (
     <Button
       className="w-full"
