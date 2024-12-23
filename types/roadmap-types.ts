@@ -3,6 +3,8 @@
 export interface ClientRoadmap {
   id: string;
   description: string;
+  duration: number;
+  title: string;
   cards: RoadmapCard[];
 }
 

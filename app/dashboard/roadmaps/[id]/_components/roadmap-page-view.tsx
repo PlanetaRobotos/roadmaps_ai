@@ -19,6 +19,7 @@ import { toast } from 'sonner';
 import { Icons } from '@/components/icons';
 import axios from '@/lib/axios';
 import { AuthContext } from '@/context/auth-context';
+import ShareButton from '@/app/dashboard/roadmaps/_components/share-button';
 
 interface RoadmapViewPageProps {
   roadmapId: string;
@@ -41,32 +42,13 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
 
   const handleLike = async () => {
     await toggleLike(roadmapId, user?.id!);
-    // toast.message(isLiked ? 'Removed Like' : 'Liked', {
-    //   description: isLiked ? 'You unliked this post.' : 'You liked this post.'
-    // });
   };
 
   const handleSave = async () => {
     await toggleSave(roadmapId, user?.id!);
-    // toast.message(isSaved ? 'Removed from Saved' : 'Saved', {
-    //   description: isSaved
-    //     ? 'You removed this post from saved items.'
-    //     : 'You saved this post.'
-    // });
   };
 
-  const handleShare = () => {
-    navigator.share?.({
-      title: 'Check out this post!',
-      text: 'A cat silhouette sitting on the moon.'
-    });
-  };
-
-  /*  const handleFullscreen = () => {
-      toast.message('Open Fullscreen', {
-        description: 'Opening fullscreen mode.'
-      });
-    };*/
+  console.log('url', window.location.href);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -133,31 +115,34 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
           >
             <Icons.like
               className={`h-5 w-5 ${
-                isLiked ? 'text-red-500' : 'text-gray-500'
+                isLiked
+                  ? 'fill-red-500 stroke-0'
+                  : 'fill-none stroke-gray-500 stroke-2'
               }`}
             />
             <span>{likeCount}</span>
           </Button>
 
           {/* Share Button */}
-          <Button
-            onClick={handleShare}
-            variant="ghost"
-            className="flex items-center space-x-2"
-          >
-            <Icons.share className="h-5 w-5 text-gray-500" />
-            <span>Share</span>
-          </Button>
+          <div className="flex items-center space-x-2">
+            <ShareButton
+              shareTitle={`Check out a course for ${roadmap?.title}!`}
+              shareText={`A course to learn ${roadmap?.title} in ${roadmap?.duration} using MyMicroCourses!`}
+              shareUrl={window.location.href}
+            />
+          </div>
 
           {/* Save Button */}
           <Button
             onClick={handleSave}
             variant="ghost"
-            className="flex items-center space-x-2"
+            className="flex items-center"
           >
             <Icons.save
               className={`h-5 w-5 ${
-                isSaved ? 'text-blue-500' : 'text-gray-500'
+                isSaved
+                  ? 'fill-blue-500 stroke-0'
+                  : 'fill-none stroke-gray-500 stroke-2'
               }`}
             />
             <span>{isSaved ? 'Saved' : 'Save'}</span>
