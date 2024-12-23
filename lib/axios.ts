@@ -2,8 +2,8 @@
 import { API_BASE_URL } from '@/config/apiConfig';
 
 const axiosInstance = axios.create({
-  baseURL: API_BASE_URL, // Backend URL
-  withCredentials: true // Send cookies and credentials
+  baseURL: API_BASE_URL,
+  withCredentials: true
 });
 
 axiosInstance.interceptors.request.use(
