@@ -23,18 +23,18 @@ export default function DashboardLayout({
   // return children;
 
   return (
-    <ProtectedRoute>
-      <KBar>
-        <SidebarProvider defaultOpen={defaultOpen}>
-          <AppSidebar />
-          <SidebarInset>
-            <Header />
-            {/* page main content */}
-            {children}
-            {/* page main content ends */}
-          </SidebarInset>
-        </SidebarProvider>
-      </KBar>
-    </ProtectedRoute>
+    // <ProtectedRoute>
+    <KBar>
+      <SidebarProvider defaultOpen={defaultOpen}>
+        <AppSidebar />
+        <SidebarInset>
+          <Header />
+          {/* page main content */}
+          {children}
+          {/* page main content ends */}
+        </SidebarInset>
+      </SidebarProvider>
+    </KBar>
+    // </ProtectedRoute>
   );
 }
