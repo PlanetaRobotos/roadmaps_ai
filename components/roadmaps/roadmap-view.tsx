@@ -16,7 +16,7 @@ import { getUserQuizzes, updateQuizStatus } from '@/services/roadmapsService';
 
 interface RoadmapViewProps {
   roadmapItems: ClientRoadmap;
-  onAuthorizeClick: () => void;
+  onAuthorizeClick?: () => void;
 }
 
 const RoadmapView: React.FC<RoadmapViewProps> = ({
