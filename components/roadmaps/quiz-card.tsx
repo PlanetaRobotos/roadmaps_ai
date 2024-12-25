@@ -15,13 +15,15 @@ interface QuizCardProps {
     quizId: string,
     answerIndex: number
   ) => Promise<void>;
+  onAuthorizeClick?: () => void;
 }
 
 const QuizCard: React.FC<QuizCardProps> = ({
   quiz,
   userId,
   updateQuizStatus,
-  initialSelectedIndex
+  initialSelectedIndex,
+  onAuthorizeClick
 }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
@@ -77,15 +79,14 @@ const QuizCard: React.FC<QuizCardProps> = ({
   };
 
   const handleOptionSelect = async (option: string) => {
-    // Evaluate correctness:
-    const selectedIndex = quiz.options.indexOf(option);
-    const correct = selectedIndex === quiz.correctAnswer;
-
-    setSelectedOption(option);
-    setIsCorrect(correct);
-
     if (userId && updateQuizStatus) {
       try {
+        const selectedIndex = quiz.options.indexOf(option);
+        const correct = selectedIndex === quiz.correctAnswer;
+
+        setSelectedOption(option);
+        setIsCorrect(correct);
+
         setLoading(true);
         await updateQuizStatus(userId, quiz.id, selectedIndex);
       } catch (error) {
@@ -93,6 +94,8 @@ const QuizCard: React.FC<QuizCardProps> = ({
       } finally {
         setLoading(false);
       }
+    } else {
+      onAuthorizeClick?.();
     }
   };
 

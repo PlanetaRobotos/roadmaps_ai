@@ -20,6 +20,16 @@ import { Icons } from '@/components/icons';
 import axios from '@/lib/axios';
 import { AuthContext } from '@/context/auth-context';
 import ShareButton from '@/app/dashboard/roadmaps/_components/share-button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle
+} from '@/components/ui/dialog';
+import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import AuthCallback from '@/app/(auth)/_components/callback';
 
 interface RoadmapViewPageProps {
   roadmapId: string;
@@ -36,19 +46,35 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
     toggleLike,
     toggleSave
   } = usePostStore();
-
+  const pathname = usePathname();
   const [roadmap, setRoadmap] = useState<ClientRoadmap>();
   const [loading, setLoading] = useState(true);
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control Dialog visibility
 
+  const router = useRouter(); // Initialize router for navigation
+
+  const signin = () => {
+    console.log('Redirecting to signin page', pathname);
+    router.push(`/signin?redirect=${pathname}`);
+  };
+
+  // Handler for Like button
   const handleLike = async () => {
-    await toggleLike(roadmapId, user?.id!);
+    if (!user) {
+      setIsDialogOpen(true); // Open Dialog if not authenticated
+      return;
+    }
+    await toggleLike(roadmapId, user.id!);
   };
 
+  // Handler for Save button
   const handleSave = async () => {
-    await toggleSave(roadmapId, user?.id!);
+    if (!user) {
+      setIsDialogOpen(true); // Open Dialog if not authenticated
+      return;
+    }
+    await toggleSave(roadmapId, user.id!);
   };
-
-  console.log('url', window.location.href);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,19 +83,18 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
         const roadmapResp = await getRoadmapById(roadmapId);
         const cards = transformRoadmapToItems(roadmapResp);
 
-        const userQuizzes = await getUserQuizzes(user?.id!);
-        console.log('User quizzes:', userQuizzes);
+        if (user) {
+          const userLikeResp = await axios.get(
+            `v1/roadmaps/${roadmapId}/userlikes/${user?.id}`
+          );
+          isLiked = userLikeResp?.data;
 
-        const userLikeResp = await axios.get(
-          `v1/roadmaps/${roadmapId}/userlikes/${user?.id!}`
-        );
-        isLiked = userLikeResp?.data;
-
-        const userSaveResp = await axios.get(
-          `/v1/users/${user?.id}/roadmaps/${roadmapId}`
-        );
-        isSaved = userSaveResp?.data;
-        console.log('User saved:', isSaved);
+          const userSaveResp = await axios.get(
+            `/v1/users/${user?.id}/roadmaps/${roadmapId}`
+          );
+          isSaved = userSaveResp?.data;
+          console.log('User saved:', isSaved);
+        }
 
         initializePost(isLiked, roadmapResp.likes!, isSaved);
         setRoadmap(cards);
@@ -87,68 +112,120 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
   if (!roadmap) return <div>Course not found. {roadmapId}</div>;
 
   return (
-    // <div className="">
-    <Card className="mx-auto flex h-full max-h-[900px] w-full max-w-2xl flex-col">
-      <CardHeader className="relative w-full flex-1">
-        <RoadmapView roadmapItems={roadmap} />
+    <>
+      <AuthCallback />
 
-        {/*<Button*/}
-        {/*  onClick={handleFullscreen}*/}
-        {/*  variant="ghost"*/}
-        {/*  className="absolute bottom-12 right-12 flex items-center space-x-2 rounded-full bg-white bg-opacity-80 p-2 shadow-md hover:bg-opacity-100"*/}
-        {/*>*/}
-        {/*  <Icons.maximize className="h-5 w-5" />*/}
-        {/*</Button>*/}
-      </CardHeader>
-      <CardContent className="bottom-0 flex w-full flex-col space-y-4 px-4 py-4">
-        <CardTitle className="text-lg font-semibold">
-          {roadmap?.description}
-        </CardTitle>
+      {/* Main Roadmap Card */}
+      <Card className="mx-auto flex h-[90vh] max-h-[800px] w-full max-w-2xl flex-col">
+        <CardHeader className="relative w-full flex-1">
+          <RoadmapView
+            roadmapItems={roadmap}
+            onAuthorizeClick={() => setIsDialogOpen(true)}
+          />
 
-        {/* Action Buttons */}
-        <div className="flex items-center justify-between">
-          {/* Like Button */}
-          <Button
-            onClick={handleLike}
+          {/* Uncomment if fullscreen functionality is needed */}
+          {/* <Button
+            onClick={handleFullscreen}
             variant="ghost"
-            className="flex items-center space-x-2"
+            className="absolute bottom-12 right-12 flex items-center space-x-2 rounded-full bg-white bg-opacity-80 p-2 shadow-md hover:bg-opacity-100"
           >
-            <Icons.like
-              className={`h-5 w-5 ${
-                isLiked
-                  ? 'fill-red-500 stroke-0'
-                  : 'fill-none stroke-gray-500 stroke-2'
-              }`}
-            />
-            <span>{likeCount}</span>
-          </Button>
+            <Icons.maximize className="h-5 w-5" />
+          </Button> */}
+        </CardHeader>
+        <CardContent className="bottom-0 flex w-full flex-col space-y-4 px-4 py-4">
+          <CardTitle className="text-lg font-semibold">
+            {roadmap?.description}
+          </CardTitle>
 
-          {/* Share Button */}
-          <div className="flex items-center space-x-2">
-            <ShareButton
-              shareTitle={`Check out a course for ${roadmap?.title}!`}
-              shareText={`A course to learn ${roadmap?.title} in ${roadmap?.duration} using MyMicroCourses!`}
-              shareUrl={window.location.href}
-            />
+          {/* Action Buttons */}
+          <div className="flex items-center justify-between">
+            {/* Like Button */}
+            <Button
+              onClick={handleLike}
+              variant="ghost"
+              className="flex items-center space-x-2"
+            >
+              <Icons.like
+                className={`h-5 w-5 ${
+                  isLiked
+                    ? 'fill-red-500 stroke-0'
+                    : 'fill-none stroke-gray-500 stroke-2'
+                }`}
+              />
+              <span>{likeCount}</span>
+            </Button>
+
+            {/* Share Button */}
+            <div className="flex items-center space-x-2">
+              <ShareButton
+                shareTitle={`Check out a course for ${roadmap?.title}!`}
+                shareText={`A course to learn ${roadmap?.title} in ${roadmap?.duration} using MyMicroCourses!`}
+                shareUrl={
+                  typeof window !== 'undefined' ? window.location.href : ''
+                }
+              />
+            </div>
+
+            {/* Save Button */}
+            <Button
+              onClick={handleSave}
+              variant="ghost"
+              className="flex items-center"
+            >
+              <Icons.save
+                className={`h-5 w-5 ${
+                  isSaved
+                    ? 'fill-blue-500 stroke-0'
+                    : 'fill-none stroke-gray-500 stroke-2'
+                }`}
+              />
+              <span>{isSaved ? 'Saved' : 'Save'}</span>
+            </Button>
           </div>
+        </CardContent>
+      </Card>
 
-          {/* Save Button */}
-          <Button
-            onClick={handleSave}
-            variant="ghost"
-            className="flex items-center"
-          >
-            <Icons.save
-              className={`h-5 w-5 ${
-                isSaved
-                  ? 'fill-blue-500 stroke-0'
-                  : 'fill-none stroke-gray-500 stroke-2'
-              }`}
-            />
-            <span>{isSaved ? 'Saved' : 'Save'}</span>
-          </Button>
+      {/* Bottom Banner for Unauthenticated Users */}
+      {!user && (
+        <div className="fixed bottom-0 left-0 flex w-full justify-center space-x-4 bg-secondary p-4 shadow-md">
+          {/* Login Button triggers Dialog */}
+          <Button onClick={() => signin()}>Login</Button>
+          {/* Sign Up Button triggers Dialog */}
+          <Button onClick={() => signin()}>Sign Up</Button>
         </div>
-      </CardContent>
-    </Card>
+      )}
+
+      {/* Dialog Popup for Authentication */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Authentication Required</DialogTitle>
+            <DialogDescription>
+              Please log in or sign up to perform this action.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4 flex justify-end space-x-2">
+            {/* Login Button navigates to Login Page */}
+            <Button
+              onClick={() => {
+                setIsDialogOpen(false);
+                signin();
+              }}
+            >
+              Login
+            </Button>
+            {/* Sign Up Button navigates to Sign Up Page */}
+            <Button
+              onClick={() => {
+                setIsDialogOpen(false);
+                signin();
+              }}
+            >
+              Sign Up
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

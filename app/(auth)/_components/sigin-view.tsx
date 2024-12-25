@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import MagicLinkLogin from './magic-link';
 import { Metadata } from 'next';
@@ -5,6 +7,8 @@ import Link from 'next/link';
 import UserAuthForm from './user-auth-form';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import GoogleSignInButton from '@/app/(auth)/_components/google-auth-button';
+import { useSearchParams } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'Authentication',
@@ -12,6 +16,10 @@ export const metadata: Metadata = {
 };
 
 export default function SignInViewPage() {
+  const searchParams = useSearchParams();
+  const redirectPath = searchParams.get('redirect');
+  console.log('redirectPath:', redirectPath);
+
   return (
     <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <Link
@@ -61,7 +69,8 @@ export default function SignInViewPage() {
               Enter your email below to create your account
             </p>
           </div>
-          <UserAuthForm />
+          {/*<UserAuthForm />*/}
+          <GoogleSignInButton redirectPath={redirectPath} />
           <p className="px-8 text-center text-sm text-muted-foreground">
             By clicking continue, you agree to our{' '}
             <Link

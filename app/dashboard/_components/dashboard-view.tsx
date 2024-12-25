@@ -2,20 +2,11 @@
 
 import React, { useContext } from 'react';
 import { AuthContext } from '@/context/auth-context';
-import { Button } from '@/components/ui/button';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import LogoutButton from '@/components/logout-button';
 
 export default function DashboardView() {
-  const { user, logout } = useContext(AuthContext);
-
-  const handleLogout = async () => {
-    try {
-      logout();
-      // Optionally redirect or show a message
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
-  };
+  const { user } = useContext(AuthContext);
 
   return (
     <ProtectedRoute>
@@ -25,9 +16,7 @@ export default function DashboardView() {
             Welcome, {user?.userName}!
           </h1>
           <p className="mb-6">This is your dashboard.</p>
-          <Button onClick={handleLogout} variant="destructive">
-            Logout
-          </Button>
+          <LogoutButton />
         </div>
       </div>
     </ProtectedRoute>

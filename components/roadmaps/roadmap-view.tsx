@@ -16,9 +16,13 @@ import { getUserQuizzes, updateQuizStatus } from '@/services/roadmapsService';
 
 interface RoadmapViewProps {
   roadmapItems: ClientRoadmap;
+  onAuthorizeClick: () => void;
 }
 
-const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmapItems }) => {
+const RoadmapView: React.FC<RoadmapViewProps> = ({
+  roadmapItems,
+  onAuthorizeClick
+}) => {
   const [api, setApi] = React.useState<CarouselApi>();
   const [showSwipeHint, setShowSwipeHint] = useState(true);
   const { user } = useContext(AuthContext);
@@ -46,12 +50,7 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmapItems }) => {
 
     const fetchUserAnswers = async () => {
       try {
-        // Suppose your service returns an array of quiz statuses
-        // e.g. [ { quizId: "abc", answerIndex: 2 }, ... ]
         const quizStatuses = await getUserQuizzes(user.id!);
-
-        // Convert array into a dictionary for quick lookup
-        // e.g. { "abc": { selectedIndex: 2 }, "xyz": { selectedIndex: 1 } }
         const map: Record<string, { selectedIndex: number }> = {};
         quizStatuses.forEach((st) => {
           map[st.quizId!] = { selectedIndex: st.answerIndex! };
@@ -84,6 +83,7 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmapItems }) => {
                       userQuizAnswers[card.id]?.selectedIndex ?? null
                     }
                     updateQuizStatus={updateQuizStatus}
+                    onAuthorizeClick={onAuthorizeClick}
                   />
                 )}
               </div>

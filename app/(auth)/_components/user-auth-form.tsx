@@ -87,7 +87,7 @@ export default function UserAuthForm() {
       {/*    </span>*/}
       {/*  </div>*/}
       {/*</div>*/}
-      <GoogleSignInButton />
+      {/*<GoogleSignInButton />*/}
     </>
   );
 }

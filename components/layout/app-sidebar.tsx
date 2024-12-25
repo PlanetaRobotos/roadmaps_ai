@@ -44,7 +44,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
 import { Icons } from '../icons';
+import { Button } from '@/components/ui/button';
 // import { SignOut } from '@/components/signout-button';
+import LogoutButton from '@/components/logout-button';
+import { useContext } from 'react';
+import { AuthContext } from '@/context/auth-context';
 
 export const company = {
   name: 'Acme Inc',
@@ -55,6 +59,16 @@ export const company = {
 export default function AppSidebar() {
   // const { data: session } = useSession();
   const pathname = usePathname();
+  const { logout } = useContext(AuthContext);
+
+  const handleLogout = async () => {
+    try {
+      logout();
+      // Optionally redirect or show a message
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
 
   return (
     <Sidebar collapsible="icon">
@@ -203,10 +217,9 @@ export default function AppSidebar() {
                   {/*</DropdownMenuItem>*/}
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
                   <LogOut />
                   Log out
-                  {/*<SignOut />*/}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

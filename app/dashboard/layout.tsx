@@ -1,10 +1,8 @@
-import KBar from '@/components/kbar';
-import AppSidebar from '@/components/layout/app-sidebar';
-import Header from '@/components/layout/header';
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+// 'use client';
+
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
-import ProtectedRoute from '@/components/ProtectedRoute';
+import { LayoutPage } from '@/app/dashboard/layoutPage';
 
 export const metadata: Metadata = {
   title: 'Next Shadcn Dashboard Starter',
@@ -16,25 +14,9 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Persisting the sidebar state in the cookie.
   const cookieStore = cookies();
   const defaultOpen = cookieStore.get('sidebar:state')?.value === 'true';
 
-  // return children;
-
-  return (
-    <ProtectedRoute>
-      <KBar>
-        <SidebarProvider defaultOpen={defaultOpen}>
-          <AppSidebar />
-          <SidebarInset>
-            <Header />
-            {/* page main content */}
-            {children}
-            {/* page main content ends */}
-          </SidebarInset>
-        </SidebarProvider>
-      </KBar>
-    </ProtectedRoute>
-  );
+  return <LayoutPage defaultOpen={defaultOpen}>{children}</LayoutPage>;
+  // return <div>{children}</div>;
 }
