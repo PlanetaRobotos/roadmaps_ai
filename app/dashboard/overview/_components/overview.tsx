@@ -8,6 +8,7 @@ import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 // import { useSession } from 'next-auth/react';
+import { sendGAEvent } from '@next/third-parties/google';
 import React from 'react';
 
 export default function OverViewPage() {
@@ -23,6 +24,10 @@ export default function OverViewPage() {
           <Link
             href={'/dashboard/roadmaps/create'}
             className={cn(buttonVariants({ variant: 'default' }))}
+            onClick={() => {
+              console.log('Clicked');
+              sendGAEvent({ event: 'create_roadmap', value: 'clicked' });
+            }}
           >
             <Plus className="mr-2 h-4 w-4" /> Add New
           </Link>

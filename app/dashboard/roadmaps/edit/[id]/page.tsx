@@ -6,12 +6,9 @@ export const metadata = {
 };
 
 export default function Page({ params }: { params: { id: string } }) {
-  const userId = 1;
-
   return (
-    // <PageContainer>
-    <EditRoadmapView roadmapId={params.id} userId={userId} />
-    // <RoadmapView roadmapItems={roadmap} />
-    // </PageContainer>
+    <div className="h-full p-2 md:px-4">
+      <EditRoadmapView roadmapId={params.id} />
+    </div>
   );
 }

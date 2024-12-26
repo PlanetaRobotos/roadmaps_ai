@@ -4,9 +4,12 @@ import React, { useContext } from 'react';
 import { AuthContext } from '@/context/auth-context';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import LogoutButton from '@/components/logout-button';
+import { useRouter } from 'next/navigation';
 
 export default function DashboardView() {
   const { user } = useContext(AuthContext);
+  const router = useRouter();
+  router.push('/dashboard/roadmaps/create');
 
   return (
     <ProtectedRoute>

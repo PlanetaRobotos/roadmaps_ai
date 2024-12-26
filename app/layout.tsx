@@ -6,6 +6,7 @@ import NextTopLoader from 'nextjs-toploader';
 import './globals.css';
 import { RoadmapsClientProvider } from '@/services/RoadmapsClientProvider';
 import { AuthProvider } from '@/context/auth-context';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 export const metadata: Metadata = {
   title: 'Next Shadcn',
@@ -38,6 +39,7 @@ export default async function RootLayout({
         </AuthProvider>
         {/*</Providers>*/}
       </body>
+      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />
     </html>
   );
 }

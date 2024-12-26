@@ -116,21 +116,12 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
       <AuthCallback />
 
       {/* Main Roadmap Card */}
-      <Card className="mx-auto flex h-[90vh] max-h-[800px] w-full max-w-2xl flex-col">
+      <Card className="mx-auto flex h-[85vh] max-h-[800px] w-full max-w-2xl flex-col">
         <CardHeader className="relative w-full flex-1">
           <RoadmapView
             roadmapItems={roadmap}
             onAuthorizeClick={() => setIsDialogOpen(true)}
           />
-
-          {/* Uncomment if fullscreen functionality is needed */}
-          {/* <Button
-            onClick={handleFullscreen}
-            variant="ghost"
-            className="absolute bottom-12 right-12 flex items-center space-x-2 rounded-full bg-white bg-opacity-80 p-2 shadow-md hover:bg-opacity-100"
-          >
-            <Icons.maximize className="h-5 w-5" />
-          </Button> */}
         </CardHeader>
         <CardContent className="bottom-0 flex w-full flex-col space-y-4 px-4 py-4">
           <CardTitle className="text-lg font-semibold">
@@ -159,7 +150,7 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
             <div className="flex items-center space-x-2">
               <ShareButton
                 shareTitle={`Check out a course for ${roadmap?.title}!`}
-                shareText={`A course to learn ${roadmap?.title} in ${roadmap?.duration} using MyMicroCourses!`}
+                shareText={`A course to learn ${roadmap?.title} in ${roadmap?.duration} using CourseAI!`}
                 shareUrl={
                   typeof window !== 'undefined' ? window.location.href : ''
                 }

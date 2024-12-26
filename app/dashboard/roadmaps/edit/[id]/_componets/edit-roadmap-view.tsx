@@ -1,38 +1,65 @@
 ﻿'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ClientRoadmap } from '@/types/roadmap-types';
 import { getRoadmapById, getUserQuizzes } from '@/services/roadmapsService';
 import { transformRoadmapToItems } from '@/utils/transformRoadmap';
 import RoadmapView from '@/components/roadmaps/roadmap-view';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Icons } from '@/components/icons';
+import ShareButton from '@/app/dashboard/roadmaps/_components/share-button';
+import { toast } from 'sonner';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Copy } from 'lucide-react';
+import { AuthContext } from '@/context/auth-context';
+import { usePathname } from 'next/navigation';
+import { CLIENT_URL } from '@/config/apiConfig';
 
 interface EditRoadmapViewProps {
   roadmapId: string;
-  userId: number;
 }
 
-export default function EditRoadmapView({
-  roadmapId,
-  userId
-}: EditRoadmapViewProps) {
+export default function EditRoadmapView({ roadmapId }: EditRoadmapViewProps) {
   const [roadmap, setRoadmap] = useState<ClientRoadmap>();
   const [loading, setLoading] = useState(true);
+  const { user } = useContext(AuthContext);
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control Dialog visibility
+  const pathname = usePathname();
 
-  const saveRoadmap = () => {
-    // Implement your save logic here
-    alert('Roadmap saved successfully!');
-  };
+  const shareText = `Check out my new roadmap for ${roadmap?.title}! Url: ${CLIENT_URL}${pathname}`;
 
   const shareRoadmap = () => {
-    // Implement your share logic here (e.g., copy to clipboard, share via social media)
-    alert('Roadmap shared successfully!');
-  };
-
-  const reset = () => {
-    // Implement your reset logic here
-    alert('Resetting roadmap...');
+    const shareText = `Check out my new roadmap for ${roadmap?.title}!`;
+    const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+    if (navigator.share) {
+      // Native Web Share API (mobile/compatible browsers)
+      navigator.share({
+        title: shareText,
+        text: `I just created a roadmap to learn  ${roadmap?.title} in ${roadmap?.duration} using CourseAI`,
+        url: shareUrl
+      });
+    } else {
+      // Fallback: open a custom modal or social share links
+      window.open(
+        `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+          `${shareText} ${shareUrl}`
+        )}`,
+        '_blank'
+      );
+    }
   };
 
   useEffect(() => {
@@ -40,12 +67,6 @@ export default function EditRoadmapView({
       try {
         const data = await getRoadmapById(roadmapId);
         const cards = transformRoadmapToItems(data);
-
-        console.log('userId:', userId);
-        if (userId) {
-          const userQuizzes = await getUserQuizzes(userId);
-          console.log('User quizzes:', userQuizzes);
-        }
 
         setRoadmap(cards);
       } catch (error) {
@@ -56,51 +77,83 @@ export default function EditRoadmapView({
     };
 
     fetchData();
-  }, [roadmapId, userId]);
+  }, [roadmapId, user]);
 
   if (loading) return <div>Loading...</div>;
   if (!roadmap) return <div>Course not found. {roadmapId}</div>;
 
-  // return <RoadmapView roadmapItems={roadmap} />;
-
   return (
-    <div className="mx-auto flex h-[85vh] max-h-[700px] w-[95vw] max-w-xl flex-col space-y-5">
-      <h3 className="mr-2 text-center text-xl font-semibold">Edit Roadmap</h3>
-      <div className="relative w-full flex-1">
-        <RoadmapView roadmapItems={roadmap} />
-      </div>
-      <div className="w-full">
-        <div className="flex justify-center space-x-4">
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={saveRoadmap}
-            className="w-1/3 px-6 py-3"
-          >
-            Copy Link
-          </Button>
-          <Button
-            type="button"
-            variant="default"
-            onClick={shareRoadmap}
-            className="w-1/3 px-6 py-3"
-          >
-            Share
-          </Button>
-        </div>
-      </div>
-      {/*<div className="mt-4 flex justify-center">*/}
-      {/*  <Button*/}
-      {/*    type="button"*/}
-      {/*    variant="secondary"*/}
-      {/*    onClick={() => {*/}
-      {/*      reset();*/}
-      {/*    }}*/}
-      {/*    className="px-6 py-3"*/}
-      {/*  >*/}
-      {/*    Create Another Roadmap*/}
-      {/*  </Button>*/}
-      {/*</div>*/}
-    </div>
+    <>
+      <h1 className="w-full pb-1 text-center text-2xl">Edit Roadmap</h1>
+      <Card className="mx-auto flex h-[80vh] max-h-[700px] w-full max-w-2xl flex-col">
+        <CardHeader className="relative w-full flex-1">
+          <RoadmapView roadmapItems={roadmap} />
+        </CardHeader>
+        <CardContent className="bottom-0 flex w-full flex-col space-y-4 px-4 py-4">
+          <div className="flex justify-center space-x-4">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setIsDialogOpen(true)}
+              className="w-1/3 px-6 py-3"
+            >
+              Copy Link
+            </Button>
+            <Button
+              type="button"
+              variant="default"
+              onClick={shareRoadmap}
+              className="w-1/3 px-6 py-3"
+            >
+              Share
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Share Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Share link</DialogTitle>
+            <DialogDescription>
+              Anyone who has this link will be able to view this.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex items-center space-x-2">
+            <div className="grid flex-1 gap-2">
+              <Label
+                htmlFor="link"
+                className="sr-only"
+                onClick={() => setIsDialogOpen(false)}
+              >
+                Link
+              </Label>
+              <Input id="link" defaultValue={shareText} readOnly />
+            </div>
+            <Button
+              type="submit"
+              size="sm"
+              className="px-3"
+              onClick={() =>
+                navigator.clipboard
+                  .writeText(shareText)
+                  .then(() => toast.success('Link copied to clipboard'))
+              }
+            >
+              <span className="sr-only">Copy</span>
+              <Copy />
+            </Button>
+          </div>
+          <DialogFooter className="sm:justify-start">
+            <DialogClose asChild>
+              <Button type="button" variant="secondary">
+                Close
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
