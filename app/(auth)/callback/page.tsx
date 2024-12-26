@@ -3,7 +3,7 @@ import SignInViewPage from '../_components/sigin-view';
 import AuthCallback from '@/app/(auth)/_components/callback';
 
 export const metadata: Metadata = {
-  title: 'Authentication | Callback',
+  title: 'Authentication | Callback | Obsolete!',
   description: 'Authentication callback page'
 };
 

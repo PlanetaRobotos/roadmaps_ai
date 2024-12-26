@@ -25,7 +25,6 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Copy } from 'lucide-react';
 import { AuthContext } from '@/context/auth-context';
-import { usePathname } from 'next/navigation';
 import { CLIENT_URL } from '@/config/apiConfig';
 
 interface EditRoadmapViewProps {
@@ -37,9 +36,8 @@ export default function EditRoadmapView({ roadmapId }: EditRoadmapViewProps) {
   const [loading, setLoading] = useState(true);
   const { user } = useContext(AuthContext);
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control Dialog visibility
-  const pathname = usePathname();
 
-  const shareText = `Check out my new roadmap for ${roadmap?.title}! Url: ${CLIENT_URL}${pathname}`;
+  const shareText = `Check out my new roadmap for ${roadmap?.title} at ${CLIENT_URL}/dashboard/roadmaps/${roadmapId}`;
 
   const shareRoadmap = () => {
     const shareText = `Check out my new roadmap for ${roadmap?.title}!`;
@@ -84,7 +82,7 @@ export default function EditRoadmapView({ roadmapId }: EditRoadmapViewProps) {
 
   return (
     <>
-      <h1 className="w-full pb-1 text-center text-2xl">Edit Roadmap</h1>
+      <h1 className="w-full pb-1 text-center text-2xl">Edit Course</h1>
       <Card className="mx-auto flex h-[80vh] max-h-[700px] w-full max-w-2xl flex-col">
         <CardHeader className="relative w-full flex-1">
           <RoadmapView roadmapItems={roadmap} />

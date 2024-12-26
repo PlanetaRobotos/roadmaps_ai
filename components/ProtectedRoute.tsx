@@ -16,7 +16,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     if (!loading && !user && !isPublicRoadmap) {
-      // router.push('/signin');
+      router.push('/signin');
       console.log('User not found. Redirecting to /signin');
     }
   }, [user, loading, router, isPublicRoadmap]);
