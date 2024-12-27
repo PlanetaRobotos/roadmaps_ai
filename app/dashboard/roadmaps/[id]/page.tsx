@@ -26,7 +26,7 @@ export async function generateMetadata(
       openGraph: {
         title: 'Course Not Found | MyMicroCourses',
         description: 'The course you are looking for does not exist.',
-        url: `https://yourdomain.com/courses/${roadmapId}`,
+        url: `${CLIENT_URL}/courses/${roadmapId}`,
         type: 'website',
         images: [
           {
@@ -42,9 +42,6 @@ export async function generateMetadata(
         title: 'Course Not Found | MyMicroCourses',
         description: 'The course you are looking for does not exist.',
         images: [`${CLIENT_URL}/images/course-not-found-og.png`]
-      },
-      alternates: {
-        canonical: `https://yourdomain.com/courses/${roadmapId}`
       }
     };
   }
@@ -55,7 +52,7 @@ export async function generateMetadata(
     openGraph: {
       title: `${course.title} | MyMicroCourses`,
       description: course.description,
-      url: `https://yourdomain.com/courses/${roadmapId}`,
+      url: `${CLIENT_URL}/courses/${course.title}`,
       type: 'article',
       images: [
         {
