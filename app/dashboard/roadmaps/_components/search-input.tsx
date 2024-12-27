@@ -174,9 +174,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
         type="text"
         value={value}
         onChange={handleChange}
-        placeholder={`Type to search ${
-          category ? `${category} ` : ''
-        }suggestions...`}
+        placeholder={`Type to create a new course...`}
         className="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
         onFocus={handleFocus}
         onKeyDown={handleKeyDown}
