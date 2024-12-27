@@ -18,8 +18,31 @@ const routeMapping: Record<string, BreadcrumbItem[]> = {
   '/dashboard/product': [
     { title: 'Dashboard', link: '/dashboard' },
     { title: 'Product', link: '/dashboard/product' }
+  ],
+  '/dashboard/roadmaps': [
+    { title: 'Dashboard', link: '/dashboard' },
+    { title: 'Roadmaps', link: '/dashboard/roadmaps' }
+  ],
+  '/dashboard/roadmaps/create': [
+    { title: 'Dashboard', link: '/dashboard' },
+    { title: 'Roadmaps', link: '/dashboard/roadmaps' },
+    { title: 'Create', link: '/dashboard/roadmaps/create' }
+  ],
+  '/dashboard/roadmaps/library': [
+    { title: 'Dashboard', link: '/dashboard' },
+    { title: 'Roadmaps', link: '/dashboard/roadmaps' },
+    { title: 'Library', link: '/dashboard/roadmaps/library' }
+  ],
+  '/dashboard/roadmaps/progress': [
+    { title: 'Dashboard', link: '/dashboard' },
+    { title: 'Roadmaps', link: '/dashboard/roadmaps' },
+    { title: 'Progress', link: '/dashboard/roadmaps/progress' }
+  ],
+  '/dashboard/roadmaps/edit': [
+    { title: 'Dashboard', link: '/dashboard' },
+    { title: 'Roadmaps', link: '/dashboard/roadmaps' },
+    { title: 'Edit', link: '/dashboard/roadmaps/edit' }
   ]
-  // Add more custom mappings as needed
 };
 
 export function useBreadcrumbs() {

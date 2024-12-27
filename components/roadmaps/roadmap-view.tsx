@@ -97,7 +97,7 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
       </Carousel>
 
       {showSwipeHint && (
-        <div className="mt-2 block w-full text-center">
+        <div className="absolute bottom-0 mx-auto block w-full -translate-x-8 transform text-center">
           <div className="inline-flex animate-bounce items-center space-x-1 text-gray-500">
             {/* Left arrow icon */}
             <svg

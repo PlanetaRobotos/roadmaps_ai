@@ -10,8 +10,7 @@ export async function GET(request: Request) {
     10
   );
 
-  const allSuggestions = [
-    // 1. r/learnprogramming
+  const promptSuggestions = [
     { category: 'learnprogramming', text: 'Basics of Mobile App Development' },
     { category: 'learnprogramming', text: 'Fundamentals of HTML and CSS' },
     {
@@ -29,7 +28,6 @@ export async function GET(request: Request) {
       text: 'Building RESTful APIs with Node.js'
     },
 
-    // 2. r/photography
     {
       category: 'photography',
       text: 'Mastering Portrait Photography Techniques'
@@ -53,7 +51,6 @@ export async function GET(request: Request) {
     },
     { category: 'photography', text: 'Night Photography: Techniques and Tips' },
 
-    // 3. r/selfimprovement
     {
       category: 'selfimprovement',
       text: 'Boosting Productivity with Time Management Strategies'
@@ -80,7 +77,6 @@ export async function GET(request: Request) {
       text: 'Building Resilience and Managing Stress'
     },
 
-    // 4. r/digitalmarketing
     { category: 'digitalmarketing', text: 'Mastering SEO Fundamentals' },
     {
       category: 'digitalmarketing',
@@ -107,7 +103,6 @@ export async function GET(request: Request) {
       text: 'Analytics and Data-Driven Marketing Decisions'
     },
 
-    // 5. r/cooking
     { category: 'cooking', text: 'Cooking Gourmet Meals at Home' },
     { category: 'cooking', text: 'Baking Perfect Cakes: Techniques and Tips' },
     { category: 'cooking', text: 'Mastering Italian Cuisine Basics' },
@@ -122,7 +117,6 @@ export async function GET(request: Request) {
     },
     { category: 'cooking', text: 'Healthy Meal Prep for Busy Individuals' },
 
-    // 6. r/fitness
     { category: 'fitness', text: 'Transforming Your Workout Routine' },
     {
       category: 'fitness',
@@ -140,7 +134,6 @@ export async function GET(request: Request) {
       text: 'Nutrition Fundamentals for Fitness Enthusiasts'
     },
 
-    // 7. r/graphic_design
     {
       category: 'graphic_design',
       text: 'Enhancing Design Skills with Adobe Photoshop'
@@ -170,7 +163,6 @@ export async function GET(request: Request) {
       text: 'Designing for Web: Best Practices and Tools'
     },
 
-    // 8. r/entrepreneur
     { category: 'entrepreneur', text: 'Kickstarting Your Startup Journey' },
     { category: 'entrepreneur', text: 'Lean Startup Methodology Explained' },
     {
@@ -194,7 +186,6 @@ export async function GET(request: Request) {
       text: 'Scaling Your Business: From Startup to Success'
     },
 
-    // 9. r/musictheory
     {
       category: 'musictheory',
       text: 'Understanding Music Theory Fundamentals'
@@ -218,7 +209,6 @@ export async function GET(request: Request) {
       text: 'Arranging Music: From Ideas to Final Composition'
     },
 
-    // 10. r/education
     { category: 'education', text: 'Revolutionizing Learning Experiences' },
     {
       category: 'education',
@@ -241,7 +231,7 @@ export async function GET(request: Request) {
   ];
 
   // Filter by category if provided
-  let filteredSuggestions = allSuggestions;
+  let filteredSuggestions = promptSuggestions;
   if (category) {
     filteredSuggestions = filteredSuggestions.filter(
       (item) => item.category === category

@@ -12,7 +12,7 @@ interface LessonCardProps {
 const LessonCard: React.FC<LessonCardProps> = ({ lesson }) => {
   return (
     <div className="h-full rounded-xl bg-blue-100 p-1">
-      <Card className="flex h-full w-full flex-col">
+      <Card className="flex h-full w-full flex-col bg-white">
         <CardHeader className="p-5">
           <CardTitle className="w-full text-center">{lesson.title}</CardTitle>
         </CardHeader>

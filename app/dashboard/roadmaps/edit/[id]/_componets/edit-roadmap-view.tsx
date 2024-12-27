@@ -5,11 +5,9 @@ import { ClientRoadmap } from '@/types/roadmap-types';
 import { getRoadmapById, getUserQuizzes } from '@/services/roadmapsService';
 import { transformRoadmapToItems } from '@/utils/transformRoadmap';
 import RoadmapView from '@/components/roadmaps/roadmap-view';
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Icons } from '@/components/icons';
-import ShareButton from '@/app/dashboard/roadmaps/_components/share-button';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import {
   Dialog,
@@ -27,6 +25,8 @@ import { Copy } from 'lucide-react';
 import { AuthContext } from '@/context/auth-context';
 import { CLIENT_URL } from '@/config/apiConfig';
 import Loading from '@/app/dashboard/_components/loading';
+import { Icons } from '@/components/icons';
+import { Separator } from '@/components/ui/separator';
 
 interface EditRoadmapViewProps {
   roadmapId: string;
@@ -38,16 +38,19 @@ export default function EditRoadmapView({ roadmapId }: EditRoadmapViewProps) {
   const { user } = useContext(AuthContext);
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control Dialog visibility
 
-  const shareText = `Check out my new roadmap for ${roadmap?.title} at ${CLIENT_URL}/dashboard/roadmaps/${roadmapId}`;
+  const shareText = `Check out my new course for ${roadmap?.title} at ${CLIENT_URL}/dashboard/roadmaps/${roadmapId}`;
+
+  const router = useRouter();
 
   const shareRoadmap = () => {
     const shareText = `Check out my new roadmap for ${roadmap?.title}!`;
     const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+
     if (navigator.share) {
       // Native Web Share API (mobile/compatible browsers)
       navigator.share({
         title: shareText,
-        text: `I just created a roadmap to learn  ${roadmap?.title} in ${roadmap?.duration} using CourseAI`,
+        text: `I just created a course to learn  ${roadmap?.title} in ${roadmap?.duration} using CourseAI`,
         url: shareUrl
       });
     } else {
@@ -83,12 +86,20 @@ export default function EditRoadmapView({ roadmapId }: EditRoadmapViewProps) {
 
   return (
     <>
-      <h1 className="w-full pb-1 text-center text-2xl">Edit Course</h1>
-      <Card className="mx-auto flex h-[80vh] max-h-[700px] w-full max-w-2xl flex-col">
-        <CardHeader className="relative w-full flex-1">
+      <div className="mt-[-30] flex w-full justify-center">
+        <h1 className="hover:border-gradient-to-r flex items-center border-b-4 border-transparent text-4xl font-extrabold text-gray-800">
+          <Icons.edit className="mr-2 text-blue-500" />
+          Edit Course
+        </h1>
+      </div>
+
+      <Separator className="mx-auto mb-2 h-1 w-5/6" />
+
+      <Card className="mx-auto flex h-[75vh] max-h-[700px] w-full max-w-2xl flex-col">
+        <CardHeader className="relative w-full flex-1 pb-0 pt-4">
           <RoadmapView roadmapItems={roadmap} />
         </CardHeader>
-        <CardContent className="bottom-0 flex w-full flex-col space-y-4 px-4 py-4">
+        <CardContent className="bottom-0 flex w-full flex-col space-y-1 px-4 py-4 pb-0">
           <div className="flex justify-center space-x-4">
             <Button
               type="button"
@@ -107,9 +118,27 @@ export default function EditRoadmapView({ roadmapId }: EditRoadmapViewProps) {
               Share
             </Button>
           </div>
+          <Button
+            type="button"
+            variant="link"
+            className="mx-auto w-1/2"
+            onClick={() => router.push('/dashboard/roadmaps/create')}
+          >
+            Create a new course
+          </Button>
         </CardContent>
       </Card>
-
+      {/*add button to explore library of courses*/}
+      <div className="flex w-full justify-center pt-3">
+        <Button
+          type="button"
+          variant="secondary"
+          className="w-1/2 max-w-lg"
+          onClick={() => router.push('/dashboard/roadmaps/library')}
+        >
+          Explore Other Courses
+        </Button>
+      </div>
       {/* Share Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-md">

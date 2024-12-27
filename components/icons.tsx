@@ -39,7 +39,8 @@ import {
   Maximize2,
   Bookmark,
   Share,
-  Heart
+  Heart,
+  Edit
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -82,6 +83,7 @@ export const Icons = {
   save: Bookmark,
   share: Share,
   like: Heart,
+  edit: Edit,
 
   // gitHub: ({ ...props }: LucideProps) => (
   //   <svg

@@ -62,7 +62,7 @@ export const transformRoadmapToItems = (
     id: 'outro',
     type: 'hero',
     title: `Congratulations on Completing "${roadmap.title}"!`,
-    contentBottom: "You've successfully navigated through the roadmap."
+    contentBottom: "You've successfully navigated through the course."
   });
 
   console.log('Items end:', items);
