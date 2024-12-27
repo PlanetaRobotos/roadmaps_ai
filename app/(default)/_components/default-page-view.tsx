@@ -11,7 +11,7 @@ export default function DefaultPageView() {
   useEffect(() => {
     if (!loading) {
       if (!user) {
-        window.location.href = '/signin';
+        window.location.href = '/dashboard/roadmaps/create';
         console.log('User not found. Redirecting to /signin default page');
       } else {
         window.location.href = '/dashboard';

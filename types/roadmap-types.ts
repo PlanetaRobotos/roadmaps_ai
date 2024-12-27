@@ -9,13 +9,6 @@ export interface ClientRoadmap {
   cards: RoadmapCard[];
 }
 
-export interface LessonContent {
-  mainContent: string;
-  resources: string[];
-  examples: string[];
-  quizzes: Quiz[];
-}
-
 export interface Quiz {
   id: string;
   question: string;
