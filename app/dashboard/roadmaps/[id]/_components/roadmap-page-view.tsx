@@ -24,6 +24,8 @@ import AuthCallback from '@/app/(auth)/_components/callback';
 import { Metadata } from 'next';
 import { CLIENT_URL } from '@/config/apiConfig';
 import Loading from '@/app/dashboard/_components/loading';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { UserModel } from '@/app/api/client';
 
 interface RoadmapViewPageProps {
   roadmapId: string;
@@ -42,6 +44,7 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
   } = usePostStore();
   const pathname = usePathname();
   const [roadmap, setRoadmap] = useState<ClientRoadmap>();
+  const [author, setAuthor] = useState<UserModel>();
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control Dialog visibility
 
@@ -76,6 +79,14 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
         let isLiked, isSaved;
 
         const roadmapResp = await getRoadmapById(roadmapId);
+
+        if (roadmapResp.authorId !== undefined && roadmapResp.authorId > 0) {
+          const authorResp = await axios.get(
+            `/v1/users/${roadmapResp.authorId}`
+          );
+          console.log('author', authorResp);
+          setAuthor(authorResp?.data);
+        }
 
         console.log('course', roadmapResp);
         const cards = transformRoadmapToItems(roadmapResp);
@@ -120,7 +131,19 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
             onAuthorizeClick={() => setIsDialogOpen(true)}
           />
         </CardHeader>
-        <CardContent className="bottom-0 flex w-full flex-col space-y-4 px-4 py-4">
+        <CardContent className="bottom-0 flex w-full flex-col space-y-1 px-4 py-4">
+          <div className="flex items-center gap-2 px-1 text-left text-sm">
+            <Avatar className="h-7 w-7 rounded-lg">
+              <AvatarFallback className="rounded-lg">
+                {author?.userName?.slice(0, 2)?.toUpperCase() || 'CN'}
+              </AvatarFallback>
+            </Avatar>
+            <div className="grid flex-1 text-left text-sm leading-tight">
+              <span className="truncate font-semibold">
+                {author?.userName || ''}
+              </span>
+            </div>
+          </div>
           <CardTitle className="text-lg font-semibold">
             {roadmap?.description}
           </CardTitle>

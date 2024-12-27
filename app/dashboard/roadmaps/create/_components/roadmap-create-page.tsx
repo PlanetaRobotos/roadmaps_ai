@@ -43,7 +43,7 @@ export default function RoadmapCreatePage() {
   } = useRoadmapStore();
 
   const onSubmit: SubmitHandler<RoadmapFormData> = async (data) => {
-    const newRoadmap = await generateRoadmap();
+    const newRoadmap = await generateRoadmap(user?.id);
     console.log('newRoadmap:', newRoadmap);
 
     if (newRoadmap) {

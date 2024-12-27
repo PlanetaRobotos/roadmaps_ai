@@ -14,7 +14,9 @@ interface RoadmapState {
   setTitle: (title: string) => void;
   setSelectedTime: (time: number) => void;
   setRoadmapPreview: (preview: ClientRoadmap) => void;
-  generateRoadmap: () => Promise<ClientRoadmap | null>;
+  generateRoadmap: (
+    userId: number | undefined
+  ) => Promise<ClientRoadmap | null>;
   reset: () => void;
 }
 
@@ -27,7 +29,7 @@ export const useRoadmapStore = create<RoadmapState>((set, get) => ({
   setSelectedTime: (time: number) => set({ selectedTime: time }),
   setRoadmapPreview: (preview: ClientRoadmap) =>
     set({ roadmapPreview: preview }),
-  generateRoadmap: async (): Promise<ClientRoadmap | null> => {
+  generateRoadmap: async (userId): Promise<ClientRoadmap | null> => {
     const { title, selectedTime } = get();
     if (!title || !selectedTime) {
       console.log('Cannot generate roadmap: Missing title or selected time.');
@@ -39,10 +41,12 @@ export const useRoadmapStore = create<RoadmapState>((set, get) => ({
     set({ isGenerating: true });
 
     try {
+      console.log('Creating roadmap... user:', userId);
       const requestBody = new RoadmapCreateRequest();
       requestBody.init({
         title: title,
-        estimatedDuration: selectedTime
+        estimatedDuration: selectedTime,
+        authorId: userId
       });
 
       const roadmapModel = await createRoadmap(requestBody);

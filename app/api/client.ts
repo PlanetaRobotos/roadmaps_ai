@@ -1335,6 +1335,84 @@ export class RoadmapsClient {
   }
 
   /**
+   * @return No Content
+   */
+  delete2(userId: number, roadmapId: string): Promise<void> {
+    let url_ = this.baseUrl + '/v1/roadmaps/{roadmapId}/userlikes/{userId}';
+    if (userId === undefined || userId === null)
+      throw new Error("The parameter 'userId' must be defined.");
+    url_ = url_.replace('{userId}', encodeURIComponent('' + userId));
+    if (roadmapId === undefined || roadmapId === null)
+      throw new Error("The parameter 'roadmapId' must be defined.");
+    url_ = url_.replace('{roadmapId}', encodeURIComponent('' + roadmapId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'DELETE',
+      headers: {}
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processDelete2(_response);
+    });
+  }
+
+  protected processDelete2(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 204) {
+      return response.text().then((_responseText) => {
+        return;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+
+  /**
    * @param body (optional)
    * @return Created
    */
@@ -2253,6 +2331,84 @@ export class UsersClient {
   }
 
   /**
+   * @return No Content
+   */
+  delete2(userId: number, roadmapId: string): Promise<void> {
+    let url_ = this.baseUrl + '/v1/users/{userId}/roadmaps/{roadmapId}';
+    if (userId === undefined || userId === null)
+      throw new Error("The parameter 'userId' must be defined.");
+    url_ = url_.replace('{userId}', encodeURIComponent('' + userId));
+    if (roadmapId === undefined || roadmapId === null)
+      throw new Error("The parameter 'roadmapId' must be defined.");
+    url_ = url_.replace('{roadmapId}', encodeURIComponent('' + roadmapId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'DELETE',
+      headers: {}
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processDelete2(_response);
+    });
+  }
+
+  protected processDelete2(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 204) {
+      return response.text().then((_responseText) => {
+        return;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+
+  /**
    * @param body (optional)
    * @return No Content
    */
@@ -3037,6 +3193,7 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
   estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
+  authorId?: number;
   likes?: number | undefined;
   modules?: RoadmapModuleModel[];
 
@@ -3059,6 +3216,7 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
         this.tags = [] as any;
         for (let item of _data['tags']) this.tags!.push(item);
       }
+      this.authorId = _data['authorId'];
       this.likes = _data['likes'];
       if (Array.isArray(_data['modules'])) {
         this.modules = [] as any;
@@ -3085,6 +3243,7 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
       data['tags'] = [];
       for (let item of this.tags) data['tags'].push(item);
     }
+    data['authorId'] = this.authorId;
     data['likes'] = this.likes;
     if (Array.isArray(this.modules)) {
       data['modules'] = [];
@@ -3100,6 +3259,7 @@ export interface IRoadmapCreateRequest {
   estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
+  authorId?: number;
   likes?: number | undefined;
   modules?: RoadmapModuleModel[];
 }
@@ -3110,6 +3270,7 @@ export class RoadmapModel implements IRoadmapModel {
   estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
+  authorId?: number;
   likes?: number | undefined;
   modules?: RoadmapModuleModel[];
   id?: string;
@@ -3133,6 +3294,7 @@ export class RoadmapModel implements IRoadmapModel {
         this.tags = [] as any;
         for (let item of _data['tags']) this.tags!.push(item);
       }
+      this.authorId = _data['authorId'];
       this.likes = _data['likes'];
       if (Array.isArray(_data['modules'])) {
         this.modules = [] as any;
@@ -3160,6 +3322,7 @@ export class RoadmapModel implements IRoadmapModel {
       data['tags'] = [];
       for (let item of this.tags) data['tags'].push(item);
     }
+    data['authorId'] = this.authorId;
     data['likes'] = this.likes;
     if (Array.isArray(this.modules)) {
       data['modules'] = [];
@@ -3176,6 +3339,7 @@ export interface IRoadmapModel {
   estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
+  authorId?: number;
   likes?: number | undefined;
   modules?: RoadmapModuleModel[];
   id?: string;
@@ -3299,6 +3463,7 @@ export class RoadmapUpdateRequest implements IRoadmapUpdateRequest {
   estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
+  authorId?: number;
   likes?: number | undefined;
   modules?: RoadmapModuleModel[];
   lessonId?: string | undefined;
@@ -3323,6 +3488,7 @@ export class RoadmapUpdateRequest implements IRoadmapUpdateRequest {
         this.tags = [] as any;
         for (let item of _data['tags']) this.tags!.push(item);
       }
+      this.authorId = _data['authorId'];
       this.likes = _data['likes'];
       if (Array.isArray(_data['modules'])) {
         this.modules = [] as any;
@@ -3351,6 +3517,7 @@ export class RoadmapUpdateRequest implements IRoadmapUpdateRequest {
       data['tags'] = [];
       for (let item of this.tags) data['tags'].push(item);
     }
+    data['authorId'] = this.authorId;
     data['likes'] = this.likes;
     if (Array.isArray(this.modules)) {
       data['modules'] = [];
@@ -3368,6 +3535,7 @@ export interface IRoadmapUpdateRequest {
   estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
+  authorId?: number;
   likes?: number | undefined;
   modules?: RoadmapModuleModel[];
   lessonId?: string | undefined;
