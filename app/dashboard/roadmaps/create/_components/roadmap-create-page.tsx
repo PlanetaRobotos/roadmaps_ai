@@ -11,6 +11,7 @@ import axios from '@/lib/axios';
 import { AuthContext } from '@/context/auth-context';
 import AuthBanner from '@/components/auth-banner';
 import AuthDialog from '@/components/auth-dialog';
+import AuthCallback from '@/app/(auth)/_components/callback';
 
 interface RoadmapFormData {
   title: string;
@@ -61,6 +62,8 @@ export default function RoadmapCreatePage() {
   };
   return (
     <>
+      <AuthCallback />
+
       <div className="flex min-h-screen items-start justify-center pt-[20vh]">
         <AnimatePresence>
           {/* Form Section */}
