@@ -1,21 +1,13 @@
 ﻿'use client';
 
 import React, { useContext, useEffect, useState } from 'react';
-import { getRoadmapById, getUserQuizzes } from '@/services/roadmapsService';
+import { getRoadmapById } from '@/services/roadmapsService';
 import { transformRoadmapToItems } from '@/utils/transformRoadmap';
 import RoadmapView from '@/components/roadmaps/roadmap-view';
 import { ClientRoadmap } from '@/types/roadmap-types';
 import { usePostStore } from '@/store/postStore';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-// import { useToast } from '@/hooks/use-toast';
-import { toast } from 'sonner';
 import { Icons } from '@/components/icons';
 import axios from '@/lib/axios';
 import { AuthContext } from '@/context/auth-context';
@@ -27,12 +19,74 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog';
-import { useRouter } from 'next/navigation';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import AuthCallback from '@/app/(auth)/_components/callback';
+import { Metadata } from 'next';
+import { CLIENT_URL } from '@/config/apiConfig';
 
 interface RoadmapViewPageProps {
   roadmapId: string;
+}
+
+export async function generateMetadata({
+  roadmapId
+}: RoadmapViewPageProps): Promise<Metadata> {
+  const course = await getRoadmapById(roadmapId);
+
+  if (!course) {
+    return {
+      title: 'Course Not Found | MyMicroCourses',
+      description: 'The course you are looking for does not exist.',
+      openGraph: {
+        title: 'Course Not Found | MyMicroCourses',
+        description: 'The course you are looking for does not exist.',
+        url: `https://yourdomain.com/courses/${roadmapId}`,
+        type: 'website',
+        images: [
+          {
+            url: `${CLIENT_URL}/images/course-not-found-og.png`,
+            width: 1200,
+            height: 630,
+            alt: 'Course Not Found'
+          }
+        ]
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: 'Course Not Found | MyMicroCourses',
+        description: 'The course you are looking for does not exist.',
+        images: [`${CLIENT_URL}/images/course-not-found-og.png`]
+      },
+      alternates: {
+        canonical: `https://yourdomain.com/courses/${roadmapId}`
+      }
+    };
+  }
+
+  return {
+    title: `${course.title} | MyMicroCourses`,
+    description: course.description,
+    openGraph: {
+      title: `${course.title} | MyMicroCourses`,
+      description: course.description,
+      url: `https://yourdomain.com/courses/${roadmapId}`,
+      type: 'article',
+      images: [
+        {
+          url: `${CLIENT_URL}/images/default-course-og.png`,
+          width: 1200,
+          height: 630,
+          alt: course.title
+        }
+      ]
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${course.title} | MyMicroCourses`,
+      description: course.description,
+      images: [`${CLIENT_URL}/images/default-course-og.png`]
+    }
+  };
 }
 
 export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
