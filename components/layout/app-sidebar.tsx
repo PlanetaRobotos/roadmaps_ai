@@ -49,15 +49,18 @@ import { Button } from '@/components/ui/button';
 import LogoutButton from '@/components/logout-button';
 import { useContext } from 'react';
 import { AuthContext } from '@/context/auth-context';
+import { CLIENT_URL } from '@/config/apiConfig';
 
 export const company = {
-  name: 'Acme Inc',
-  logo: GalleryVerticalEnd,
-  plan: 'Enterprise'
+  name: 'Levenue Tech',
+  logo: `${CLIENT_URL}/images/logo-bg-bigger.png`,
+  // plan: 'Enterprise',
+  description: 'AI Course network'
 };
 
 export default function AppSidebar() {
   // const { data: session } = useSession();
+  const { user } = useContext(AuthContext);
   const pathname = usePathname();
   const { logout } = useContext(AuthContext);
 
@@ -75,11 +78,17 @@ export default function AppSidebar() {
       <SidebarHeader>
         <div className="flex gap-2 py-2 text-sidebar-accent-foreground ">
           <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-            <company.logo className="size-4" />
+            {/*<company.logo />*/}
+            <img
+              src={company.logo}
+              alt={company.name}
+              className="h-8 w-8 rounded-lg"
+            />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-semibold">{company.name}</span>
-            <span className="truncate text-xs">{company.plan}</span>
+            {/*<span className="truncate text-xs">{company.plan}</span>*/}
+            <span className="truncate text-xs">{company.description}</span>
           </div>
         </div>
       </SidebarHeader>
@@ -158,15 +167,15 @@ export default function AppSidebar() {
                     // alt={session?.user?.name || ''}
                     />
                     <AvatarFallback className="rounded-lg">
-                      {/*{session?.user?.name?.slice(0, 2)?.toUpperCase() || 'CN'}*/}
+                      {user?.userName?.slice(0, 2)?.toUpperCase() || 'CN'}
                     </AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">
-                      {/*{session?.user?.name || ''}*/}
+                      {user?.userName || ''}
                     </span>
                     <span className="truncate text-xs">
-                      {/*{session?.user?.email || ''}*/}
+                      {user?.email || ''}
                     </span>
                   </div>
                   <ChevronsUpDown className="ml-auto size-4" />
@@ -186,16 +195,16 @@ export default function AppSidebar() {
                       // alt={session?.user?.name || ''}
                       />
                       <AvatarFallback className="rounded-lg">
-                        {/*{session?.user?.name?.slice(0, 2)?.toUpperCase() ||                          'CN'}*/}
+                        {user?.userName?.slice(0, 2)?.toUpperCase() || 'CN'}
                       </AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold">
-                        {/*{session?.user?.name || ''}*/}
+                        {user?.userName || ''}
                       </span>
                       <span className="truncate text-xs">
                         {' '}
-                        {/*{session?.user?.email || ''}*/}
+                        {user?.email || ''}
                       </span>
                     </div>
                   </div>

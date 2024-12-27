@@ -4,6 +4,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icons } from '@/components/icons';
+import { useSearchParams } from 'next/navigation';
+import { DEFAULT_SUGGESTIONS_LIMIT } from '@/constants/data';
 
 interface SearchInputProps {
   value: string;
@@ -18,6 +20,9 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+
+  const searchParams = useSearchParams();
+  const category = searchParams.get('category')?.toLowerCase() || '';
 
   // Debounce function to delay the filtering
   const debounce = (func: Function, delay: number) => {
@@ -39,7 +44,8 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
 
   // Fetch suggestions from the API
   const fetchSuggestions = async (input: string) => {
-    if (input.trim() === '') {
+    if (input.trim() === '' && !isFocusTriggered.current) {
+      // If input is empty and not triggered by focus, do not fetch
       setFilteredSuggestions([]);
       setIsDropdownOpen(false);
       return;
@@ -49,9 +55,17 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
     setError('');
 
     try {
-      const response = await fetch(
-        `/api/suggestions?query=${encodeURIComponent(input)}`
-      );
+      const url = new URL('/api/suggestions', window.location.origin);
+      url.searchParams.append('query', input);
+      if (category) {
+        url.searchParams.append('category', category);
+      }
+      // When input is focused and query is empty, set limit to 5
+      if (input.trim() === '' && isFocusTriggered.current) {
+        url.searchParams.append('limit', `${DEFAULT_SUGGESTIONS_LIMIT}`);
+      }
+
+      const response = await fetch(url.toString());
       if (!response.ok) {
         throw new Error('Failed to fetch suggestions');
       }
@@ -64,11 +78,14 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
       setIsDropdownOpen(false);
     } finally {
       setIsLoading(false);
+      isFocusTriggered.current = false; // Reset the focus flag after fetching
     }
   };
 
   // Create a debounced version of the fetch function
-  const debouncedFetch = useCallback(debounce(fetchSuggestions, 300), []);
+  const debouncedFetch = useCallback(debounce(fetchSuggestions, 300), [
+    category
+  ]);
 
   // Handle clicking outside the dropdown to close it
   useEffect(() => {
@@ -123,6 +140,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
     }
   };
 
+  // Scroll into view when highlightedIndex changes
   useEffect(() => {
     if (
       highlightedIndex >= 0 &&
@@ -138,19 +156,29 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
     }
   }, [highlightedIndex, filteredSuggestions]);
 
+  // Handle input focus to show first 5 suggestions
+  const isFocusTriggered = useRef<boolean>(false);
+
+  const handleFocus = () => {
+    if (value.trim() === '') {
+      isFocusTriggered.current = true;
+      fetchSuggestions('');
+    } else if (filteredSuggestions.length > 0) {
+      setIsDropdownOpen(true);
+    }
+  };
+
   return (
     <div className="relative w-full" ref={dropdownRef}>
       <input
         type="text"
         value={value}
         onChange={handleChange}
-        placeholder="Type to create a new course..."
+        placeholder={`Type to search ${
+          category ? `${category} ` : ''
+        }suggestions...`}
         className="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
-        onFocus={() => {
-          if (filteredSuggestions.length > 0) {
-            setIsDropdownOpen(true);
-          }
-        }}
+        onFocus={handleFocus}
         onKeyDown={handleKeyDown}
         aria-autocomplete="list"
         aria-controls="suggestions-list"

@@ -23,70 +23,10 @@ import { usePathname, useRouter } from 'next/navigation';
 import AuthCallback from '@/app/(auth)/_components/callback';
 import { Metadata } from 'next';
 import { CLIENT_URL } from '@/config/apiConfig';
+import Loading from '@/app/dashboard/_components/loading';
 
 interface RoadmapViewPageProps {
   roadmapId: string;
-}
-
-export async function generateMetadata({
-  roadmapId
-}: RoadmapViewPageProps): Promise<Metadata> {
-  const course = await getRoadmapById(roadmapId);
-
-  if (!course) {
-    return {
-      title: 'Course Not Found | MyMicroCourses',
-      description: 'The course you are looking for does not exist.',
-      openGraph: {
-        title: 'Course Not Found | MyMicroCourses',
-        description: 'The course you are looking for does not exist.',
-        url: `https://yourdomain.com/courses/${roadmapId}`,
-        type: 'website',
-        images: [
-          {
-            url: `${CLIENT_URL}/images/course-not-found-og.png`,
-            width: 1200,
-            height: 630,
-            alt: 'Course Not Found'
-          }
-        ]
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: 'Course Not Found | MyMicroCourses',
-        description: 'The course you are looking for does not exist.',
-        images: [`${CLIENT_URL}/images/course-not-found-og.png`]
-      },
-      alternates: {
-        canonical: `https://yourdomain.com/courses/${roadmapId}`
-      }
-    };
-  }
-
-  return {
-    title: `${course.title} | MyMicroCourses`,
-    description: course.description,
-    openGraph: {
-      title: `${course.title} | MyMicroCourses`,
-      description: course.description,
-      url: `https://yourdomain.com/courses/${roadmapId}`,
-      type: 'article',
-      images: [
-        {
-          url: `${CLIENT_URL}/images/default-course-og.png`,
-          width: 1200,
-          height: 630,
-          alt: course.title
-        }
-      ]
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: `${course.title} | MyMicroCourses`,
-      description: course.description,
-      images: [`${CLIENT_URL}/images/default-course-og.png`]
-    }
-  };
 }
 
 export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
@@ -134,7 +74,10 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
     const fetchData = async () => {
       try {
         let isLiked, isSaved;
+
         const roadmapResp = await getRoadmapById(roadmapId);
+
+        console.log('course', roadmapResp);
         const cards = transformRoadmapToItems(roadmapResp);
 
         if (user) {
@@ -162,7 +105,7 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
     fetchData();
   }, [roadmapId, user, initializePost]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loading />;
   if (!roadmap) return <div>Course not found. {roadmapId}</div>;
 
   return (

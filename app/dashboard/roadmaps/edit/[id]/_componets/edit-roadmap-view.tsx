@@ -26,6 +26,7 @@ import { Input } from '@/components/ui/input';
 import { Copy } from 'lucide-react';
 import { AuthContext } from '@/context/auth-context';
 import { CLIENT_URL } from '@/config/apiConfig';
+import Loading from '@/app/dashboard/_components/loading';
 
 interface EditRoadmapViewProps {
   roadmapId: string;
@@ -77,7 +78,7 @@ export default function EditRoadmapView({ roadmapId }: EditRoadmapViewProps) {
     fetchData();
   }, [roadmapId, user]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loading />;
   if (!roadmap) return <div>Course not found. {roadmapId}</div>;
 
   return (

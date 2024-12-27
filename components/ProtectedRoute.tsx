@@ -3,6 +3,7 @@
 import React, { useContext, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { AuthContext } from '@/context/auth-context';
+import Loading from '@/app/dashboard/_components/loading';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   children
@@ -22,7 +23,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   }, [user, loading, router, isPublicRoadmap]);
 
   if (loading) {
-    return <div>Loading...</div>; // Or a loading spinner
+    return <Loading />;
   }
 
   return <>{children}</>;

@@ -1,5 +1,7 @@
 import { NavItem } from '@/types';
 
+export const DEFAULT_SUGGESTIONS_LIMIT = '7';
+
 export type User = {
   id: number;
   name: string;
@@ -122,14 +124,14 @@ export type Product = {
 };
 
 export const navItems: NavItem[] = [
-  {
-    title: 'Home',
-    url: '/dashboard/overview',
-    icon: 'house',
-    isActive: false,
-    shortcut: ['d', 'd'],
-    items: [] // Empty array as there are no child items for Dashboard
-  },
+  // {
+  //   title: 'Home',
+  //   url: '/dashboard/overview',
+  //   icon: 'house',
+  //   isActive: false,
+  //   shortcut: ['d', 'd'],
+  //   items: [] // Empty array as there are no child items for Dashboard
+  // },
   {
     title: 'Create',
     url: '/dashboard/roadmaps/create',

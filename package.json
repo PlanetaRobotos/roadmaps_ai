@@ -2,6 +2,7 @@
   "name": "nextshcdndashboardstarter",
   "version": "1.0.0",
   "private": true,
+  "ssl:setup": "node hooks/create-ssl-certs.js",
   "author": {
     "name": "Kiran",
     "url": "https://github.com/Kiranism"
@@ -61,6 +62,7 @@
     "cmdk": "^1.0.0",
     "crypto-browserify": "^3.12.1",
     "date-fns": "^2.30.0",
+    "devcert": "^1.2.2",
     "embla-carousel-react": "^8.5.1",
     "eslint": "8.48.0",
     "eslint-config-next": "^14.0.1",
