@@ -21,18 +21,18 @@ import {
 } from '@/components/ui/dialog';
 import { usePathname, useRouter } from 'next/navigation';
 import AuthCallback from '@/app/(auth)/_components/callback';
-import { Metadata } from 'next';
-import { CLIENT_URL } from '@/config/apiConfig';
 import Loading from '@/app/dashboard/_components/loading';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { UserModel } from '@/app/api/client';
+import AuthBanner from '@/components/auth-banner';
+import AuthDialog from '@/components/auth-dialog';
 
 interface RoadmapViewPageProps {
   roadmapId: string;
 }
 
 export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
-  const { user } = useContext(AuthContext);
+  const { user, openAuthDialog } = useContext(AuthContext);
 
   const {
     isLiked,
@@ -42,32 +42,21 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
     toggleLike,
     toggleSave
   } = usePostStore();
-  const pathname = usePathname();
   const [roadmap, setRoadmap] = useState<ClientRoadmap>();
   const [author, setAuthor] = useState<UserModel>();
   const [loading, setLoading] = useState(true);
-  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control Dialog visibility
 
-  const router = useRouter(); // Initialize router for navigation
-
-  const signin = () => {
-    console.log('Redirecting to signin page', pathname);
-    router.push(`/signin?redirect=${pathname}`);
-  };
-
-  // Handler for Like button
   const handleLike = async () => {
     if (!user) {
-      setIsDialogOpen(true); // Open Dialog if not authenticated
+      openAuthDialog();
       return;
     }
     await toggleLike(roadmapId, user.id!);
   };
 
-  // Handler for Save button
   const handleSave = async () => {
     if (!user) {
-      setIsDialogOpen(true); // Open Dialog if not authenticated
+      openAuthDialog();
       return;
     }
     await toggleSave(roadmapId, user.id!);
@@ -128,7 +117,7 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
         <CardHeader className="relative w-full flex-1">
           <RoadmapView
             roadmapItems={roadmap}
-            onAuthorizeClick={() => setIsDialogOpen(true)}
+            onAuthorizeClick={() => openAuthDialog()}
           />
         </CardHeader>
         <CardContent className="bottom-0 flex w-full flex-col space-y-1 px-4 py-4">
@@ -196,47 +185,8 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
         </CardContent>
       </Card>
 
-      {/* Bottom Banner for Unauthenticated Users */}
-      {!user && (
-        <div className="fixed bottom-0 left-0 flex w-full justify-center space-x-4 bg-secondary p-4 shadow-md">
-          {/* Login Button triggers Dialog */}
-          <Button onClick={() => signin()}>Login</Button>
-          {/* Sign Up Button triggers Dialog */}
-          <Button onClick={() => signin()}>Sign Up</Button>
-        </div>
-      )}
-
-      {/* Dialog Popup for Authentication */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Authentication Required</DialogTitle>
-            <DialogDescription>
-              Please log in or sign up to perform this action.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="mt-4 flex justify-end space-x-2">
-            {/* Login Button navigates to Login Page */}
-            <Button
-              onClick={() => {
-                setIsDialogOpen(false);
-                signin();
-              }}
-            >
-              Login
-            </Button>
-            {/* Sign Up Button navigates to Sign Up Page */}
-            <Button
-              onClick={() => {
-                setIsDialogOpen(false);
-                signin();
-              }}
-            >
-              Sign Up
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <AuthBanner />
+      <AuthDialog />
     </>
   );
 }
