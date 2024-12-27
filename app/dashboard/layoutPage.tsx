@@ -18,11 +18,13 @@ export function LayoutPage({
   const { user, loading } = useContext(AuthContext);
 
   if (!user) {
-    console.log('here 1');
-    return <div>{children}</div>;
+    return (
+      <ProtectedRoute>
+        <div>{children}</div>
+      </ProtectedRoute>
+    );
   }
 
-  console.log('here 2');
   return (
     <ProtectedRoute>
       <KBar>
