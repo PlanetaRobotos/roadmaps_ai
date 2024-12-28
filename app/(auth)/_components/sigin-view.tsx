@@ -69,8 +69,7 @@ export default function SignInViewPage() {
               Enter your email below to create your account
             </p>
           </div>
-          {/*<UserAuthForm />*/}
-          <GoogleSignInButton redirectPath={redirectPath} />
+          <UserAuthForm redirectPath={redirectPath} />
           <p className="px-8 text-center text-sm text-muted-foreground">
             By clicking continue, you agree to our{' '}
             <Link

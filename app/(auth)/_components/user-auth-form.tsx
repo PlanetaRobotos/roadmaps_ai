@@ -17,6 +17,9 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
 import GoogleSignInButton from './google-auth-button';
+import { API_BASE_URL } from '@/config/apiConfig';
+import axios from '@/lib/axios';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Enter a valid email address' })
@@ -24,7 +27,12 @@ const formSchema = z.object({
 
 type UserFormValue = z.infer<typeof formSchema>;
 
-export default function UserAuthForm() {
+export default function UserAuthForm({
+  redirectPath
+}: {
+  redirectPath?: string | null;
+}) {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl');
   const [loading, startTransition] = useTransition();
@@ -37,57 +45,73 @@ export default function UserAuthForm() {
   });
 
   const onSubmit = async (data: UserFormValue) => {
-    startTransition(() => {
-      signIn('credentials', {
-        email: data.email,
-        callbackUrl: callbackUrl ?? '/dashboard'
+    console.log('data:', data);
+
+    try {
+      const userResp = await axios.post(`${API_BASE_URL}/v1/users`, {
+        email: data.email
       });
-      toast.success('Signed In Successfully!');
-    });
+
+      console.log('userResp:', userResp.data);
+
+      const redirectLinkResp = await axios.post(
+        `${API_BASE_URL}/v1/auth/send-magic-link`,
+        {
+          userId: userResp.data.id
+        }
+      );
+
+      console.log('redirectLinkResp:', redirectLinkResp.data);
+
+      router.push(`/verify-request?email=${userResp.data.email}`);
+    } catch (error) {
+      console.error('error:', error);
+      toast.error('An error occurred while creating the user.');
+    }
   };
 
   return (
     <>
-      {/*<Form {...form}>*/}
-      {/*  <form*/}
-      {/*    onSubmit={form.handleSubmit(onSubmit)}*/}
-      {/*    className="w-full space-y-2"*/}
-      {/*  >*/}
-      {/*    <FormField*/}
-      {/*      control={form.control}*/}
-      {/*      name="email"*/}
-      {/*      render={({ field }) => (*/}
-      {/*        <FormItem>*/}
-      {/*          <FormLabel>Email</FormLabel>*/}
-      {/*          <FormControl>*/}
-      {/*            <Input*/}
-      {/*              type="email"*/}
-      {/*              placeholder="Enter your email..."*/}
-      {/*              disabled={loading}*/}
-      {/*              {...field}*/}
-      {/*            />*/}
-      {/*          </FormControl>*/}
-      {/*          <FormMessage />*/}
-      {/*        </FormItem>*/}
-      {/*      )}*/}
-      {/*    />*/}
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-full space-y-2"
+        >
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    placeholder="Enter your email..."
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-      {/*    <Button disabled={loading} className="ml-auto w-full" type="submit">*/}
-      {/*      Continue With Email*/}
-      {/*    </Button>*/}
-      {/*  </form>*/}
-      {/*</Form>*/}
-      {/*<div className="relative">*/}
-      {/*  <div className="absolute inset-0 flex items-center">*/}
-      {/*    <span className="w-full border-t" />*/}
-      {/*  </div>*/}
-      {/*  <div className="relative flex justify-center text-xs uppercase">*/}
-      {/*    <span className="bg-background px-2 text-muted-foreground">*/}
-      {/*      Or continue with*/}
-      {/*    </span>*/}
-      {/*  </div>*/}
-      {/*</div>*/}
-      {/*<GoogleSignInButton />*/}
+          <Button disabled={loading} className="ml-auto w-full" type="submit">
+            Continue With Email
+          </Button>
+        </form>
+      </Form>
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground">
+            Or continue with
+          </span>
+        </div>
+      </div>
+      <GoogleSignInButton redirectPath={redirectPath} />
     </>
   );
 }

@@ -40,10 +40,7 @@ const AuthCallback: React.FC<AuthCallbackProps> = ({ redirectPath }) => {
     // }
   }, [router, redirectPath]);
 
-  return (
-    // <div className="flex h-screen items-center justify-center">Loading...</div>
-    null
-  );
+  return null;
 };
 
 export default AuthCallback;
