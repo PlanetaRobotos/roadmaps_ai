@@ -21,6 +21,7 @@ export default function SignInViewPage() {
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get('redirect');
   console.log('redirectPath:', redirectPath);
+  console.log(`${CLIENT_URL}/images/logo-bg-transparent.png`);
 
   return (
     <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">

@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import SignInViewPage from '../_components/sigin-view';
+import SignInViewPage from '../_components/signin-view';
 import AuthCallback from '@/app/(auth)/_components/callback';
 
 export const metadata: Metadata = {
