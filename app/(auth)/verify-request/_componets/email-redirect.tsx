@@ -8,6 +8,9 @@ import { emailProviders } from '@/utils/emailProviders';
 export default function EmailRedirectPage() {
   const searchParams = useSearchParams();
   const email = searchParams.get('email');
+  const search = searchParams.get('search');
+
+  console.log('email:', email);
 
   const openEmailInbox = () => {
     const domain = email?.split('@')[1].toLowerCase();
@@ -15,8 +18,10 @@ export default function EmailRedirectPage() {
     const webmailUrl = emailProviders[domain!];
 
     if (webmailUrl) {
+      const updatedWebmailUrl = `${webmailUrl}#search/${search}`;
+
       const newWindow = window.open(
-        webmailUrl,
+        updatedWebmailUrl,
         '_blank',
         'noopener,noreferrer'
       );
@@ -37,13 +42,6 @@ export default function EmailRedirectPage() {
       } else {
         console.error('Popup blocked. Please allow popups for this website.');
       }
-    }
-
-    console.log('domain:', domain);
-    if (domain) {
-      window.open(`https://mail.${domain}/`, '_blank');
-    } else {
-      window.open('https://mail.google.com/', '_blank');
     }
   };
 

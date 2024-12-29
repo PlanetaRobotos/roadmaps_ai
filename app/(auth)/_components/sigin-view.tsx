@@ -9,6 +9,8 @@ import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import GoogleSignInButton from '@/app/(auth)/_components/google-auth-button';
 import { useSearchParams } from 'next/navigation';
+import { company } from '@/components/layout/app-sidebar';
+import { CLIENT_URL } from '@/config/apiConfig';
 
 export const metadata: Metadata = {
   title: 'Authentication',
@@ -34,28 +36,20 @@ export default function SignInViewPage() {
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
         <div className="absolute inset-0 bg-zinc-900" />
         <div className="relative z-20 flex items-center text-lg font-medium">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="mr-2 h-6 w-6"
-          >
-            <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
-          </svg>
-          Logo
+          <img
+            src={`${CLIENT_URL}/images/logo-bg-transparent.png`}
+            alt={company.name}
+            className="h-16 w-16"
+          />
         </div>
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
             <p className="text-lg">
-              &ldquo;This library has saved me countless hours of work and
-              helped me deliver stunning designs to my clients faster than ever
-              before.&rdquo;
+              &ldquo;Free indie tool that empowers anyone to create engaging
+              AI-generated courses in minutes. Perfect for learners, creators,
+              and solopreneurs — save time and stay inspired! 🚀 &rdquo;
             </p>
-            <footer className="text-sm">Sofia Davis</footer>
+            <footer className="text-sm">Marta Davis</footer>
           </blockquote>
         </div>
       </div>

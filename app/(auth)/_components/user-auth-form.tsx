@@ -63,7 +63,9 @@ export default function UserAuthForm({
 
       console.log('redirectLinkResp:', redirectLinkResp.data);
 
-      router.push(`/verify-request?email=${userResp.data.email}`);
+      router.push(
+        `/verify-request?email=${userResp.data.email}&search=${redirectLinkResp.data}`
+      );
     } catch (error) {
       console.error('error:', error);
       toast.error('An error occurred while creating the user.');
