@@ -52,8 +52,8 @@ import { AuthContext } from '@/context/auth-context';
 import { CLIENT_URL } from '@/config/apiConfig';
 
 export const company = {
-  name: 'Levenue Tech',
-  logo: `${CLIENT_URL}/images/logo-bg-bigger.png`,
+  name: 'Levenue MiniCourses',
+  logo: `/images/logo.png`,
   // plan: 'Enterprise',
   description: 'AI Course network'
 };

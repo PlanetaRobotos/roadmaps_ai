@@ -142,9 +142,9 @@ export default function RoadmapCreatePage() {
                     type="submit"
                     variant="default"
                     className="px-6 py-3"
-                    disabled={isGenerating} // Disable while generating
+                    disabled={isGenerating}
                   >
-                    {isGenerating ? 'Generating...' : 'Generate Roadmap'}
+                    {isGenerating ? 'Generating...' : 'Generate Course'}
                   </Button>
                 </div>
               )}
@@ -152,7 +152,7 @@ export default function RoadmapCreatePage() {
               {/* Loading Message */}
               {isGenerating && (
                 <div className="mt-6 flex items-center justify-center text-gray-500">
-                  <span className="mr-2">Cooking up your roadmap magic!</span>
+                  <span className="mr-2">Cooking up your course magic!</span>
                   {/* Spinner Icon */}
                   <svg
                     className="h-5 w-5 animate-spin text-gray-500"

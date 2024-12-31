@@ -95,7 +95,7 @@ export default function EditRoadmapView({ roadmapId }: EditRoadmapViewProps) {
 
       <Separator className="mx-auto mb-2 h-1 w-5/6" />
 
-      <Card className="mx-auto flex h-[75vh] max-h-[700px] w-full max-w-2xl flex-col">
+      <Card className="mx-auto flex h-[70vh] max-h-[700px] w-full max-w-2xl flex-col">
         <CardHeader className="relative w-full flex-1 pb-0 pt-4">
           <RoadmapView roadmapItems={roadmap} />
         </CardHeader>

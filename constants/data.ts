@@ -1,6 +1,11 @@
 import { NavItem } from '@/types';
 
 export const DEFAULT_SUGGESTIONS_LIMIT = '7';
+export const DEFAULT_EMAIL_PATH = `https://mail.google.com/mail/u/0/?fs=1&tf=cm&source=mailto&to=myrskyi.work@gmail.com`;
+export const DEFAULT_TWITTER_PATH = 'https://x.com/myrsk_pavlo';
+export const DEFAULT_TELEGRAM_PATH = 'https://t.me/pavlo_myrskyi';
+export const DEFAULT_INSTAGRAM_PATH =
+  'https://www.instagram.com/myrskyi.pavlo/';
 
 export type User = {
   id: number;

@@ -40,7 +40,8 @@ import {
   Bookmark,
   Share,
   Heart,
-  Edit
+  Edit,
+  Gift
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -84,6 +85,7 @@ export const Icons = {
   share: Share,
   like: Heart,
   edit: Edit,
+  gift: Gift,
 
   // gitHub: ({ ...props }: LucideProps) => (
   //   <svg

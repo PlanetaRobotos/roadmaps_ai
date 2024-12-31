@@ -26,7 +26,7 @@ export default function RoadmapsList({
   emptyMessage = 'No roadmaps available.'
 }: RoadmapsListProps) {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // Items per page
+  const itemsPerPage = 15; // Items per page
   const totalPages = Math.ceil(roadmaps.length / itemsPerPage);
 
   // Calculate the paginated items
