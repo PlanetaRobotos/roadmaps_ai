@@ -4,7 +4,6 @@ import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Star } from 'lucide-react';
 import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
-import { HighlightedComment } from '@/lib/utils';
 
 interface ReviewProps {
   image: string;
@@ -69,6 +68,15 @@ const reviewList: ReviewProps[] = [
     link: 'https://www.reddit.com/r/SaaS/comments/1hp0fd8/comment/m4kj09o/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button'
   }
 ];
+
+export function HighlightedComment({ comment }: { comment: string }) {
+  const transformedComment = comment.replace(
+    /<color>(.*?)<\/color>/gs,
+    `<span class="bg-primary/40">$1</span>`
+  );
+
+  return <div dangerouslySetInnerHTML={{ __html: transformedComment }} />;
+}
 
 export const TestimonialSection = () => {
   return (

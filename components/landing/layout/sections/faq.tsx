@@ -4,10 +4,17 @@ import {
   AccordionItem,
   AccordionTrigger
 } from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { HighlightedComment } from '@/lib/utils';
 import { DEFAULT_EMAIL_PATH, DEFAULT_TWITTER_PATH } from '@/constants/data';
+
+export function HighlightedComment({ comment }: { comment: string }) {
+  const transformedComment = comment.replace(
+    /<color>(.*?)<\/color>/gs,
+    `<span class="bg-primary/40">$1</span>`
+  );
+
+  return <div dangerouslySetInnerHTML={{ __html: transformedComment }} />;
+}
 
 interface FAQProps {
   question: string;

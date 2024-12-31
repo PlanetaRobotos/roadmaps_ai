@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import UserAuthForm from './user-auth-form';
 import { buttonVariants } from '@/components/ui/button';
-import { cn, HighlightedComment } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import GoogleSignInButton from '@/app/(auth)/_components/google-auth-button';
 import { useSearchParams } from 'next/navigation';
 import { company } from '@/components/layout/app-sidebar';

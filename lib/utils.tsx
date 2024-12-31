@@ -22,12 +22,3 @@ export function formatBytes(
     sizeType === 'accurate' ? accurateSizes[i] ?? 'Bytest' : sizes[i] ?? 'Bytes'
   }`;
 }
-
-export function HighlightedComment({ comment }: { comment: string }) {
-  const transformedComment = comment.replace(
-    /<color>(.*?)<\/color>/gs,
-    `<span class="bg-primary/40">$1</span>`
-  );
-
-  return <div dangerouslySetInnerHTML={{ __html: transformedComment }} />;
-}
