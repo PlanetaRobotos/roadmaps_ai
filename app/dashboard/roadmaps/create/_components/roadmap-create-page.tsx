@@ -99,39 +99,46 @@ export default function RoadmapCreatePage() {
 
               {/* Time Commitment Buttons */}
               {title && (
-                <div className="mt-6 flex justify-center space-x-4">
-                  {/* 15 Minutes Button */}
-                  <Button
-                    type="button"
-                    variant={selectedTime === 15 ? 'default' : 'secondary'}
-                    onClick={() => setSelectedTime(15)}
-                    className="w-18 rounded-full"
-                    aria-label="Quick Start - 15 minutes"
-                  >
-                    <span className="text-lg font-semibold">15m</span>
-                  </Button>
+                <div>
+                  <div className="mt-6 flex justify-center space-x-4">
+                    {/* 15 Minutes Button */}
+                    <Button
+                      type="button"
+                      variant={selectedTime === 15 ? 'default' : 'secondary'}
+                      onClick={() => setSelectedTime(15)}
+                      className="w-18 rounded-full"
+                      aria-label="Quick Start - 15 minutes"
+                    >
+                      <span className="text-lg font-semibold">15m</span>
+                    </Button>
 
-                  {/* 30 Minutes Button */}
-                  <Button
-                    type="button"
-                    variant={selectedTime === 30 ? 'default' : 'secondary'}
-                    onClick={() => setSelectedTime(30)}
-                    className="w-18 rounded-full"
-                    aria-label="Overview - 30 minutes"
-                  >
-                    <span className="text-lg font-semibold">30m</span>
-                  </Button>
+                    {/* 30 Minutes Button */}
+                    <Button
+                      type="button"
+                      variant={selectedTime === 30 ? 'default' : 'secondary'}
+                      onClick={() => setSelectedTime(30)}
+                      className="w-18 rounded-full"
+                      aria-label="Overview - 30 minutes"
+                    >
+                      <span className="text-lg font-semibold">30m</span>
+                    </Button>
 
-                  {/* 1 Hour Button */}
-                  <Button
-                    type="button"
-                    variant={selectedTime === 60 ? 'default' : 'secondary'}
-                    onClick={() => setSelectedTime(60)}
-                    className="w-18 rounded-full"
-                    aria-label="Deep Dive - 1 hour"
-                  >
-                    <span className="text-lg font-semibold">1h</span>
-                  </Button>
+                    {/* 1 Hour Button */}
+                    <Button
+                      type="button"
+                      variant={selectedTime === 60 ? 'default' : 'secondary'}
+                      onClick={() => setSelectedTime(60)}
+                      className="w-18 rounded-full"
+                      aria-label="Deep Dive - 1 hour"
+                    >
+                      <span className="text-lg font-semibold">1h</span>
+                    </Button>
+                  </div>
+                  <div className="mt-2 flex justify-center opacity-50">
+                    <span className="text-sm italic text-muted-foreground">
+                      Select Time Commitment
+                    </span>
+                  </div>
                 </div>
               )}
 
