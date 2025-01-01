@@ -5,6 +5,7 @@ import { AuthContext } from '@/context/auth-context';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import LogoutButton from '@/components/logout-button';
 import { useRouter } from 'next/navigation';
+import AuthCallback from '@/app/(auth)/_components/callback';
 
 export default function DashboardView() {
   const { user } = useContext(AuthContext);
@@ -12,7 +13,10 @@ export default function DashboardView() {
   router.push('/dashboard/roadmaps/create');
 
   return (
-    <ProtectedRoute>
+    <>
+      <AuthCallback />
+
+      {/*<ProtectedRoute>*/}
       <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100">
         <div className="w-full max-w-2xl rounded bg-white p-8 shadow">
           <h1 className="mb-4 text-3xl font-bold">
@@ -22,6 +26,7 @@ export default function DashboardView() {
           <LogoutButton />
         </div>
       </div>
-    </ProtectedRoute>
+      {/*</ProtectedRoute>*/}
+    </>
   );
 }

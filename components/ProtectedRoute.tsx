@@ -13,7 +13,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   const { user, loading } = useContext(AuthContext);
   const router = useRouter();
 
-  const isPublicRoadmap = pathname.startsWith('/dashboard/roadmaps/');
+  const isPublicRoadmap = pathname.startsWith('/dashboard');
 
   useEffect(() => {
     console.log('ProtectedRoute pathname:', pathname);
