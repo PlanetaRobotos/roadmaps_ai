@@ -30,7 +30,7 @@ export async function generateMetadata(
         type: 'website',
         images: [
           {
-            url: `${CLIENT_URL}/images/course-not-found-og.png`,
+            url: `/images/course-not-found-og.jpg`,
             width: 1200,
             height: 630,
             alt: 'Course Not Found'
@@ -41,7 +41,7 @@ export async function generateMetadata(
         card: 'summary_large_image',
         title: 'Course Not Found | MyMicroCourses',
         description: 'The course you are looking for does not exist.',
-        images: [`${CLIENT_URL}/images/course-not-found-og.png`]
+        images: [`/images/course-not-found-og.jpg`]
       }
     };
   }
@@ -56,7 +56,7 @@ export async function generateMetadata(
       type: 'article',
       images: [
         {
-          url: `${CLIENT_URL}/images/default-course-og.png`,
+          url: `/images/default-course-og.png`,
           width: 1200,
           height: 630,
           alt: course.title
@@ -67,7 +67,7 @@ export async function generateMetadata(
       card: 'summary_large_image',
       title: `${course.title} | MyMicroCourses`,
       description: course.description,
-      images: [`${CLIENT_URL}/images/default-course-og.png`]
+      images: [`/images/default-course-og.png`]
     }
   };
 }
