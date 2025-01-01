@@ -111,9 +111,8 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
   return (
     <>
       <AuthCallback />
-
       {/* Main Roadmap Card */}
-      <Card className="mx-auto flex h-[85vh] max-h-[800px] w-full max-w-2xl flex-col">
+      <Card className="mx-auto flex h-full max-h-[800px] w-full max-w-2xl flex-col">
         <CardHeader className="relative w-full flex-1">
           <RoadmapView
             roadmapItems={roadmap}
