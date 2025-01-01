@@ -5,8 +5,10 @@ import KBar from '@/components/kbar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import AppSidebar from '@/components/layout/app-sidebar';
 import Header from '@/components/layout/header';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { AuthContext } from '@/context/auth-context';
+import AuthBanner from '@/components/auth-banner';
+import AuthDialog from '@/components/auth-dialog';
 
 export function LayoutPage({
   children,
@@ -17,22 +19,16 @@ export function LayoutPage({
 }) {
   const { user, loading } = useContext(AuthContext);
 
-  if (!user) {
-    return (
-      <ProtectedRoute>
-        <div>{children}</div>
-      </ProtectedRoute>
-    );
-  }
-
   return (
     <ProtectedRoute>
       <KBar>
-        <SidebarProvider defaultOpen={defaultOpen}>
-          <AppSidebar />
+        <SidebarProvider defaultOpen={user ? defaultOpen : false}>
+          {user && <AppSidebar />}
           <SidebarInset>
             <Header />
             {children}
+            <AuthBanner />
+            <AuthDialog />
           </SidebarInset>
         </SidebarProvider>
       </KBar>

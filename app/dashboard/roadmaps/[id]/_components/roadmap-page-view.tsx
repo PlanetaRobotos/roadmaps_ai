@@ -12,20 +12,10 @@ import { Icons } from '@/components/icons';
 import axios from '@/lib/axios';
 import { AuthContext } from '@/context/auth-context';
 import ShareButton from '@/app/dashboard/roadmaps/_components/share-button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog';
-import { usePathname, useRouter } from 'next/navigation';
 import AuthCallback from '@/app/(auth)/_components/callback';
 import Loading from '@/app/dashboard/_components/loading';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { UserModel } from '@/app/api/client';
-import AuthBanner from '@/components/auth-banner';
-import AuthDialog from '@/components/auth-dialog';
 
 interface RoadmapViewPageProps {
   roadmapId: string;
@@ -79,6 +69,7 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
 
         console.log('course', roadmapResp);
         const cards = transformRoadmapToItems(roadmapResp);
+        console.log('cards', cards);
 
         if (user) {
           const userLikeResp = await axios.get(
@@ -110,7 +101,6 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
 
   return (
     <>
-      <AuthCallback />
       {/* Main Roadmap Card */}
       <Card className="mx-auto flex h-full max-h-[800px] w-full max-w-2xl flex-col">
         <CardHeader className="relative w-full flex-1">
@@ -183,9 +173,6 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
           </div>
         </CardContent>
       </Card>
-
-      <AuthBanner />
-      <AuthDialog />
     </>
   );
 }

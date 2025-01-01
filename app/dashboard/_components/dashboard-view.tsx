@@ -23,7 +23,7 @@ export default function DashboardView() {
             Welcome, {user?.userName}!
           </h1>
           <p className="mb-6">This is your dashboard.</p>
-          <LogoutButton />
+          {/*<LogoutButton />*/}
         </div>
       </div>
       {/*</ProtectedRoute>*/}
