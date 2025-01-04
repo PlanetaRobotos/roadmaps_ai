@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -9,6 +11,9 @@ import {
 } from '@/components/ui/card';
 import { Check } from 'lucide-react';
 import { Icons } from '@/components/icons';
+import { useRouter } from 'next/navigation';
+import axios from '@/lib/axios';
+import { DEFAULT_EMAIL_PATH } from '@/constants/data';
 
 enum PopularPlan {
   NO = 0,
@@ -70,6 +75,33 @@ const plans: PlanProps[] = [
 ];
 
 export const PricingSection = () => {
+  const router = useRouter();
+  const handleSelectPlan = (plan: string) => async () => {
+    console.log(`Selected plan: ${plan}`);
+
+    if (plan === 'free') {
+      router.push('/signin');
+    }
+
+    if (plan === 'standard') {
+      //TODO redirect to wayforpay payment page
+
+      await axios.post('/v1/purchase/buy-plan', {
+        plan: 'standard'
+      });
+    }
+
+    if (plan === 'premium') {
+      const subject = encodeURIComponent('Premium Plan Inquiry');
+      const body = encodeURIComponent(
+        'Hello,\n\nI am interested in the Premium plan. Please provide more details.\n\nThank you.'
+      );
+      window.open(
+        `mailto:myrskyi.work@gmail.com?subject=${subject}&body=${body}`
+      );
+    }
+  };
+
   return (
     <section id="pricing" className="container py-24 sm:py-32">
       <h2 className="mb-2 text-center text-lg tracking-wider text-primary">
@@ -142,6 +174,7 @@ export const PricingSection = () => {
 
               <CardFooter className="mb-5 mt-auto">
                 <Button
+                  onClick={handleSelectPlan(title.toLowerCase())}
                   variant={
                     popular === PopularPlan?.YES ? 'default' : 'secondary'
                   }

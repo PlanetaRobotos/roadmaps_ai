@@ -3,6 +3,7 @@ import RoadmapViewPage from '@/app/dashboard/roadmaps/[id]/_components/roadmap-p
 import { Metadata, ResolvingMetadata } from 'next';
 import { API_BASE_URL, CLIENT_URL } from '@/config/apiConfig';
 import { RoadmapsClient } from '@/app/api/client';
+import { company } from '@/constants/data';
 
 type Props = {
   params: { id: string };
@@ -21,10 +22,10 @@ export async function generateMetadata(
 
   if (!course) {
     return {
-      title: 'Course Not Found | MyMicroCourses',
+      title: `Course Not Found | ${company.name}`,
       description: 'The course you are looking for does not exist.',
       openGraph: {
-        title: 'Course Not Found | MyMicroCourses',
+        title: `Course Not Found | ${company.name}`,
         description: 'The course you are looking for does not exist.',
         url: `${CLIENT_URL}/courses/${roadmapId}`,
         type: 'website',
@@ -39,7 +40,7 @@ export async function generateMetadata(
       },
       twitter: {
         card: 'summary_large_image',
-        title: 'Course Not Found | MyMicroCourses',
+        title: `Course Not Found | ${company.name}`,
         description: 'The course you are looking for does not exist.',
         images: [`/images/course-not-found-og.jpg`]
       }
@@ -47,10 +48,10 @@ export async function generateMetadata(
   }
 
   return {
-    title: `${course.title} | MyMicroCourses`,
+    title: `${course.title} | ${company.name}`,
     description: course.description,
     openGraph: {
-      title: `${course.title} | MyMicroCourses`,
+      title: `${course.title} | ${company.name}`,
       description: course.description,
       url: `${CLIENT_URL}/courses/${course.title}`,
       type: 'article',
@@ -65,7 +66,7 @@ export async function generateMetadata(
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${course.title} | MyMicroCourses`,
+      title: `${course.title} | ${company.name}`,
       description: course.description,
       images: [`/images/default-course-og.png`]
     }

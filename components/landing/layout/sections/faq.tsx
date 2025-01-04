@@ -6,6 +6,7 @@ import {
 } from '@/components/ui/accordion';
 import Link from 'next/link';
 import { DEFAULT_EMAIL_PATH, DEFAULT_TWITTER_PATH } from '@/constants/data';
+import { company } from '@/constants/data';
 
 export function HighlightedComment({ comment }: { comment: string }) {
   const transformedComment = comment.replace(
@@ -25,8 +26,7 @@ interface FAQProps {
 const FAQList: FAQProps[] = [
   {
     question: 'What do I get exactly?',
-    answer:
-      'You’ll receive <color>lifetime access</color> to Levenue MiniCourses, including all current features for creating, exploring, and sharing short, visually appealing courses. <br/><br/>You’ll also gain entry to our <color>Telegram community</color>, where you can ask questions, swap ideas, and share your courses with other enthusiasts <br/><br/>All without any ongoing subscription fees.',
+    answer: `You’ll receive <color>lifetime access</color> to ${company.name}, including all current features for creating, exploring, and sharing short, visually appealing courses. <br/><br/>You’ll also gain entry to our <color>Telegram community</color>, where you can ask questions, swap ideas, and share your courses with other enthusiasts <br/><br/>All without any ongoing subscription fees.`,
     value: 'item-1'
   },
   {

@@ -13,6 +13,9 @@ import LessonCard from '@/components/roadmaps/lesson-card';
 import QuizCard from '@/components/roadmaps/quiz-card';
 import { AuthContext } from '@/context/auth-context';
 import { getUserQuizzes, updateQuizStatus } from '@/services/roadmapsService';
+import axios from '@/lib/axios';
+import { SwipeTip } from '@/components/helper-icon';
+import { cn } from '@/lib/utils';
 
 interface RoadmapViewProps {
   roadmapItems: ClientRoadmap;
@@ -69,68 +72,60 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
     <>
       <Carousel className="mx-auto h-full w-full" setApi={setApi}>
         <CarouselContent className="h-full">
-          {roadmapItems.cards.map((card, index) => (
-            <CarouselItem key={index}>
-              <div className="fixed h-full w-[94%]">
-                {card.type === 'hero' && <HeroCard hero={card} />}
-                {card.type === 'lesson' && <LessonCard lesson={card} />}
-                {card.type === 'quiz' && (
-                  <QuizCard
-                    quiz={card}
-                    userId={user?.id}
-                    // If we have a stored answer for this quiz, pass it as initialSelectedIndex
-                    initialSelectedIndex={
-                      userQuizAnswers[card.id]?.selectedIndex ?? null
-                    }
-                    updateQuizStatus={updateQuizStatus}
-                    onAuthorizeClick={onAuthorizeClick}
-                  />
-                )}
-              </div>
-            </CarouselItem>
-          ))}
+          {roadmapItems.cards
+            .filter((card) => card.type == 'lesson')
+            .map((card, index) => (
+              <CarouselItem key={index}>
+                <div className="fixed h-full w-[94%]">
+                  {card.type === 'hero' && <HeroCard hero={card} />}
+                  {card.type === 'lesson' && (
+                    <LessonCard
+                      lesson={card}
+                      onUpdate={async (id, newContent) => {
+                        // Update lesson content
+                        console.log('Updating lesson:', id, newContent);
+
+                        // Validate content
+                        if (newContent === '') return;
+
+                        await axios.put(`/v1/roadmaps/${roadmapItems.id}`, {
+                          lessonId: id,
+                          lessonContent: newContent
+                        });
+                        const card = roadmapItems.cards.find(
+                          (c) => c.id === id
+                        ) as LessonCard;
+                        card!.content = newContent;
+                      }}
+                    />
+                  )}
+                  {card.type === 'quiz' && (
+                    <QuizCard
+                      quiz={card}
+                      userId={user?.id}
+                      initialSelectedIndex={
+                        userQuizAnswers[card.id]?.selectedIndex ?? null
+                      }
+                      updateQuizStatus={updateQuizStatus}
+                      onAuthorizeClick={onAuthorizeClick}
+                    />
+                  )}
+                </div>
+              </CarouselItem>
+            ))}
         </CarouselContent>
 
         {/* Arrows only for desktop */}
         <CarouselPrevious className="hidden md:block" />
-        <CarouselNext className="hidden md:block" />
+        <CarouselNext
+          className={'hidden md:block'}
+          iconClassName={showSwipeHint ? 'animate-ping' : ''}
+        />
       </Carousel>
 
       {showSwipeHint && (
-        <div className="absolute bottom-0 mx-auto block w-full -translate-x-8 transform text-center">
-          <div className="inline-flex animate-bounce items-center space-x-1 text-gray-500">
-            {/* Left arrow icon */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
-            <span className="text-sm">Swipe</span>
-            {/* Right arrow icon */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M14 5l7 7m0 0l-7 7m7-7H3"
-              />
-            </svg>
-          </div>
+        <div className="absolute bottom-3 mx-auto block w-full -translate-x-8 transform text-center">
+          <SwipeTip />
         </div>
       )}
     </>

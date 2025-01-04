@@ -5,6 +5,7 @@ import { AuthContext } from '@/context/auth-context';
 import Loading from '@/app/dashboard/_components/loading';
 import AuthCallback from '@/app/(auth)/_components/callback';
 import { DEFAULT_EMAIL_PATH } from '@/constants/data';
+import { company } from '@/constants/data';
 
 export default function TermsOfServicesPage() {
   return (
@@ -20,9 +21,9 @@ export default function TermsOfServicesPage() {
         <section>
           <h2 className="mb-4 text-2xl font-semibold">1. Overview</h2>
           <p>
-            Levenue MicroCourses provides a platform for creating and exploring
-            short, AI-generated courses. Upon purchase (or free enrollment),
-            users receive access to:
+            {company.name} provides a platform for creating and exploring short,
+            AI-generated courses. Upon purchase (or free enrollment), users
+            receive access to:
           </p>
           <ul className="list-disc pl-6">
             <li>AI-powered course generation tools.</li>
@@ -114,8 +115,8 @@ export default function TermsOfServicesPage() {
               who generated it.
             </li>
             <li>
-              Levenue MicroCourses is not liable for any inaccuracies or misuse
-              of the AI-generated materials.
+              {company.name} is not liable for any inaccuracies or misuse of the
+              AI-generated materials.
             </li>
           </ul>
         </section>

@@ -7,6 +7,13 @@ export const DEFAULT_TELEGRAM_PATH = 'https://t.me/pavlo_myrskyi';
 export const DEFAULT_INSTAGRAM_PATH =
   'https://www.instagram.com/myrskyi.pavlo/';
 
+export const company = {
+  name: 'Levenue MiniCourses',
+  logo: `/images/logo.png`,
+  // plan: 'Enterprise',
+  description: 'AI Course network'
+};
+
 export type User = {
   id: number;
   name: string;

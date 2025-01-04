@@ -9,7 +9,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import GoogleSignInButton from '@/app/(auth)/_components/google-auth-button';
 import { useSearchParams } from 'next/navigation';
-import { company } from '@/components/layout/app-sidebar';
+import { company } from '@/constants/data';
 import { CLIENT_URL } from '@/config/apiConfig';
 
 export const metadata: Metadata = {

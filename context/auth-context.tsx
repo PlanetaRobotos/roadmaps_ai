@@ -16,7 +16,18 @@ interface AuthContextType {
   closeAuthDialog: () => void;
   handleLogin: () => void;
   handleSignUp: () => void;
+  isPaidRole: boolean;
+  isStandardRole: boolean;
+  isEnterpriseRole: boolean;
 }
+
+export const IsAdminRole = (roles: string[] | null) => {
+  return roles?.includes('admin');
+};
+
+export const IsUserRole = (roles: string[] | null) => {
+  return roles?.includes('user');
+};
 
 export const AuthContext = createContext<AuthContextType>({
   user: null,
@@ -27,7 +38,10 @@ export const AuthContext = createContext<AuthContextType>({
   openAuthDialog: () => {},
   closeAuthDialog: () => {},
   handleLogin: () => {},
-  handleSignUp: () => {}
+  handleSignUp: () => {},
+  isPaidRole: false,
+  isStandardRole: false,
+  isEnterpriseRole: false
 });
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
@@ -36,8 +50,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const pathname = usePathname();
 
   const [user, setUser] = useState<UserModel | null>(null);
+  // const [roles, setRoles] = useState<string[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [isAuthDialogOpen, setIsAuthDialogOpen] = useState<boolean>(false);
+
+  const [isPaidRole, setIsPaidRole] = useState<boolean>(false);
+  const [isStandardRole, setStandardRole] = useState<boolean>(false);
+  const [isEnterpriseRole, setIsEnterpriseRole] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -56,10 +75,25 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const fetchRoles = async () => {
+    try {
+      const response = await axios.get('v1/users/roles');
+      const roles = response.data.roles;
+      console.log('Roles:', response.data.roles);
+
+      setIsPaidRole(roles?.includes('standard' || 'enterprise'));
+      setStandardRole(!!roles?.includes('standard'));
+      setIsEnterpriseRole(!!roles?.includes('enterprise'));
+    } catch (error) {
+      console.error('Error fetching roles:', error);
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       fetchUser();
+      fetchRoles();
       console.log('User fetched');
     } else {
       setLoading(false);
@@ -70,6 +104,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const login = (token: string) => {
     localStorage.setItem('token', token);
     fetchUser();
+    fetchRoles();
   };
 
   // Logout
@@ -101,7 +136,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         openAuthDialog,
         closeAuthDialog,
         handleLogin,
-        handleSignUp
+        handleSignUp,
+        isPaidRole,
+        isStandardRole,
+        isEnterpriseRole
       }}
     >
       {children}

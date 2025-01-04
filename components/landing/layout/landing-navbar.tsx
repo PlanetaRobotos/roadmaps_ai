@@ -21,6 +21,7 @@ import {
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
+import { company } from '@/constants/data';
 
 // import { ToggleTheme } from "./toogle-theme";
 
@@ -82,7 +83,7 @@ export const LandingNavbar = () => {
           width={28}
           height={28}
         />
-        Levenue MiniCourses
+        {company.name}
       </Link>
       {/* <!-- Mobile --> */}
       <div className="flex items-center lg:hidden">
@@ -133,7 +134,7 @@ export const LandingNavbar = () => {
       </div>
 
       {/* <!-- Desktop --> */}
-      <NavigationMenu className="mx-auto hidden lg:block">
+      <NavigationMenu className="hidden pr-12 lg:block">
         <NavigationMenuList>
           <NavigationMenuItem>
             {routeList.map(({ href, label }) => (

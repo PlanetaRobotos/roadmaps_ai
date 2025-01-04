@@ -27,38 +27,24 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-  SidebarRail
+  SidebarRail,
+  useSidebar
 } from '@/components/ui/sidebar';
 import { navItems } from '@/constants/data';
-import {
-  BadgeCheck,
-  Bell,
-  ChevronRight,
-  ChevronsUpDown,
-  CreditCard,
-  GalleryVerticalEnd,
-  LogOut
-} from 'lucide-react';
+import { ChevronRight, ChevronsUpDown, LogOut } from 'lucide-react';
 // import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
-import { Icons } from '../icons';
-import { Button } from '@/components/ui/button';
-// import { SignOut } from '@/components/signout-button';
-import LogoutButton from '@/components/logout-button';
 import { useContext } from 'react';
+import { Icons } from '../icons';
 import { AuthContext } from '@/context/auth-context';
-import { CLIENT_URL } from '@/config/apiConfig';
-
-export const company = {
-  name: 'Levenue MiniCourses',
-  logo: `/images/logo.png`,
-  // plan: 'Enterprise',
-  description: 'AI Course network'
-};
+import { company } from '@/constants/data';
+import TokenBalance from '@/components/TokenBalance';
 
 export default function AppSidebar() {
+  const { isMobile, setOpenMobile } = useSidebar();
+
   // const { data: session } = useSession();
   const { user } = useContext(AuthContext);
   const pathname = usePathname();
@@ -90,6 +76,9 @@ export default function AppSidebar() {
             {/*<span className="truncate text-xs">{company.plan}</span>*/}
             <span className="truncate text-xs">{company.description}</span>
           </div>
+        </div>
+        <div className="grid flex-1 truncate leading-tight">
+          <TokenBalance />
         </div>
       </SidebarHeader>
       <SidebarContent className="overflow-x-hidden">
@@ -132,6 +121,7 @@ export default function AppSidebar() {
                         ))}
                       </SidebarMenuSub>
                     </CollapsibleContent>
+                    ;
                   </SidebarMenuItem>
                 </Collapsible>
               ) : (
@@ -140,6 +130,9 @@ export default function AppSidebar() {
                     asChild
                     tooltip={item.title}
                     isActive={pathname === item.url}
+                    onClick={() => {
+                      if (isMobile) setOpenMobile(false);
+                    }}
                   >
                     <Link href={item.url}>
                       <Icon />
@@ -167,12 +160,12 @@ export default function AppSidebar() {
                     // alt={session?.user?.name || ''}
                     />
                     <AvatarFallback className="rounded-lg">
-                      {user?.userName?.slice(0, 2)?.toUpperCase() || 'CN'}
+                      {user?.firstName?.slice(0, 2)?.toUpperCase() || 'CN'}
                     </AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">
-                      {user?.userName || ''}
+                      {user?.firstName || ''}
                     </span>
                     <span className="truncate text-xs">
                       {user?.email || ''}
@@ -195,12 +188,12 @@ export default function AppSidebar() {
                       // alt={session?.user?.name || ''}
                       />
                       <AvatarFallback className="rounded-lg">
-                        {user?.userName?.slice(0, 2)?.toUpperCase() || 'CN'}
+                        {user?.firstName?.slice(0, 2)?.toUpperCase() || 'CN'}
                       </AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold">
-                        {user?.userName || ''}
+                        {user?.firstName || ''}
                       </span>
                       <span className="truncate text-xs">
                         {' '}

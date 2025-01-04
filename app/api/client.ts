@@ -26,10 +26,10 @@ export class AuthClient {
 
   /**
    * @param body (optional)
-   * @return No Content
+   * @return Created
    */
-  sendMagicLink(body: SendMagicLinkRequest | undefined): Promise<void> {
-    let url_ = this.baseUrl + '/v1/auth/magic-link';
+  create(body: SendMagicLinkRequest | undefined): Promise<string> {
+    let url_ = this.baseUrl + '/v1/auth/send-magic-link';
     url_ = url_.replace(/[?&]$/, '');
 
     const content_ = JSON.stringify(body);
@@ -38,16 +38,17 @@ export class AuthClient {
       body: content_,
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
       }
     };
 
     return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processSendMagicLink(_response);
+      return this.processCreate(_response);
     });
   }
 
-  protected processSendMagicLink(response: Response): Promise<void> {
+  protected processCreate(response: Response): Promise<string> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -85,9 +86,16 @@ export class AuthClient {
           result401
         );
       });
-    } else if (status === 204) {
+    } else if (status === 201) {
       return response.text().then((_responseText) => {
-        return;
+        let result201: any = null;
+        let resultData201 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result201 = resultData201 !== undefined ? resultData201 : <any>null;
+
+        return result201;
       });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
@@ -99,23 +107,15 @@ export class AuthClient {
         );
       });
     }
-    return Promise.resolve<void>(null as any);
+    return Promise.resolve<string>(null as any);
   }
 
   /**
-   * @param userId (optional)
    * @param token (optional)
    * @return OK
    */
-  magicLinkLogin(
-    userId: number | undefined,
-    token: string | undefined
-  ): Promise<string> {
-    let url_ = this.baseUrl + '/v1/auth/magic-link-login?';
-    if (userId === null)
-      throw new Error("The parameter 'userId' cannot be null.");
-    else if (userId !== undefined)
-      url_ += 'userId=' + encodeURIComponent('' + userId) + '&';
+  verifyEmail(token: string | undefined): Promise<string> {
+    let url_ = this.baseUrl + '/v1/auth/VerifyEmail?';
     if (token === null)
       throw new Error("The parameter 'token' cannot be null.");
     else if (token !== undefined)
@@ -130,11 +130,11 @@ export class AuthClient {
     };
 
     return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processMagicLinkLogin(_response);
+      return this.processVerifyEmail(_response);
     });
   }
 
-  protected processMagicLinkLogin(response: Response): Promise<string> {
+  protected processVerifyEmail(response: Response): Promise<string> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -792,6 +792,93 @@ export class LessonsClient {
   }
 }
 
+export class PurchaseClient {
+  private http: {
+    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
+  };
+  private baseUrl: string;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+    undefined;
+
+  constructor(
+    baseUrl?: string,
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+  ) {
+    this.http = http ? http : (window as any);
+    this.baseUrl = baseUrl ?? '';
+  }
+
+  buyPlan(body: BuyPlanRequest | undefined): Promise<void> {
+    let url_ = this.baseUrl + '/v1/purchase/buy-plan';
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(body);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processBuyPlan(_response);
+    });
+  }
+
+  protected processBuyPlan(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+}
+
 export class RoadmapsClient {
   private http: {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
@@ -1235,6 +1322,10 @@ export class RoadmapsClient {
         result201 = RoadmapModel.fromJS(resultData201);
         return result201;
       });
+    } else if (status === 403) {
+      return response.text().then((_responseText) => {
+        return throwException('Forbidden', status, _responseText, _headers);
+      });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
         return throwException(
@@ -1595,6 +1686,181 @@ export class ServerInfoClient {
   }
 }
 
+export class TokensClient {
+  private http: {
+    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
+  };
+  private baseUrl: string;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+    undefined;
+
+  constructor(
+    baseUrl?: string,
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+  ) {
+    this.http = http ? http : (window as any);
+    this.baseUrl = baseUrl ?? '';
+  }
+
+  /**
+   * @return OK
+   */
+  getBalance(): Promise<UserModel> {
+    let url_ = this.baseUrl + '/v1/tokens/balance';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json'
+      }
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processGetBalance(_response);
+    });
+  }
+
+  protected processGetBalance(response: Response): Promise<UserModel> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result200 = UserModel.fromJS(resultData200);
+        return result200;
+      });
+    } else if (status === 403) {
+      return response.text().then((_responseText) => {
+        return throwException('Forbidden', status, _responseText, _headers);
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<UserModel>(null as any);
+  }
+
+  refillTokens(body: RefillTokensRequest | undefined): Promise<void> {
+    let url_ = this.baseUrl + '/v1/tokens/refill';
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(body);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processRefillTokens(_response);
+    });
+  }
+
+  protected processRefillTokens(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 403) {
+      return response.text().then((_responseText) => {
+        return throwException('Forbidden', status, _responseText, _headers);
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+}
+
 export class UsersClient {
   private http: {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
@@ -1764,10 +2030,6 @@ export class UsersClient {
             : JSON.parse(_responseText, this.jsonParseReviver);
         result200 = UserModel.fromJS(resultData200);
         return result200;
-      });
-    } else if (status === 403) {
-      return response.text().then((_responseText) => {
-        return throwException('Forbidden', status, _responseText, _headers);
       });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
@@ -2623,6 +2885,107 @@ export class UsersClient {
     }
     return Promise.resolve<UserQuizModelFiltered>(null as any);
   }
+
+  getUserRoles(): Promise<void> {
+    let url_ = this.baseUrl + '/v1/users/roles';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {}
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processGetUserRoles(_response);
+    });
+  }
+
+  protected processGetUserRoles(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+}
+
+export class BuyPlanRequest implements IBuyPlanRequest {
+  plan?: string;
+
+  constructor(data?: IBuyPlanRequest) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.plan = _data['plan'];
+    }
+  }
+
+  static fromJS(data: any): BuyPlanRequest {
+    data = typeof data === 'object' ? data : {};
+    let result = new BuyPlanRequest();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['plan'] = this.plan;
+    return data;
+  }
+}
+
+export interface IBuyPlanRequest {
+  plan?: string;
 }
 
 /** Record that represents a default HTTP error response. */
@@ -3187,13 +3550,53 @@ export interface IQuizModel {
   correctAnswerIndex?: number;
 }
 
+export class RefillTokensRequest implements IRefillTokensRequest {
+  userId?: number;
+  amount?: number;
+
+  constructor(data?: IRefillTokensRequest) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.userId = _data['userId'];
+      this.amount = _data['amount'];
+    }
+  }
+
+  static fromJS(data: any): RefillTokensRequest {
+    data = typeof data === 'object' ? data : {};
+    let result = new RefillTokensRequest();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['userId'] = this.userId;
+    data['amount'] = this.amount;
+    return data;
+  }
+}
+
+export interface IRefillTokensRequest {
+  userId?: number;
+  amount?: number;
+}
+
 export class RoadmapCreateRequest implements IRoadmapCreateRequest {
   title?: string | undefined;
   topic?: string | undefined;
   estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
-  authorId?: number;
+  authorId?: number | undefined;
   likes?: number | undefined;
   modules?: RoadmapModuleModel[];
 
@@ -3259,7 +3662,7 @@ export interface IRoadmapCreateRequest {
   estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
-  authorId?: number;
+  authorId?: number | undefined;
   likes?: number | undefined;
   modules?: RoadmapModuleModel[];
 }
@@ -3270,7 +3673,7 @@ export class RoadmapModel implements IRoadmapModel {
   estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
-  authorId?: number;
+  authorId?: number | undefined;
   likes?: number | undefined;
   modules?: RoadmapModuleModel[];
   id?: string;
@@ -3339,7 +3742,7 @@ export interface IRoadmapModel {
   estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
-  authorId?: number;
+  authorId?: number | undefined;
   likes?: number | undefined;
   modules?: RoadmapModuleModel[];
   id?: string;
@@ -3463,11 +3866,11 @@ export class RoadmapUpdateRequest implements IRoadmapUpdateRequest {
   estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
-  authorId?: number;
+  authorId?: number | undefined;
   likes?: number | undefined;
   modules?: RoadmapModuleModel[];
   lessonId?: string | undefined;
-  lessonCompleted?: boolean | undefined;
+  lessonContent?: string | undefined;
 
   constructor(data?: IRoadmapUpdateRequest) {
     if (data) {
@@ -3496,7 +3899,7 @@ export class RoadmapUpdateRequest implements IRoadmapUpdateRequest {
           this.modules!.push(RoadmapModuleModel.fromJS(item));
       }
       this.lessonId = _data['lessonId'];
-      this.lessonCompleted = _data['lessonCompleted'];
+      this.lessonContent = _data['lessonContent'];
     }
   }
 
@@ -3524,7 +3927,7 @@ export class RoadmapUpdateRequest implements IRoadmapUpdateRequest {
       for (let item of this.modules) data['modules'].push(item.toJSON());
     }
     data['lessonId'] = this.lessonId;
-    data['lessonCompleted'] = this.lessonCompleted;
+    data['lessonContent'] = this.lessonContent;
     return data;
   }
 }
@@ -3535,15 +3938,15 @@ export interface IRoadmapUpdateRequest {
   estimatedDuration?: number | undefined;
   description?: string | undefined;
   tags?: string[] | undefined;
-  authorId?: number;
+  authorId?: number | undefined;
   likes?: number | undefined;
   modules?: RoadmapModuleModel[];
   lessonId?: string | undefined;
-  lessonCompleted?: boolean | undefined;
+  lessonContent?: string | undefined;
 }
 
 export class SendMagicLinkRequest implements ISendMagicLinkRequest {
-  email?: string;
+  userId?: number;
 
   constructor(data?: ISendMagicLinkRequest) {
     if (data) {
@@ -3556,7 +3959,7 @@ export class SendMagicLinkRequest implements ISendMagicLinkRequest {
 
   init(_data?: any) {
     if (_data) {
-      this.email = _data['email'];
+      this.userId = _data['userId'];
     }
   }
 
@@ -3569,13 +3972,13 @@ export class SendMagicLinkRequest implements ISendMagicLinkRequest {
 
   toJSON(data?: any) {
     data = typeof data === 'object' ? data : {};
-    data['email'] = this.email;
+    data['userId'] = this.userId;
     return data;
   }
 }
 
 export interface ISendMagicLinkRequest {
-  email?: string;
+  userId?: number;
 }
 
 export class ServerInfoModel implements IServerInfoModel {
@@ -3623,8 +4026,9 @@ export interface IServerInfoModel {
 }
 
 export class UserCreateRequest implements IUserCreateRequest {
-  userName?: string;
+  firstName?: string;
   email?: string;
+  emailConfirmed?: boolean;
 
   constructor(data?: IUserCreateRequest) {
     if (data) {
@@ -3637,8 +4041,9 @@ export class UserCreateRequest implements IUserCreateRequest {
 
   init(_data?: any) {
     if (_data) {
-      this.userName = _data['userName'];
+      this.firstName = _data['firstName'];
       this.email = _data['email'];
+      this.emailConfirmed = _data['emailConfirmed'];
     }
   }
 
@@ -3651,15 +4056,17 @@ export class UserCreateRequest implements IUserCreateRequest {
 
   toJSON(data?: any) {
     data = typeof data === 'object' ? data : {};
-    data['userName'] = this.userName;
+    data['firstName'] = this.firstName;
     data['email'] = this.email;
+    data['emailConfirmed'] = this.emailConfirmed;
     return data;
   }
 }
 
 export interface IUserCreateRequest {
-  userName?: string;
+  firstName?: string;
   email?: string;
+  emailConfirmed?: boolean;
 }
 
 export class UserLikeAddRequest implements IUserLikeAddRequest {
@@ -3767,8 +4174,9 @@ export interface IUserLikeModel {
 }
 
 export class UserModel implements IUserModel {
-  userName?: string;
+  firstName?: string;
   email?: string;
+  emailConfirmed?: boolean;
   id?: number;
 
   constructor(data?: IUserModel) {
@@ -3782,8 +4190,9 @@ export class UserModel implements IUserModel {
 
   init(_data?: any) {
     if (_data) {
-      this.userName = _data['userName'];
+      this.firstName = _data['firstName'];
       this.email = _data['email'];
+      this.emailConfirmed = _data['emailConfirmed'];
       this.id = _data['id'];
     }
   }
@@ -3797,16 +4206,18 @@ export class UserModel implements IUserModel {
 
   toJSON(data?: any) {
     data = typeof data === 'object' ? data : {};
-    data['userName'] = this.userName;
+    data['firstName'] = this.firstName;
     data['email'] = this.email;
+    data['emailConfirmed'] = this.emailConfirmed;
     data['id'] = this.id;
     return data;
   }
 }
 
 export interface IUserModel {
-  userName?: string;
+  firstName?: string;
   email?: string;
+  emailConfirmed?: boolean;
   id?: number;
 }
 

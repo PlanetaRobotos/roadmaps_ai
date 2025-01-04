@@ -113,12 +113,12 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
           <div className="flex items-center gap-2 px-1 text-left text-sm">
             <Avatar className="h-7 w-7 rounded-lg">
               <AvatarFallback className="rounded-lg">
-                {author?.userName?.slice(0, 2)?.toUpperCase() || 'CN'}
+                {author?.firstName?.slice(0, 2)?.toUpperCase() || 'CN'}
               </AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-semibold">
-                {author?.userName || ''}
+                {author?.firstName || ''}
               </span>
             </div>
           </div>

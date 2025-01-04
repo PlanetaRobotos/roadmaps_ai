@@ -1,66 +1,99 @@
 ﻿'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from '@/lib/axios';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button'; // Assuming you have a Button component
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { toast } from 'sonner'; // Assuming you have an Input component
+import { toast } from 'sonner';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form';
+import { API_BASE_URL, CLIENT_URL } from '@/config/apiConfig';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import * as z from 'zod';
 
-interface MagicLinkForm {
-  email: string;
-}
+const formSchema = z.object({
+  email: z.string().email({ message: 'Enter a valid email address' })
+});
+
+type UserFormValue = z.infer<typeof formSchema>;
 
 const MagicLinkLogin: React.FC = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm<MagicLinkForm>();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
+  const defaultValues = {
+    email: 'demo@gmail.com'
+  };
+  const router = useRouter();
 
-  const onSubmit = async (data: MagicLinkForm) => {
+  const form = useForm<UserFormValue>({
+    resolver: zodResolver(formSchema),
+    defaultValues
+  });
+
+  const onSubmit = async (data: UserFormValue) => {
     setLoading(true);
     try {
-      await axios.post('v1/auth/magic-link', { email: data.email });
-      // Notify user to check their email
-      toast.success('Magic link sent! Check your email.');
+      const userResp = await axios.post(`${API_BASE_URL}/v1/users`, {
+        email: data.email
+      });
+
+      if (!userResp.data.emailConfirmed) {
+        const redirectLinkResp = await axios.post(
+          `${API_BASE_URL}/v1/auth/send-magic-link`,
+          {
+            userId: userResp.data.id
+          }
+        );
+
+        const email = redirectLinkResp.data;
+        router.push(
+          `/verify-request?email=${userResp.data.email}&search=${email}`
+        );
+      } else {
+        window.location.href = `${API_BASE_URL}/v1/auth/redirect?email=${data.email}`;
+      }
     } catch (error) {
-      // Handle error (e.g., show error message)
-      toast.error('Failed to send magic link. Please try again.');
+      console.error('error:', error);
+      toast.error('An error occurred while creating the user.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="w-full max-w-md rounded bg-white p-8 shadow">
-      <h2 className="mb-6 text-2xl font-bold">Login with Magic Link</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4">
-          <label className="block text-gray-700">Email Address</label>
-          <Input
-            type="email"
-            placeholder="you@example.com"
-            {...register('email', {
-              required: 'Email is required',
-              pattern: {
-                value: /^\S+@\S+$/i,
-                message: 'Invalid email address'
-              }
-            })}
-            className="mt-1"
-          />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input
+                  type="email"
+                  placeholder="Enter your email..."
+                  disabled={loading}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
-        </div>
-        <Button type="submit" disabled={loading} className="w-full">
-          {loading ? 'Sending...' : 'Send Magic Link'}
+        />
+
+        <Button disabled={loading} className="ml-auto w-full" type="submit">
+          Continue With Email
         </Button>
       </form>
-    </div>
+    </Form>
   );
 };
 

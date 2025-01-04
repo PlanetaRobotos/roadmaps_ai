@@ -41,7 +41,10 @@ import {
   Share,
   Heart,
   Edit,
-  Gift
+  Gift,
+  Infinity,
+  CircleX,
+  Wallet
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -86,6 +89,9 @@ export const Icons = {
   like: Heart,
   edit: Edit,
   gift: Gift,
+  infinity: Infinity,
+  error: CircleX,
+  wallet: Wallet,
 
   // gitHub: ({ ...props }: LucideProps) => (
   //   <svg

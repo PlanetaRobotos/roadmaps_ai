@@ -9,6 +9,7 @@ import {
   DEFAULT_TWITTER_PATH
 } from '@/constants/data';
 import { CLIENT_URL } from '@/config/apiConfig';
+import { company } from '@/constants/data';
 
 export const FooterSection = () => {
   return (
@@ -25,7 +26,7 @@ export const FooterSection = () => {
                 height={28}
               />
 
-              <h3 className="text-2xl">Levenue MiniCourses</h3>
+              <h3 className="text-2xl">{company.name}</h3>
             </Link>
             <span className="mt-3 text-muted-foreground">
               Share your expertise in minutes <br /> Create, Learn, and Inspire!
@@ -120,7 +121,7 @@ export const FooterSection = () => {
         <Separator className="my-6" />
         <section className="">
           <h3 className="">
-            &copy; {new Date().getFullYear()} Levenue MiniCourses. All rights
+            &copy; {new Date().getFullYear()} {company.name}. All rights
             reserved.
           </h3>
         </section>
