@@ -110,6 +110,75 @@ export class AuthClient {
     return Promise.resolve<string>(null as any);
   }
 
+  redirectToDashboard(email: string | undefined): Promise<void> {
+    let url_ = this.baseUrl + '/v1/auth/redirect?';
+    if (email === null)
+      throw new Error("The parameter 'email' cannot be null.");
+    else if (email !== undefined)
+      url_ += 'email=' + encodeURIComponent('' + email) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {}
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processRedirectToDashboard(_response);
+    });
+  }
+
+  protected processRedirectToDashboard(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+
   /**
    * @param token (optional)
    * @return OK
@@ -865,6 +934,498 @@ export class PurchaseClient {
           result401
         );
       });
+    } else if (status === 403) {
+      return response.text().then((_responseText) => {
+        return throwException('Forbidden', status, _responseText, _headers);
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+
+  featureGlobal(): Promise<void> {
+    let url_ = this.baseUrl + '/v1/purchase/feature-global';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {}
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processFeatureGlobal(_response);
+    });
+  }
+
+  protected processFeatureGlobal(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 403) {
+      return response.text().then((_responseText) => {
+        return throwException('Forbidden', status, _responseText, _headers);
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+
+  deletePlan(body: DeletePlanRequest | undefined): Promise<void> {
+    let url_ = this.baseUrl + '/v1/purchase/delete-plan';
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(body);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processDeletePlan(_response);
+    });
+  }
+
+  protected processDeletePlan(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 403) {
+      return response.text().then((_responseText) => {
+        return throwException('Forbidden', status, _responseText, _headers);
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+
+  featureStandard(): Promise<void> {
+    let url_ = this.baseUrl + '/v1/purchase/feature-standard';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {}
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processFeatureStandard(_response);
+    });
+  }
+
+  protected processFeatureStandard(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 403) {
+      return response.text().then((_responseText) => {
+        return throwException('Forbidden', status, _responseText, _headers);
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+
+  featurePaidBoth(): Promise<void> {
+    let url_ = this.baseUrl + '/v1/purchase/feature-paid-both';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {}
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processFeaturePaidBoth(_response);
+    });
+  }
+
+  protected processFeaturePaidBoth(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 403) {
+      return response.text().then((_responseText) => {
+        return throwException('Forbidden', status, _responseText, _headers);
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+
+  featureEnterprise(): Promise<void> {
+    let url_ = this.baseUrl + '/v1/purchase/feature-enterprise';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {}
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processFeatureEnterprise(_response);
+    });
+  }
+
+  protected processFeatureEnterprise(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 403) {
+      return response.text().then((_responseText) => {
+        return throwException('Forbidden', status, _responseText, _headers);
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+
+  featureAdmin(): Promise<void> {
+    let url_ = this.baseUrl + '/v1/purchase/feature-admin';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {}
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processFeatureAdmin(_response);
+    });
+  }
+
+  protected processFeatureAdmin(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 403) {
+      return response.text().then((_responseText) => {
+        return throwException('Forbidden', status, _responseText, _headers);
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+
+  featureUser(): Promise<void> {
+    let url_ = this.baseUrl + '/v1/purchase/feature-user';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {}
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processFeatureUser(_response);
+    });
+  }
+
+  protected processFeatureUser(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 403) {
+      return response.text().then((_responseText) => {
+        return throwException('Forbidden', status, _responseText, _headers);
+      });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
         return throwException(
@@ -1255,7 +1816,7 @@ export class RoadmapsClient {
    * @return Created
    */
   create(body: RoadmapCreateRequest | undefined): Promise<RoadmapModel> {
-    let url_ = this.baseUrl + '/v1/roadmaps';
+    let url_ = this.baseUrl + '/v1/roadmaps/create';
     url_ = url_.replace(/[?&]$/, '');
 
     const content_ = JSON.stringify(body);
@@ -1705,7 +2266,7 @@ export class TokensClient {
   /**
    * @return OK
    */
-  getBalance(): Promise<UserModel> {
+  getBalance(): Promise<string> {
     let url_ = this.baseUrl + '/v1/tokens/balance';
     url_ = url_.replace(/[?&]$/, '');
 
@@ -1721,7 +2282,7 @@ export class TokensClient {
     });
   }
 
-  protected processGetBalance(response: Response): Promise<UserModel> {
+  protected processGetBalance(response: Response): Promise<string> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -1766,7 +2327,8 @@ export class TokensClient {
           _responseText === ''
             ? null
             : JSON.parse(_responseText, this.jsonParseReviver);
-        result200 = UserModel.fromJS(resultData200);
+        result200 = resultData200 !== undefined ? resultData200 : <any>null;
+
         return result200;
       });
     } else if (status === 403) {
@@ -1783,7 +2345,7 @@ export class TokensClient {
         );
       });
     }
-    return Promise.resolve<UserModel>(null as any);
+    return Promise.resolve<string>(null as any);
   }
 
   refillTokens(body: RefillTokensRequest | undefined): Promise<void> {
@@ -1842,10 +2404,6 @@ export class TokensClient {
           _headers,
           result401
         );
-      });
-    } else if (status === 403) {
-      return response.text().then((_responseText) => {
-        return throwException('Forbidden', status, _responseText, _headers);
       });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
@@ -2988,6 +3546,42 @@ export interface IBuyPlanRequest {
   plan?: string;
 }
 
+export class DeletePlanRequest implements IDeletePlanRequest {
+  plan?: string;
+
+  constructor(data?: IDeletePlanRequest) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.plan = _data['plan'];
+    }
+  }
+
+  static fromJS(data: any): DeletePlanRequest {
+    data = typeof data === 'object' ? data : {};
+    let result = new DeletePlanRequest();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['plan'] = this.plan;
+    return data;
+  }
+}
+
+export interface IDeletePlanRequest {
+  plan?: string;
+}
+
 /** Record that represents a default HTTP error response. */
 export class ErrorDto implements IErrorDto {
   status?: number;
@@ -3599,6 +4193,7 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
   authorId?: number | undefined;
   likes?: number | undefined;
   modules?: RoadmapModuleModel[];
+  price?: number;
 
   constructor(data?: IRoadmapCreateRequest) {
     if (data) {
@@ -3626,6 +4221,7 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
         for (let item of _data['modules'])
           this.modules!.push(RoadmapModuleModel.fromJS(item));
       }
+      this.price = _data['price'];
     }
   }
 
@@ -3652,6 +4248,7 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
       data['modules'] = [];
       for (let item of this.modules) data['modules'].push(item.toJSON());
     }
+    data['price'] = this.price;
     return data;
   }
 }
@@ -3665,6 +4262,7 @@ export interface IRoadmapCreateRequest {
   authorId?: number | undefined;
   likes?: number | undefined;
   modules?: RoadmapModuleModel[];
+  price?: number;
 }
 
 export class RoadmapModel implements IRoadmapModel {

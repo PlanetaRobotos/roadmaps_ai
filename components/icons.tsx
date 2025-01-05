@@ -44,7 +44,8 @@ import {
   Gift,
   Infinity,
   CircleX,
-  Wallet
+  Wallet,
+  CircleDollarSign
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -92,6 +93,7 @@ export const Icons = {
   infinity: Infinity,
   error: CircleX,
   wallet: Wallet,
+  coin: CircleDollarSign,
 
   // gitHub: ({ ...props }: LucideProps) => (
   //   <svg

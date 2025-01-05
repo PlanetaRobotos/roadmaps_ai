@@ -5,15 +5,19 @@ import { RoadmapCreateRequest } from '@/app/api/client';
 import { createRoadmap } from '@/services/roadmapsService';
 import { transformRoadmapToItems } from '@/utils/transformRoadmap';
 import { API_BASE_URL } from '@/config/apiConfig';
+import { toast } from 'sonner';
+import axios from '@/lib/axios';
 
 interface RoadmapState {
   title: string;
   selectedTime: number | null;
+  price: number | null;
   roadmapPreview: ClientRoadmap | null;
   isGenerating: boolean;
   setTitle: (title: string) => void;
   setSelectedTime: (time: number) => void;
   setRoadmapPreview: (preview: ClientRoadmap) => void;
+  setPrice: (price: number) => void;
   generateRoadmap: (
     userId: number | undefined
   ) => Promise<ClientRoadmap | null>;
@@ -23,14 +27,16 @@ interface RoadmapState {
 export const useRoadmapStore = create<RoadmapState>((set, get) => ({
   title: '',
   selectedTime: null,
+  price: null,
   roadmapPreview: null,
   isGenerating: false,
   setTitle: (title: string) => set({ title }),
   setSelectedTime: (time: number) => set({ selectedTime: time }),
   setRoadmapPreview: (preview: ClientRoadmap) =>
     set({ roadmapPreview: preview }),
+  setPrice: (price: number) => set({ price }),
   generateRoadmap: async (userId): Promise<ClientRoadmap | null> => {
-    const { title, selectedTime } = get();
+    const { title, selectedTime, price } = get();
     if (!title || !selectedTime) {
       console.log('Cannot generate roadmap: Missing title or selected time.');
       return null;
@@ -41,23 +47,24 @@ export const useRoadmapStore = create<RoadmapState>((set, get) => ({
     set({ isGenerating: true });
 
     try {
-      console.log('Creating roadmap... user:', userId);
+      console.log('Creating roadmap... user:', userId, 'price', price);
       const requestBody = new RoadmapCreateRequest();
       requestBody.init({
         title: title,
         estimatedDuration: selectedTime,
-        authorId: userId
+        authorId: userId,
+        price: price
       });
 
-      const roadmapModel = await createRoadmap(requestBody);
+      const roadmapModel = await axios.post('v1/roadmaps', requestBody);
 
-      const cards = transformRoadmapToItems(roadmapModel);
+      const cards = transformRoadmapToItems(roadmapModel.data);
       set({ roadmapPreview: cards });
 
       return cards;
     } catch (error) {
       console.error('Error generating roadmap:', error);
-      alert('Failed to generate roadmap. Please try again.');
+      toast('Failed to generate roadmap. Please try again.');
       return null;
     } finally {
       set({ isGenerating: false });

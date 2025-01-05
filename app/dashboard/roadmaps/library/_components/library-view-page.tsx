@@ -8,7 +8,7 @@ import { getAllRoadmaps } from '@/services/roadmapsService';
 import { Icons } from '@/components/icons';
 import { Separator } from '@/components/ui/separator';
 
-function ProgressViewPage() {
+function LibraryViewPage() {
   const [libraryRoadmaps, setLibraryRoadmaps] = useState<RoadmapModel[]>([]);
   const [loadingLibrary, setLoadingLibrary] = useState(true);
 
@@ -37,4 +37,4 @@ function ProgressViewPage() {
   );
 }
 
-export default ProgressViewPage;
+export default LibraryViewPage;

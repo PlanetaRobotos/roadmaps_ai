@@ -73,7 +73,7 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
       <Carousel className="mx-auto h-full w-full" setApi={setApi}>
         <CarouselContent className="h-full">
           {roadmapItems.cards
-            .filter((card) => card.type == 'lesson')
+            // .filter((card) => card.type == 'lesson')
             .map((card, index) => (
               <CarouselItem key={index}>
                 <div className="fixed h-full w-[94%]">

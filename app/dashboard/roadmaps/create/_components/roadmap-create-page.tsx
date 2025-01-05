@@ -10,7 +10,10 @@ import { useRouter } from 'next/navigation';
 import axios from '@/lib/axios';
 import { AuthContext } from '@/context/auth-context';
 import AuthCallback from '@/app/(auth)/_components/callback';
+import { Icons } from '@/components/icons';
 import { SpinnerMinimalistic } from '@/components/helper-icon';
+import { toast } from 'sonner';
+import useTokenBalance from '@/hooks/useTokenBalance';
 
 interface RoadmapFormData {
   title: string;
@@ -20,6 +23,7 @@ interface RoadmapFormData {
 export default function RoadmapCreatePage() {
   const router = useRouter();
   const { user, openAuthDialog } = useContext(AuthContext);
+  const { tokens } = useTokenBalance();
 
   const {
     handleSubmit,
@@ -41,12 +45,20 @@ export default function RoadmapCreatePage() {
     setTitle,
     setSelectedTime,
     generateRoadmap,
+    price,
+    setPrice,
     reset: resetRoadmap
   } = useRoadmapStore();
 
   const onSubmit: SubmitHandler<RoadmapFormData> = async (data) => {
     if (!user) {
       openAuthDialog();
+      return;
+    }
+
+    console.log(`tokens:, ${tokens}, price: ${price}`);
+    if (tokens !== -1 && price !== null && tokens < price) {
+      toast.error(`You need more coins to generate this roadmap.`);
       return;
     }
 
@@ -102,7 +114,10 @@ export default function RoadmapCreatePage() {
                     <Button
                       type="button"
                       variant={selectedTime === 15 ? 'default' : 'secondary'}
-                      onClick={() => setSelectedTime(15)}
+                      onClick={() => {
+                        setSelectedTime(15);
+                        setPrice(3);
+                      }}
                       className="w-18 rounded-full"
                       aria-label="Quick Start - 15 minutes"
                     >
@@ -113,7 +128,10 @@ export default function RoadmapCreatePage() {
                     <Button
                       type="button"
                       variant={selectedTime === 30 ? 'default' : 'secondary'}
-                      onClick={() => setSelectedTime(30)}
+                      onClick={() => {
+                        setSelectedTime(30);
+                        setPrice(5);
+                      }}
                       className="w-18 rounded-full"
                       aria-label="Overview - 30 minutes"
                     >
@@ -124,7 +142,10 @@ export default function RoadmapCreatePage() {
                     <Button
                       type="button"
                       variant={selectedTime === 60 ? 'default' : 'secondary'}
-                      onClick={() => setSelectedTime(60)}
+                      onClick={() => {
+                        setSelectedTime(60);
+                        setPrice(7);
+                      }}
                       className="w-18 rounded-full"
                       aria-label="Deep Dive - 1 hour"
                     >
@@ -145,10 +166,14 @@ export default function RoadmapCreatePage() {
                   <Button
                     type="submit"
                     variant="default"
-                    className="px-6 py-3"
+                    className="relative px-6 py-3"
                     disabled={isGenerating}
                   >
                     {isGenerating ? 'Generating...' : 'Generate Course'}
+                    <div className="absolute right-0 inline-flex translate-x-1/2 translate-y-[-50%] items-center rounded-full bg-primary px-2 py-1 font-bold">
+                      {price}
+                      <Icons.coin className="ml-1 h-4 w-4 stroke-blue-500" />
+                    </div>
                   </Button>
                 </div>
               )}
