@@ -13,12 +13,8 @@ import { Check } from 'lucide-react';
 import { Icons } from '@/components/icons';
 import { useRouter } from 'next/navigation';
 import axios from '@/lib/axios';
-import { DEFAULT_EMAIL_PATH } from '@/constants/data';
 import { WayForPayFormData } from '@/types/wayforpay';
 import { submitWayForPayForm } from '@/utils/payment';
-import { createPayment } from '@/services/paymentService';
-import { CLIENT_URL } from '@/config/apiConfig';
-import { useRef } from 'react';
 
 enum PopularPlan {
   NO = 0,
