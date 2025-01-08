@@ -45,7 +45,8 @@ import {
   Infinity,
   CircleX,
   Wallet,
-  CircleDollarSign
+  CircleDollarSign,
+  Compass
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -94,6 +95,7 @@ export const Icons = {
   error: CircleX,
   wallet: Wallet,
   coin: CircleDollarSign,
+  explore: Compass,
 
   // gitHub: ({ ...props }: LucideProps) => (
   //   <svg

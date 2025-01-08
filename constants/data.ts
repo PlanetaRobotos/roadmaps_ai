@@ -136,21 +136,21 @@ export type Product = {
 };
 
 export const navItems: NavItem[] = [
-  // {
-  //   title: 'Home',
-  //   url: '/dashboard/overview',
-  //   icon: 'house',
-  //   isActive: false,
-  //   shortcut: ['d', 'd'],
-  //   items: [] // Empty array as there are no child items for Dashboard
-  // },
   {
-    title: 'Create',
-    url: '/dashboard/roadmaps/create',
-    icon: 'badgePlus',
+    title: 'Home',
+    url: '/dashboard/overview',
+    icon: 'house',
     isActive: false,
-    shortcut: ['u', 'u'],
-    items: []
+    shortcut: ['d', 'd'],
+    items: [] // Empty array as there are no child items for Dashboard
+  },
+  {
+    title: 'Explore',
+    url: '/dashboard/roadmaps/explore',
+    icon: 'explore',
+    isActive: false,
+    shortcut: ['d', 'd'],
+    items: [] // Empty array as there are no child items for Dashboard
   },
   {
     title: 'Library',
@@ -158,15 +158,16 @@ export const navItems: NavItem[] = [
     icon: 'book',
     isActive: false,
     shortcut: ['d', 'd'],
-    items: [] // Empty array as there are no child items for Dashboard
+    items: [], // Empty array as there are no child items for Dashboard
+    separator: true
   },
   {
-    title: 'My Progress',
-    url: '/dashboard/roadmaps/progress',
-    icon: 'chart',
+    title: 'Create',
+    url: '/dashboard/roadmaps/create',
+    icon: 'badgePlus',
     isActive: false,
-    shortcut: ['d', 'd'],
-    items: [] // Empty array as there are no child items for Dashboard
+    shortcut: ['u', 'u'],
+    items: []
   }
   // {
   //   title: 'Account',

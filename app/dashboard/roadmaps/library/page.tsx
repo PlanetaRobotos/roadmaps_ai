@@ -1,7 +1,7 @@
-﻿import LibraryViewPage from '@/app/dashboard/roadmaps/library/_components/library-view-page';
+﻿import LibraryViewPage from './_components/library-view-page';
 
 export const metadata = {
-  title: 'Dashboard : Library'
+  title: 'Dashboard : Progress'
 };
 
 export default async function Page() {

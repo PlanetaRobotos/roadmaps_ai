@@ -1,8 +1,8 @@
-// 'use client';
-
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { LayoutPage } from '@/app/dashboard/layoutPage';
+import React from 'react';
+import { TokenProvider } from '@/context/token-context';
 
 export const metadata: Metadata = {
   title: 'Next Shadcn Dashboard Starter',
@@ -17,6 +17,9 @@ export default function DashboardLayout({
   const cookieStore = cookies();
   const defaultOpen = cookieStore.get('sidebar:state')?.value === 'true';
 
-  return <LayoutPage defaultOpen={defaultOpen}>{children}</LayoutPage>;
-  // return <div>{children}</div>;
+  return (
+    <TokenProvider>
+      <LayoutPage defaultOpen={defaultOpen}>{children}</LayoutPage>
+    </TokenProvider>
+  );
 }

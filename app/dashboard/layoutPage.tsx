@@ -21,17 +21,17 @@ export function LayoutPage({
 
   return (
     <ProtectedRoute>
-      <KBar>
-        <SidebarProvider defaultOpen={user ? defaultOpen : false}>
-          {user && <AppSidebar />}
-          <SidebarInset>
-            <Header />
-            {children}
-            <AuthBanner />
-            <AuthDialog />
-          </SidebarInset>
-        </SidebarProvider>
-      </KBar>
+      {/*<KBar>*/}
+      <SidebarProvider defaultOpen={user ? defaultOpen : false}>
+        {user && <AppSidebar />}
+        <SidebarInset>
+          <Header />
+          {children}
+          <AuthBanner />
+          <AuthDialog />
+        </SidebarInset>
+      </SidebarProvider>
+      {/*</KBar>*/}
     </ProtectedRoute>
   );
 }

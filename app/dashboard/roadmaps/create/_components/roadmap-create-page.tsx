@@ -23,7 +23,7 @@ interface RoadmapFormData {
 export default function RoadmapCreatePage() {
   const router = useRouter();
   const { user, openAuthDialog } = useContext(AuthContext);
-  const { tokens } = useTokenBalance();
+  const { tokens, updateTokens } = useTokenBalance();
 
   const {
     handleSubmit,
@@ -57,11 +57,12 @@ export default function RoadmapCreatePage() {
     }
 
     console.log(`tokens:, ${tokens}, price: ${price}`);
-    if (tokens !== -1 && price !== null && tokens < price) {
+    if (tokens !== -1 && tokens < price) {
       toast.error(`You need more coins to generate this roadmap.`);
       return;
     }
 
+    updateTokens(tokens - price);
     const newRoadmap = await generateRoadmap(user?.id);
     console.log('newRoadmap:', newRoadmap);
 
@@ -71,6 +72,15 @@ export default function RoadmapCreatePage() {
       router.push(`/dashboard/roadmaps/edit/${newRoadmap.id}`);
     }
   };
+  // return (
+  //   <Button
+  //     onClick={() => {
+  //       updateTokens(5);
+  //       console.log('here');
+  //     }}
+  //   />
+  // );
+
   return (
     <>
       <div className="flex h-full items-start justify-center pt-[20vh]">

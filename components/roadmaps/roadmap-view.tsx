@@ -8,6 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious
 } from '@/components/ui/carousel';
+import { Progress } from '@/components/ui/progress';
 import HeroCard from '@/components/roadmaps/hero-card';
 import LessonCard from '@/components/roadmaps/lesson-card';
 import QuizCard from '@/components/roadmaps/quiz-card';
@@ -32,18 +33,27 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
   const [userQuizAnswers, setUserQuizAnswers] = useState<
     Record<string, { selectedIndex: number }>
   >({});
+  const [current, setCurrent] = React.useState(0);
+  const [count, setCount] = React.useState(0);
 
   useEffect(() => {
     if (!api) {
       return;
     }
 
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap());
+
     api.on('settle', () => {
       if (showSwipeHint) {
         setShowSwipeHint(false);
       }
     });
-  }, [api]);
+
+    api.on('select', () => {
+      setCurrent(api.selectedScrollSnap());
+    });
+  }, [api, showSwipeHint]);
 
   useEffect(() => {
     if (!user) {
@@ -70,7 +80,7 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
 
   return (
     <>
-      <Carousel className="mx-auto h-full w-full" setApi={setApi}>
+      <Carousel className="mx-auto mb-4 h-full w-full" setApi={setApi}>
         <CarouselContent className="h-full">
           {roadmapItems.cards
             // .filter((card) => card.type == 'lesson')
@@ -128,6 +138,11 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
           <SwipeTip />
         </div>
       )}
+
+      <Progress
+        value={count > 1 ? (current / (count - 1)) * 100 : 0}
+        className="mx-auto flex w-5/6 max-w-2xl items-center"
+      />
     </>
   );
 };

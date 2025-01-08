@@ -14,6 +14,11 @@ import { Icons } from '@/components/icons';
 import { useRouter } from 'next/navigation';
 import axios from '@/lib/axios';
 import { DEFAULT_EMAIL_PATH } from '@/constants/data';
+import { WayForPayFormData } from '@/types/wayforpay';
+import { submitWayForPayForm } from '@/utils/payment';
+import { createPayment } from '@/services/paymentService';
+import { CLIENT_URL } from '@/config/apiConfig';
+import { useRef } from 'react';
 
 enum PopularPlan {
   NO = 0,
@@ -76,6 +81,7 @@ const plans: PlanProps[] = [
 
 export const PricingSection = () => {
   const router = useRouter();
+
   const handleSelectPlan = (plan: string) => async () => {
     console.log(`Selected plan: ${plan}`);
 
@@ -84,11 +90,21 @@ export const PricingSection = () => {
     }
 
     if (plan === 'standard') {
-      //TODO redirect to wayforpay payment page
+      try {
+        const response = await axios.post<WayForPayFormData>(
+          '/v1/purchase/create',
+          {
+            planType: 'standard'
+          }
+        );
 
-      await axios.post('/v1/purchase/buy-plan', {
-        plan: 'standard'
-      });
+        submitWayForPayForm(response.data);
+
+        // window.location.href = `https://secure.wayforpay.com/button/bd844d85b2ec0`;
+      } catch (error) {
+        console.error('Failed to create payment:', error);
+        // Handle error (show toast, error message, etc.)
+      }
     }
 
     if (plan === 'premium') {

@@ -16,10 +16,10 @@ import PageContainer from '@/components/layout/page-container';
 export const LandingPageView = () => {
   return (
     <>
-      <HeroSection />
-      <FounderSection />
-      <FeaturesSection />
-      <TestimonialSection />
+      {/*<HeroSection />*/}
+      {/*<FounderSection />*/}
+      {/*<FeaturesSection />*/}
+      {/*<TestimonialSection />*/}
       <PricingSection />
       <FAQSection />
       <FooterSection />

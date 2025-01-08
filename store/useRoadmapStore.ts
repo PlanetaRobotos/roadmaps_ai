@@ -11,7 +11,7 @@ import axios from '@/lib/axios';
 interface RoadmapState {
   title: string;
   selectedTime: number | null;
-  price: number | null;
+  price: number;
   roadmapPreview: ClientRoadmap | null;
   isGenerating: boolean;
   setTitle: (title: string) => void;
@@ -27,7 +27,7 @@ interface RoadmapState {
 export const useRoadmapStore = create<RoadmapState>((set, get) => ({
   title: '',
   selectedTime: null,
-  price: null,
+  price: 0,
   roadmapPreview: null,
   isGenerating: false,
   setTitle: (title: string) => set({ title }),
