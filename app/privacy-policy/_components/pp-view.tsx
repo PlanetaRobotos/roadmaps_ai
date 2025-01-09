@@ -1,9 +1,6 @@
 ﻿'use client';
 
-import React, { useContext, useEffect } from 'react';
-import { AuthContext } from '@/context/auth-context';
-import Loading from '@/app/dashboard/_components/loading';
-import AuthCallback from '@/app/(auth)/_components/callback';
+import React from 'react';
 import { DEFAULT_EMAIL_PATH } from '@/constants/data';
 
 export default function PrivacyPolicyPage() {

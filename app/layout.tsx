@@ -7,6 +7,7 @@ import { RoadmapsClientProvider } from '@/services/RoadmapsClientProvider';
 import { AuthProvider } from '@/context/auth-context';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import Providers from '@/components/layout/providers';
+import AuthCallback from '@/app/(auth)/_components/callback';
 
 export const metadata: Metadata = {
   title: 'Next Shadcn',

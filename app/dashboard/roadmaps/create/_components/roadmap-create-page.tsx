@@ -9,7 +9,6 @@ import { useRoadmapStore } from '@/store/useRoadmapStore';
 import { useRouter } from 'next/navigation';
 import axios from '@/lib/axios';
 import { AuthContext } from '@/context/auth-context';
-import AuthCallback from '@/app/(auth)/_components/callback';
 import { Icons } from '@/components/icons';
 import { SpinnerMinimalistic } from '@/components/helper-icon';
 import { toast } from 'sonner';

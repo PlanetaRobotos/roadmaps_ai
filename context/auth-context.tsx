@@ -4,12 +4,11 @@ import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import axios from '../lib/axios';
 import { UserModel } from '@/app/api/client';
 import { toast } from 'sonner';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 interface AuthContextType {
   user: UserModel | null;
   loading: boolean;
-  login: (token: string) => void;
   logout: () => void;
   isAuthDialogOpen: boolean;
   openAuthDialog: () => void;
@@ -32,7 +31,6 @@ export const IsUserRole = (roles: string[] | null) => {
 export const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
-  login: () => {},
   logout: () => {},
   isAuthDialogOpen: false,
   openAuthDialog: () => {},
@@ -48,6 +46,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children
 }) => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const [user, setUser] = useState<UserModel | null>(null);
   // const [roles, setRoles] = useState<string[] | null>(null);
@@ -90,8 +89,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
+    const login = (token: string) => {
+      console.log('Logging in with token:', token);
+      localStorage.setItem('token', token);
+      const params = new URLSearchParams(window.location.search);
+      params.delete('token');
+      const newUrl = `${window.location.pathname}?${params.toString()}`;
+      window.history.replaceState({}, '', newUrl);
+    };
+    const storageToken = localStorage.getItem('token');
+    const queryToken = searchParams.get('token');
+    console.log('Query token:', queryToken);
+
+    if (queryToken) {
+      login(queryToken);
+    }
+
+    if (storageToken) {
       fetchUser();
       fetchRoles();
       console.log('User fetched');
@@ -99,19 +113,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setLoading(false);
       console.log('No token found');
     }
-  }, []);
+  }, [searchParams]);
 
-  const login = (token: string) => {
-    localStorage.setItem('token', token);
-    fetchUser();
-    fetchRoles();
-  };
-
-  // Logout
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
-    toast.success('Logged out successfully!');
+    // toast.success('Logged out successfully!');
     router.push('/signin');
   };
 
@@ -130,7 +137,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       value={{
         user,
         loading,
-        login,
         logout,
         isAuthDialogOpen,
         openAuthDialog,

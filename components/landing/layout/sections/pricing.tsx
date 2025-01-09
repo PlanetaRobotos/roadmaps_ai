@@ -90,11 +90,12 @@ export const PricingSection = () => {
 
     if (plan === 'standard') {
       try {
+        console.log('Creating payment: ', user?.email ?? null);
         const response = await axios.post<WayForPayFormData>(
           '/v1/purchase/create',
           {
             planType: 'standard',
-            email: user?.email
+            email: user?.email ?? null
           }
         );
 

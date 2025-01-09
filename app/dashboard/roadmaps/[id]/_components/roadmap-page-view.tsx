@@ -12,7 +12,6 @@ import { Icons } from '@/components/icons';
 import axios from '@/lib/axios';
 import { AuthContext } from '@/context/auth-context';
 import ShareButton from '@/app/dashboard/roadmaps/_components/share-button';
-import AuthCallback from '@/app/(auth)/_components/callback';
 import Loading from '@/app/dashboard/_components/loading';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { UserModel } from '@/app/api/client';
