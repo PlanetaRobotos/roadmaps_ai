@@ -11,12 +11,7 @@
   productName: string[];
   productPrice: number[];
   productCount: number[];
-  clientFirstName: string;
-  clientLastName: string;
-  clientAddress: string;
-  clientCity: string;
   clientEmail: string;
-  defaultPaymentSystem: string;
   planType: string;
   serviceUrl: string;
 }

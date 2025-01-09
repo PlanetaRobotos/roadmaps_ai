@@ -15,6 +15,8 @@ import { useRouter } from 'next/navigation';
 import axios from '@/lib/axios';
 import { WayForPayFormData } from '@/types/wayforpay';
 import { submitWayForPayForm } from '@/utils/payment';
+import { useContext } from 'react';
+import { AuthContext } from '@/context/auth-context';
 
 enum PopularPlan {
   NO = 0,
@@ -76,6 +78,7 @@ const plans: PlanProps[] = [
 ];
 
 export const PricingSection = () => {
+  const { user } = useContext(AuthContext);
   const router = useRouter();
 
   const handleSelectPlan = (plan: string) => async () => {
@@ -90,13 +93,12 @@ export const PricingSection = () => {
         const response = await axios.post<WayForPayFormData>(
           '/v1/purchase/create',
           {
-            planType: 'standard'
+            planType: 'standard',
+            email: user?.email
           }
         );
 
         submitWayForPayForm(response.data);
-
-        // window.location.href = `https://secure.wayforpay.com/button/bd844d85b2ec0`;
       } catch (error) {
         console.error('Failed to create payment:', error);
         // Handle error (show toast, error message, etc.)

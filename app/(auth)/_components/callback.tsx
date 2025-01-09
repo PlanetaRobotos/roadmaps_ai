@@ -11,16 +11,15 @@ interface AuthCallbackProps {
 }
 
 const AuthCallback: React.FC<AuthCallbackProps> = ({ redirectPath }) => {
-  const { login } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
     console.log('searchParams:', searchParams);
-    const token = searchParams.get('token');
+    const token = localStorage.getItem('token');
 
     if (token) {
-      // Store the token securely
       console.log('Token:', token);
       login(token);
 

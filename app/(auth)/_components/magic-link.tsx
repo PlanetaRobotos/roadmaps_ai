@@ -14,7 +14,7 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form';
-import { API_BASE_URL, CLIENT_URL } from '@/config/apiConfig';
+import { API_BASE_URL } from '@/config/apiConfig';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import * as z from 'zod';

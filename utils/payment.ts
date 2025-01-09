@@ -16,7 +16,7 @@ export const submitWayForPayForm = (formData: WayForPayFormData) => {
     amount: formData.amount.toString(),
     currency: formData.currency,
     orderTimeout: formData.orderTimeout,
-    defaultPaymentSystem: formData.defaultPaymentSystem,
+    clientEmail: formData.clientEmail,
     serviceUrl: formData.serviceUrl
   };
 

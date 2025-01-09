@@ -1,16 +1,13 @@
 'use client';
 
 import React from 'react';
-import MagicLinkLogin from './magic-link';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import UserAuthForm from './user-auth-form';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import GoogleSignInButton from '@/app/(auth)/_components/google-auth-button';
 import { useSearchParams } from 'next/navigation';
 import { company } from '@/constants/data';
-import { CLIENT_URL } from '@/config/apiConfig';
 
 export const metadata: Metadata = {
   title: 'Authentication',
