@@ -6,6 +6,7 @@ import './globals.css';
 import { RoadmapsClientProvider } from '@/services/RoadmapsClientProvider';
 import { AuthProvider } from '@/context/auth-context';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'Next Shadcn',
@@ -31,10 +32,12 @@ export default async function RootLayout({
     >
       <body className={'overflow-hidden'}>
         <NextTopLoader showSpinner={false} />
-        <AuthProvider>
-          <Toaster />
-          <RoadmapsClientProvider>{children}</RoadmapsClientProvider>
-        </AuthProvider>
+        <Suspense fallback={null}>
+          <AuthProvider>
+            <Toaster />
+            <RoadmapsClientProvider>{children}</RoadmapsClientProvider>
+          </AuthProvider>
+        </Suspense>
       </body>
       <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />
     </html>

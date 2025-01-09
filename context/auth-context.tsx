@@ -1,9 +1,8 @@
 ﻿'use client';
 
-import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import axios from '../lib/axios';
 import { UserModel } from '@/app/api/client';
-import { toast } from 'sonner';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 interface AuthContextType {
@@ -19,14 +18,6 @@ interface AuthContextType {
   isStandardRole: boolean;
   isEnterpriseRole: boolean;
 }
-
-export const IsAdminRole = (roles: string[] | null) => {
-  return roles?.includes('admin');
-};
-
-export const IsUserRole = (roles: string[] | null) => {
-  return roles?.includes('user');
-};
 
 export const AuthContext = createContext<AuthContextType>({
   user: null,
@@ -49,7 +40,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const searchParams = useSearchParams();
 
   const [user, setUser] = useState<UserModel | null>(null);
-  // const [roles, setRoles] = useState<string[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [isAuthDialogOpen, setIsAuthDialogOpen] = useState<boolean>(false);
 
