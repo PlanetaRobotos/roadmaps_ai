@@ -82,10 +82,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const loginByPaymentDetails = async (orderReference: string) => {
       try {
+        console.log('Logging in by payment details:', orderReference);
         const response = await axios.post(
           `/v1/purchase/login-by-payment-details`,
           {
-            orderReference: orderReference
+            orderReference
           }
         );
 
