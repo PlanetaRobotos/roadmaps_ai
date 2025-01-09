@@ -17,6 +17,7 @@ import { WayForPayFormData } from '@/types/wayforpay';
 import { submitWayForPayForm } from '@/utils/payment';
 import { useContext } from 'react';
 import { AuthContext } from '@/context/auth-context';
+import { ORDER_REF_STORAGE_TITLE } from '@/constants/data';
 
 enum PopularPlan {
   NO = 0,
@@ -97,6 +98,11 @@ export const PricingSection = () => {
             planType: 'standard',
             email: user?.email ?? null
           }
+        );
+
+        localStorage.setItem(
+          ORDER_REF_STORAGE_TITLE,
+          response.data.orderReference
         );
 
         submitWayForPayForm(response.data);

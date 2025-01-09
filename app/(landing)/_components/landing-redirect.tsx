@@ -3,9 +3,11 @@
 import React, { useContext, useEffect } from 'react';
 import { AuthContext } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
+import { ORDER_REF_STORAGE_TITLE } from '@/constants/data';
 
 export const LandingRedirect: React.FC = () => {
   const router = useRouter();
+
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -21,7 +23,6 @@ export const LandingRedirect: React.FC = () => {
       }
     } else {
       console.log('User is not logged in');
-      // router.push('/login');
     }
   }, [router, user]);
 

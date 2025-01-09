@@ -4,6 +4,7 @@ import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import axios from '../lib/axios';
 import { UserModel } from '@/app/api/client';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { ORDER_REF_STORAGE_TITLE } from '@/constants/data';
 
 interface AuthContextType {
   user: UserModel | null;
@@ -79,20 +80,53 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   useEffect(() => {
-    const login = (token: string) => {
-      console.log('Logging in with token:', token);
-      localStorage.setItem('token', token);
+    const loginByPaymentDetails = async (orderReference: string) => {
+      try {
+        const response = await axios.post(
+          `/v1/purchase/login-by-payment-details`,
+          {
+            orderReference: orderReference
+          }
+        );
+
+        console.log('Login by payment details response:', response.data);
+
+        const token = response.data.token;
+        if (token) {
+          login(token);
+          localStorage.removeItem(ORDER_REF_STORAGE_TITLE);
+        }
+      } catch (error) {
+        console.error('Error logging in by payment details:', error);
+      }
+    };
+
+    const queryLogin = (token: string) => {
+      login(token);
+      console.log('Query logging in with token:', token);
       const params = new URLSearchParams(window.location.search);
       params.delete('token');
       const newUrl = `${window.location.pathname}?${params.toString()}`;
       window.history.replaceState({}, '', newUrl);
     };
+
+    const login = (token: string) => {
+      console.log('Logging in with token:', token);
+      localStorage.setItem('token', token);
+    };
+
     const storageToken = localStorage.getItem('token');
     const queryToken = searchParams.get('token');
     console.log('Query token:', queryToken);
 
     if (queryToken) {
-      login(queryToken);
+      queryLogin(queryToken);
+    }
+
+    const orderReference = localStorage.getItem(ORDER_REF_STORAGE_TITLE);
+    if (orderReference) {
+      console.log('Order reference:', orderReference);
+      loginByPaymentDetails(orderReference);
     }
 
     if (storageToken) {
