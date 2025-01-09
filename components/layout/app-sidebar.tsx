@@ -1,5 +1,7 @@
 'use client';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { capitalize } from '@/utils/shared';
 import {
   Collapsible,
   CollapsibleContent,
@@ -31,33 +33,28 @@ import {
   SidebarSeparator,
   useSidebar
 } from '@/components/ui/sidebar';
-import { navItems } from '@/constants/data';
-import { ChevronRight, ChevronsUpDown, LogOut } from 'lucide-react';
-// import { useSession } from 'next-auth/react';
+import { company, navItems } from '@/constants/data';
+import { ChevronRight, ChevronsUpDown, CreditCard, LogOut } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
 import { useContext } from 'react';
 import { Icons } from '../icons';
 import { AuthContext } from '@/context/auth-context';
-import { company } from '@/constants/data';
 import TokenBalance from '@/components/TokenBalance';
 
 export default function AppSidebar() {
   const { isMobile, setOpenMobile } = useSidebar();
+  const router = useRouter();
 
   // const { data: session } = useSession();
   const { user } = useContext(AuthContext);
   const pathname = usePathname();
   const { logout } = useContext(AuthContext);
 
-  const handleLogout = async () => {
-    try {
-      logout();
-      // Optionally redirect or show a message
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
+  const handlePricingPage = () => {
+    router.push('/pricing');
+    console.log('Billing page');
   };
 
   return (
@@ -197,7 +194,7 @@ export default function AppSidebar() {
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold">
-                        {user?.firstName || ''}
+                        {capitalize(user?.firstName) || ''}
                       </span>
                       <span className="truncate text-xs">
                         {' '}
@@ -213,17 +210,17 @@ export default function AppSidebar() {
                   {/*  <BadgeCheck />*/}
                   {/*  Account*/}
                   {/*</DropdownMenuItem>*/}
-                  {/*<DropdownMenuItem>*/}
-                  {/*  <CreditCard />*/}
-                  {/*  Billing*/}
-                  {/*</DropdownMenuItem>*/}
+                  <DropdownMenuItem onClick={handlePricingPage}>
+                    <CreditCard className="mr-1" />
+                    Pricing
+                  </DropdownMenuItem>
                   {/*<DropdownMenuItem>*/}
                   {/*  <Bell />*/}
                   {/*  Notifications*/}
                   {/*</DropdownMenuItem>*/}
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout}>
+                <DropdownMenuItem onClick={logout}>
                   <LogOut />
                   Log out
                 </DropdownMenuItem>

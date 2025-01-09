@@ -50,7 +50,7 @@ const plans: PlanProps[] = [
     price: 45,
     description:
       'Upgrade to a robust toolkit with everything you need to share and grow your expertise.',
-    buttonText: 'Get starterd',
+    buttonText: 'Get Started',
     benefitList: [
       'Unlimited generations',
       'Modify your course',
@@ -124,7 +124,7 @@ export const PricingSection = () => {
   };
 
   return (
-    <section id="pricing" className="container py-24 sm:py-32">
+    <section id="pricing" className="container">
       <h2 className="mb-2 text-center text-lg tracking-wider text-primary">
         Pricing
       </h2>

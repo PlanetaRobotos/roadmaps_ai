@@ -2,7 +2,6 @@
 import { Inter } from 'next/font/google';
 import '@/styles/landing.css';
 import { cn } from '@/lib/utils';
-import { LandingNavbar } from '@/components/landing/layout/landing-navbar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,7 +18,6 @@ export default function LandingLayout({
   return (
     <html lang="pt-br" className="landing" suppressHydrationWarning>
       <body className={cn('min-h-screen bg-background', inter.className)}>
-        <LandingNavbar />
         {children}
       </body>
     </html>
