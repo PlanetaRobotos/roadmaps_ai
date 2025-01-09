@@ -113,6 +113,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     const login = (token: string) => {
       console.log('Logging in with token:', token);
       localStorage.setItem('token', token);
+      fetchUser();
+      fetchRoles();
+      console.log('User fetched');
     };
 
     const storageToken = localStorage.getItem('token');
