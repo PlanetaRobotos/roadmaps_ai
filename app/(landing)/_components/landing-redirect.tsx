@@ -3,7 +3,6 @@
 import React, { useContext, useEffect } from 'react';
 import { AuthContext } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
-import { ORDER_REF_STORAGE_TITLE } from '@/constants/data';
 
 export const LandingRedirect: React.FC = () => {
   const router = useRouter();
@@ -16,7 +15,7 @@ export const LandingRedirect: React.FC = () => {
 
       if (user.emailConfirmed) {
         console.log('User is logged in');
-        // router.push('/dashboard');
+        router.push('/dashboard');
       } else {
         console.log('User is logged in but email is not confirmed');
         router.push('/dashboard/profile');

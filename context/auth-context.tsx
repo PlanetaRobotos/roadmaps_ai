@@ -91,11 +91,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         );
 
         console.log('Login by payment details response:', response.data);
+        localStorage.removeItem(ORDER_REF_STORAGE_TITLE);
 
         const token = response.data.token;
         if (token) {
-          login(token);
-          localStorage.removeItem(ORDER_REF_STORAGE_TITLE);
+          await login(token);
         }
       } catch (error) {
         console.error('Error logging in by payment details:', error);
@@ -111,11 +111,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       window.history.replaceState({}, '', newUrl);
     };
 
-    const login = (token: string) => {
+    const login = async (token: string) => {
       console.log('Logging in with token:', token);
       localStorage.setItem('token', token);
-      fetchUser();
-      fetchRoles();
+      await fetchUser();
+      await fetchRoles();
       console.log('User fetched');
     };
 
