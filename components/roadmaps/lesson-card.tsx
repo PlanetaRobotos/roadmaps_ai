@@ -1,7 +1,6 @@
 ﻿'use client';
 
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { LessonCard } from '@/types/roadmap-types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
@@ -10,14 +9,21 @@ import { TipButton } from '@/app/dashboard/roadmaps/_components/roadmap-edit-but
 import { EditingState } from '@/types/editState';
 import { toast } from 'sonner';
 import { AuthContext } from '@/context/auth-context';
+import { ExternalLink } from 'lucide-react';
+import { LessonCard } from '@/types/roadmap-types';
 
 interface LessonCardProps {
   lesson: LessonCard;
+  isEditable: boolean;
   onUpdate: (id: string, newContent: string) => Promise<void>;
 }
 
-const LessonCard: React.FC<LessonCardProps> = ({ lesson, onUpdate }) => {
-  const { isPaidRole } = useContext(AuthContext);
+const LessonCard: React.FC<LessonCardProps> = ({
+  lesson,
+  isEditable,
+  onUpdate
+}) => {
+  const { isPaidRole, user } = useContext(AuthContext);
   const { editingState, setEditingState } = useEditStore();
   const [tempContent, setTempContent] = useState('');
 
@@ -31,7 +37,6 @@ const LessonCard: React.FC<LessonCardProps> = ({ lesson, onUpdate }) => {
   const wasEditingRef = useRef<EditingState>(editingState);
 
   useEffect(() => {
-    // Transition from Editing to Saving
     if (
       editingState === EditingState.Saving &&
       wasEditingRef.current === EditingState.Editing
@@ -60,9 +65,44 @@ const LessonCard: React.FC<LessonCardProps> = ({ lesson, onUpdate }) => {
       setTempContent('');
     }
 
-    // Update the ref to the current state for the next render
     wasEditingRef.current = editingState;
   }, [editingState, lesson.id, onUpdate, setEditingState, tempContent]);
+
+  const ResourcesList = () => {
+    if (!lesson.resources || lesson.resources.length === 0) return null;
+
+    return (
+      <div className="mt-8">
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-white px-2 text-muted-foreground">
+              Additional Resources
+            </span>
+          </div>
+        </div>
+        <div className="mt-6 space-y-2">
+          <ul className="space-y-2">
+            {lesson.resources.map((resource, index) => (
+              <li key={index} className="flex items-center">
+                <ExternalLink className="mr-2 h-4 w-4 text-gray-500" />
+                <a
+                  href={resource}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-800 hover:underline"
+                >
+                  {new URL(resource).hostname}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="h-full rounded-xl bg-blue-100 p-1">
@@ -86,7 +126,7 @@ const LessonCard: React.FC<LessonCardProps> = ({ lesson, onUpdate }) => {
           <ScrollArea className="w-full flex-1 overflow-auto">
             <CardContent className="flex h-full flex-grow flex-col justify-between p-4">
               <div className="prose h-full max-w-none p-2 leading-relaxed lg:prose-xl md:px-6">
-                {isPaidRole && (
+                {isPaidRole && isEditable && (
                   <TipButton
                     disabled={editingState !== EditingState.Idle}
                     onClick={handleEditClick}
@@ -99,6 +139,8 @@ const LessonCard: React.FC<LessonCardProps> = ({ lesson, onUpdate }) => {
                   }}
                   className="mt-4"
                 />
+
+                <ResourcesList />
               </div>
             </CardContent>
           </ScrollArea>

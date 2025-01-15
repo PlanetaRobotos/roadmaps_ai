@@ -1,9 +1,13 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { S3_COURSE_THUMBNAIL_URL } from '@/constants/data';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export const getImageUrl = (filename: string) =>
+  `${S3_COURSE_THUMBNAIL_URL}/${filename}.png`;
 
 export function formatBytes(
   bytes: number,

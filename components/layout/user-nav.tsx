@@ -37,11 +37,11 @@ export function UserNav() {
               alt={''}
             />
             <AvatarFallback>
-              {user?.firstName?.slice(0, 2)?.toUpperCase() || 'CN'}
+              {user?.name?.slice(0, 2)?.toUpperCase() || 'CN'}
             </AvatarFallback>
           </Avatar>
           <p className="text-sm font-medium leading-none">
-            {capitalize(user?.firstName)}
+            {capitalize(user?.name)}
           </p>
         </Button>
       </DropdownMenuTrigger>
@@ -49,7 +49,7 @@ export function UserNav() {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             {/*<p className="text-sm font-medium leading-none">*/}
-            {/*  {user?.firstName}*/}
+            {/*  {user?.name}*/}
             {/*</p>*/}
             <p className="text-xs leading-none text-muted-foreground">
               {user?.email}
@@ -58,7 +58,7 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push('/dashboard/profile')}>
             <SettingsIcon className="mr-1" />
             Profile
             {/*<DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>*/}

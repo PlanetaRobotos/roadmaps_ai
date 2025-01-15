@@ -1,5 +1,5 @@
 ﻿import React, { useContext, useEffect, useState } from 'react';
-import { ClientRoadmap, RoadmapCard } from '@/types/roadmap-types';
+import { ClientRoadmap, CardState } from '@/types/roadmap-types';
 import {
   Carousel,
   CarouselApi,
@@ -16,7 +16,15 @@ import { AuthContext } from '@/context/auth-context';
 import { getUserQuizzes, updateQuizStatus } from '@/services/roadmapsService';
 import axios from '@/lib/axios';
 import { SwipeTip } from '@/components/helper-icon';
-import { cn } from '@/lib/utils';
+import { cn, getImageUrl } from '@/lib/utils';
+import ThumbnailCard from '@/components/roadmaps/thumbnail-card';
+import {
+  extractColors,
+  getRGBA,
+  isLightColor,
+  RGB,
+  DEFAULT_COLORS
+} from '@/utils/colors';
 
 interface RoadmapViewProps {
   roadmapItems: ClientRoadmap;
@@ -35,6 +43,38 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
   >({});
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
+
+  const [cardState, setCardState] = useState<{
+    colors: RGB[];
+    isLoading: boolean;
+    error: boolean;
+  }>({
+    colors: [],
+    isLoading: true,
+    error: false
+  });
+
+  useEffect(() => {
+    const loadColors = async () => {
+      try {
+        const extractedColors = await extractColors(roadmapItems.thumbnail);
+        setCardState((prev) => ({
+          ...prev,
+          colors: extractedColors,
+          isLoading: false
+        }));
+      } catch (error) {
+        console.error('Failed to extract colors:', error);
+        setCardState((prev) => ({
+          ...prev,
+          isLoading: false,
+          error: true
+        }));
+      }
+    };
+
+    loadColors();
+  }, [roadmapItems.thumbnail]);
 
   useEffect(() => {
     if (!api) {
@@ -78,6 +118,15 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
     fetchUserAnswers();
   }, [user, roadmapItems]);
 
+  const { colors, isLoading, error } = cardState;
+  const borderColor = colors.length
+    ? {
+        backgroundColor: getRGBA(colors[0], 0.95)
+      }
+    : {
+        backgroundColor: 'rgba(0, 0, 0, 0.9)'
+      };
+
   return (
     <>
       <Carousel className="mx-auto mb-4 h-full w-full" setApi={setApi}>
@@ -87,10 +136,12 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
             .map((card, index) => (
               <CarouselItem key={index}>
                 <div className="fixed h-full w-[94%]">
+                  {card.type === 'thumbnail' && <ThumbnailCard props={card} />}
                   {card.type === 'hero' && <HeroCard hero={card} />}
                   {card.type === 'lesson' && (
                     <LessonCard
                       lesson={card}
+                      isEditable={user?.id === roadmapItems.authorId}
                       onUpdate={async (id, newContent) => {
                         // Update lesson content
                         console.log('Updating lesson:', id, newContent);

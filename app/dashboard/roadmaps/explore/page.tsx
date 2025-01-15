@@ -1,6 +1,5 @@
 ﻿import ExploreViewPage from './_components/explore-view-page';
-import PageContainer from '@/components/layout/page-container';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import ScrollablePage from '@/components/ScrollablePage';
 import React from 'react';
 
 export const metadata = {
@@ -9,8 +8,8 @@ export const metadata = {
 
 export default async function Page() {
   return (
-    <div className="h-full p-4 md:px-6">
+    <ScrollablePage maxHeight="h-screen" direction="vertical">
       <ExploreViewPage />
-    </div>
+    </ScrollablePage>
   );
 }

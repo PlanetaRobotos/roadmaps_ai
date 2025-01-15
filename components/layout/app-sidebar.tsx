@@ -34,7 +34,13 @@ import {
   useSidebar
 } from '@/components/ui/sidebar';
 import { company, navItems } from '@/constants/data';
-import { ChevronRight, ChevronsUpDown, CreditCard, LogOut } from 'lucide-react';
+import {
+  ChevronRight,
+  ChevronsUpDown,
+  CreditCard,
+  LogOut,
+  SettingsIcon
+} from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
@@ -161,12 +167,12 @@ export default function AppSidebar() {
                     // alt={session?.user?.name || ''}
                     />
                     <AvatarFallback className="rounded-lg">
-                      {user?.firstName?.slice(0, 2)?.toUpperCase() || 'CN'}
+                      {user?.name?.slice(0, 2)?.toUpperCase() || 'CN'}
                     </AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">
-                      {user?.firstName || ''}
+                      {capitalize(user?.name) || ''}
                     </span>
                     <span className="truncate text-xs">
                       {user?.email || ''}
@@ -189,12 +195,12 @@ export default function AppSidebar() {
                       // alt={session?.user?.name || ''}
                       />
                       <AvatarFallback className="rounded-lg">
-                        {user?.firstName?.slice(0, 2)?.toUpperCase() || 'CN'}
+                        {user?.name?.slice(0, 2)?.toUpperCase() || 'CN'}
                       </AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold">
-                        {capitalize(user?.firstName) || ''}
+                        {capitalize(user?.name) || ''}
                       </span>
                       <span className="truncate text-xs">
                         {' '}
@@ -206,10 +212,12 @@ export default function AppSidebar() {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuGroup>
-                  {/*<DropdownMenuItem>*/}
-                  {/*  <BadgeCheck />*/}
-                  {/*  Account*/}
-                  {/*</DropdownMenuItem>*/}
+                  <DropdownMenuItem
+                    onClick={() => router.push('/dashboard/profile')}
+                  >
+                    <SettingsIcon className="mr-1" />
+                    Profile
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={handlePricingPage}>
                     <CreditCard className="mr-1" />
                     Pricing

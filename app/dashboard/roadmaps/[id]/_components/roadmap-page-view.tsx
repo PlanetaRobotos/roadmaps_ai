@@ -58,6 +58,11 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
 
         const roadmapResp = await getRoadmapById(roadmapId);
 
+        console.log('course', roadmapResp);
+        const cards = transformRoadmapToItems(roadmapResp);
+        console.log('cards', cards);
+        setRoadmap(cards);
+
         if (roadmapResp.authorId !== undefined && roadmapResp.authorId > 0) {
           const authorResp = await axios.get(
             `/v1/users/${roadmapResp.authorId}`
@@ -65,10 +70,6 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
           console.log('author', authorResp);
           setAuthor(authorResp?.data);
         }
-
-        console.log('course', roadmapResp);
-        const cards = transformRoadmapToItems(roadmapResp);
-        console.log('cards', cards);
 
         if (user) {
           const userLikeResp = await axios.get(
@@ -84,7 +85,6 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
         }
 
         initializePost(isLiked, roadmapResp.likes!, isSaved);
-        setRoadmap(cards);
       } catch (error) {
         console.error('Failed to fetch lesson or additional data:', error);
       } finally {
@@ -112,12 +112,12 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
           <div className="flex items-center gap-2 px-1 text-left text-sm">
             <Avatar className="h-7 w-7 rounded-lg">
               <AvatarFallback className="rounded-lg">
-                {author?.firstName?.slice(0, 2)?.toUpperCase() || 'CN'}
+                {author?.name?.slice(0, 2)?.toUpperCase() || 'CN'}
               </AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-semibold">
-                {author?.firstName || ''}
+                {author?.name || ''}
               </span>
             </div>
           </div>

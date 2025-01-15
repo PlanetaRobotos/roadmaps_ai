@@ -1,16 +1,25 @@
 ﻿import { ClientRoadmap, RoadmapCard } from '@/types/roadmap-types';
 import { RoadmapModel } from '@/app/api/client';
+import { getImageUrl } from '@/lib/utils';
 
 export const transformRoadmapToItems = (
   roadmap: RoadmapModel
 ): ClientRoadmap => {
   const items: RoadmapCard[] = [];
 
+  let thumbnailUrl: string | undefined;
+  if (roadmap.thumbnailUrl) {
+    thumbnailUrl = getImageUrl(roadmap.thumbnailUrl);
+  } else {
+    const randomIndex = Math.floor(Math.random() * 11) + 1;
+    thumbnailUrl = `/images/roadmaps/roadmap-thumbnail-${randomIndex}.png`;
+  }
+
   items.push({
     id: roadmap.id!,
-    type: 'hero',
+    type: 'thumbnail',
     title: `${roadmap.title}`,
-    contentBottom: roadmap.description
+    thumbnail: thumbnailUrl
   });
 
   try {
@@ -29,7 +38,8 @@ export const transformRoadmapToItems = (
                 title: lesson.title!,
                 description: lesson.description!,
                 content: lesson.content?.mainContent || '',
-                completed: lesson.completed!
+                completed: lesson.completed!,
+                resources: lesson.content?.resources || []
               });
 
               if (lesson.quizzes && lesson.quizzes.length > 0) {
@@ -73,6 +83,7 @@ export const transformRoadmapToItems = (
     title: roadmap.title!,
     duration: roadmap.estimatedDuration!,
     description: roadmap.description!,
+    thumbnail: thumbnailUrl,
     cards: items
   };
 };

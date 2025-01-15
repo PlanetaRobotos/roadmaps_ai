@@ -9,6 +9,11 @@ export const DEFAULT_INSTAGRAM_PATH =
 
 export const ORDER_REF_STORAGE_TITLE = 'currentOrderReference';
 
+export const S3_COURSE_THUMBNAIL_URL =
+  'https://levenue-minicourses.s3.us-east-1.amazonaws.com/thumbnails';
+export const S3_CATEGORY_THUMBNAIL_URL =
+  'https://levenue-minicourses.s3.us-east-1.amazonaws.com/categories/thumbnails';
+
 export const company = {
   name: 'Levenue MiniCourses',
   logo: `/images/logo.png`,
@@ -24,6 +29,7 @@ export type User = {
   verified: boolean;
   status: string;
 };
+
 export const users: User[] = [
   {
     id: 1,

@@ -1,29 +1,17 @@
 ﻿import React from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Clock } from 'lucide-react';
 
-interface TimerDialProps {
-  duration: number; // Duration in minutes
-}
-
-export default function TimerDial({ duration }: TimerDialProps) {
-  // Map durations to text
-  const durationToText = (minutes: number) => {
-    if (minutes <= 15) return '15m';
-    if (minutes <= 30) return '30m';
-    return '1h';
-  };
-
-  const label = durationToText(duration);
-
+const TimerDial = ({ duration }: { duration: number }) => {
   return (
-    <div
-      className="relative flex h-9 w-9 items-center justify-center rounded-full border border-border bg-primary shadow-md"
-      style={{
-        fontSize: '0.75rem', // Adjust text size
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' // Soft shadow
-      }}
+    <Badge
+      variant="secondary"
+      className="flex items-center gap-1.5 bg-black/50 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm"
     >
-      {/* Label inside the circle */}
-      <span className="text-xs font-medium text-card-foreground">{label}</span>
-    </div>
+      <Clock className="h-3 w-3" />
+      {duration}m
+    </Badge>
   );
-}
+};
+
+export default TimerDial;

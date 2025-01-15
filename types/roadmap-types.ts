@@ -3,6 +3,7 @@
 export interface ClientRoadmap {
   id: string;
   description: string;
+  thumbnail: string;
   authorId: number;
   duration: number;
   title: string;
@@ -16,7 +17,7 @@ export interface Quiz {
   correctAnswer: number;
 }
 
-export type RoadmapCard = HeroCard | LessonCard | QuizCard;
+export type RoadmapCard = HeroCard | ThumbnailCard | LessonCard | QuizCard;
 
 export interface HeroCard {
   id: string;
@@ -26,6 +27,13 @@ export interface HeroCard {
   contentBottom?: string;
 }
 
+export interface ThumbnailCard {
+  id: string;
+  type: 'thumbnail';
+  title: string;
+  thumbnail: string;
+}
+
 export interface LessonCard {
   id: string;
   roadmapId: string;
@@ -33,6 +41,7 @@ export interface LessonCard {
   title: string;
   description: string;
   content: string;
+  resources: string[];
   completed: boolean;
 }
 
@@ -42,4 +51,10 @@ export interface QuizCard {
   question: string;
   options: string[];
   correctAnswer: number;
+}
+
+export interface CardState {
+  primaryColor: string;
+  isLoading: boolean;
+  error: boolean;
 }

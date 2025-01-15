@@ -11,6 +11,18 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'api.slingacademy.com',
         port: ''
+      },
+      {
+        protocol: 'https',
+        hostname: 'levenue-minicourses.s3.us-east-1.amazonaws.com',
+        port: '',
+        pathname: '/thumbnails/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'levenue-minicourses.s3.us-east-1.amazonaws.com',
+        port: '',
+        pathname: '/categories/thumbnails/**'
       }
     ]
   },

@@ -1,14 +1,7 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-// import {getRandomElementFromArray} from "@/lib/utils";
-// import { MdMoreVert } from 'react-icons/md';
-// import { FiPlay } from 'react-icons/fi';
-// import IconButton from '@/components/elements/button/iconButton';
-// import usePlayerState from '@/hooks/usePlayerState';
-import { createSecretKey } from 'node:crypto';
 import { IRoadmapModel } from '@/app/api/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import TimerDial from '@/components/ui/timer-dial';
@@ -16,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
-const PlayListCard = (props: IRoadmapModel) => {
+const CourseCard = (props: IRoadmapModel) => {
   const {
     id,
     tags,
@@ -31,7 +24,7 @@ const PlayListCard = (props: IRoadmapModel) => {
 
   return (
     <Link href={`/dashboard/roadmaps/${id}`}>
-      <Card className="group relative min-h-[17rem] overflow-hidden rounded-xl border border-border bg-card shadow-lg transition-shadow duration-200 hover:shadow-xl">
+      <Card className="group relative min-h-[17rem] max-w-lg overflow-hidden rounded-xl border border-border bg-card shadow-lg transition-shadow duration-200 hover:shadow-xl">
         {/* Timer Icon */}
         <div className="absolute right-2 top-2 z-10">
           <TimerDial duration={estimatedDuration!} />
@@ -84,4 +77,4 @@ const PlayListCard = (props: IRoadmapModel) => {
   );
 };
 
-export default PlayListCard;
+export default CourseCard;

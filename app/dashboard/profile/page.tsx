@@ -1,5 +1,6 @@
 import { SearchParams } from 'nuqs/parsers';
 import ProfileViewPage from './_components/profile-view-page';
+import PageContainer from '@/components/layout/page-container';
 
 type pageProps = {
   searchParams: SearchParams;
@@ -10,5 +11,9 @@ export const metadata = {
 };
 
 export default async function Page({ searchParams }: pageProps) {
-  return <ProfileViewPage />;
+  return (
+    <PageContainer>
+      <ProfileViewPage />
+    </PageContainer>
+  );
 }

@@ -1,18 +1,18 @@
 ﻿'use client';
 
-import PageContainer from '@/components/layout/page-container';
-import RoadmapsList from '@/app/dashboard/roadmaps/_components/roadmaps-list';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { RoadmapModel } from '@/app/api/client';
 import { getUserRoadmaps } from '@/services/roadmapsService';
 import { AuthContext } from '@/context/auth-context';
-import { Icons } from '@/components/icons';
+import CourseCarousel from '@/components/carousels/course-carousel';
+import ScrollablePage from '@/components/ScrollablePage';
+import DashboardFooter from '@/app/dashboard/_components/dashboard-footer';
 import { Separator } from '@/components/ui/separator';
 
 function LibraryViewPage() {
   const { user } = useContext(AuthContext);
   const [progressRoadmaps, setProgressRoadmaps] = useState<RoadmapModel[]>([]);
-  const [loadingProgress, setLoadingProgress] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -25,20 +25,30 @@ function LibraryViewPage() {
   }, [user]);
 
   return (
-    <PageContainer scrollable>
-      <div className="space-y-5">
-        <div className="mt-[-10] flex w-full justify-center">
-          <h1 className="hover:border-gradient-to-r flex items-center border-b-4 border-transparent text-4xl font-extrabold text-gray-800">
-            <Icons.chart className="mr-2 text-blue-500" />
-            My Progress
-          </h1>
+    <ScrollablePage maxHeight="h-screen" direction="vertical">
+      <div className="min-h-screen pb-12">
+        {/* Hero Section */}
+        <div className="mb-5 bg-gradient-to-b from-neutral-100 to-background">
+          <div className="container mx-auto px-4 pt-8 md:px-8">
+            <h1 className="text-4xl font-extrabold text-gray-800">Library</h1>
+          </div>
         </div>
 
-        <Separator className="mx-auto h-1 w-5/6" />
-
-        <RoadmapsList roadmaps={progressRoadmaps} loading={loadingProgress} />
+        {/*My Progress*/}
+        <div className="container mx-auto px-4 md:px-8">
+          {progressRoadmaps.length > 0 && (
+            <section className="">
+              <CourseCarousel
+                roadmaps={progressRoadmaps}
+                title="My Progress"
+                subTitle="Recently added"
+              />
+            </section>
+          )}
+        </div>
       </div>
-    </PageContainer>
+      {/*<DashboardFooter />*/}
+    </ScrollablePage>
   );
 }
 

@@ -10,11 +10,11 @@ import { TestimonialSection } from '@/components/landing/layout/sections/testimo
 export const LandingPageView = () => {
   return (
     <>
-      <LandingRedirect />
-      <HeroSection />
-      <FounderSection />
-      <FeaturesSection />
-      <TestimonialSection />
+      {/*<LandingRedirect />*/}
+      {/*<HeroSection />*/}
+      {/*<FounderSection />*/}
+      {/*<FeaturesSection />*/}
+      {/*<TestimonialSection />*/}
       <div className="py-24 sm:py-32">
         <PricingSection />
       </div>

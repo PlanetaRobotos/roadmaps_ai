@@ -53,9 +53,9 @@ const plans: PlanProps[] = [
     buttonText: 'Get Started',
     benefitList: [
       'Unlimited generations',
-      'Modify your course',
+      'Modify Your course',
       'Access verified courses',
-      'Priority support',
+      'Powerful GPT models',
       'Community access'
     ],
     oldPrice: 55
@@ -71,7 +71,7 @@ const plans: PlanProps[] = [
       'Unlimited generations',
       'Exclusive templates',
       'Advanced editing features',
-      'Powerful GPT models',
+      'Advanced GPT models',
       'Dedicated support',
       'Private community'
     ]
