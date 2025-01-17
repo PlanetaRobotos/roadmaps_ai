@@ -2,13 +2,13 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export const HeroSection = () => {
   const router = useRouter();
+
   return (
     <section className="container w-full">
       <div className="mx-auto grid place-items-center gap-8 py-20 md:py-32 lg:max-w-screen-xl">
@@ -28,11 +28,21 @@ export const HeroSection = () => {
 
           <div className="mx-auto max-w-screen-lg text-center text-4xl font-bold md:text-6xl">
             <h1>
-              Share
-              <span className="bg-gradient-to-r from-[#D247BF] to-primary bg-clip-text px-2 text-transparent">
-                Your Expertise
+              Share{' '}
+              {/*<span className="bg-gradient-to-r from-[#D247BF] to-primary bg-clip-text px-2 text-transparent">*/}
+              your ideas
+              {/*</span>*/}
+              <br /> in seconds,{'  '}
+              <span className="relative inline-block text-white">
+                <span className="relative z-10 px-1 py-1">not hours</span>
+                <span
+                  className="absolute -inset-x-2 -inset-y-1 transform bg-gray-300"
+                  style={{
+                    transform: 'rotate(-1deg) translateY(4px)',
+                    transformOrigin: 'left center'
+                  }}
+                ></span>
               </span>
-              in Minutes <br /> Create, Learn, and Inspire!
             </h1>
           </div>
 

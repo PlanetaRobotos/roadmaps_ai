@@ -6,7 +6,8 @@ import './globals.css';
 import { RoadmapsClientProvider } from '@/services/RoadmapsClientProvider';
 import { AuthProvider } from '@/context/auth-context';
 import { GoogleAnalytics } from '@next/third-parties/google';
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
+import SupportDialog from '@/components/support-dialog';
 
 export const metadata: Metadata = {
   title: 'Next Shadcn',
@@ -37,6 +38,7 @@ export default async function RootLayout({
             <Toaster />
             <RoadmapsClientProvider>{children}</RoadmapsClientProvider>
           </AuthProvider>
+          <SupportDialog />
         </Suspense>
       </body>
       <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />

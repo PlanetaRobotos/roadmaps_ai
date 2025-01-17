@@ -18,6 +18,8 @@ import { submitWayForPayForm } from '@/utils/payment';
 import { useContext } from 'react';
 import { AuthContext } from '@/context/auth-context';
 import { ORDER_REF_STORAGE_TITLE } from '@/constants/data';
+import { useAnalytics } from '@/hooks/useAnalytics';
+import { AnalyticsEvents } from '@/constants/analytics';
 
 enum PopularPlan {
   NO = 0,
@@ -81,6 +83,7 @@ const plans: PlanProps[] = [
 export const PricingSection = () => {
   const { user } = useContext(AuthContext);
   const router = useRouter();
+  const { trackPayment } = useAnalytics();
 
   const handleSelectPlan = (plan: string) => async () => {
     console.log(`Selected plan: ${plan}`);
@@ -92,6 +95,7 @@ export const PricingSection = () => {
     if (plan === 'standard') {
       try {
         console.log('Creating payment: ', user?.email ?? null);
+
         const response = await axios.post<WayForPayFormData>(
           '/v1/purchase/create',
           {
@@ -99,6 +103,8 @@ export const PricingSection = () => {
             email: user?.email ?? null
           }
         );
+
+        trackPayment(response.data.amount, response.data.productName[0]);
 
         localStorage.setItem(
           ORDER_REF_STORAGE_TITLE,

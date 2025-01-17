@@ -1,8 +1,12 @@
 ﻿'use client';
 
 import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 
 export const FounderSection = () => {
+  const router = useRouter();
+
   return (
     <section className="container bg-background py-14 sm:py-20">
       <h2 className="mb-6 text-center text-lg tracking-wider text-primary">
@@ -53,7 +57,7 @@ export const FounderSection = () => {
               <span className="font-bold text-foreground">
                 Immediate Creation:
               </span>{' '}
-              Type a prompt, generate a lesson, share instantly.
+              Type a prompt, generate a course, share instantly.
             </li>
             <li>
               <span className="font-bold text-foreground">Less Overwhelm:</span>{' '}
@@ -68,7 +72,14 @@ export const FounderSection = () => {
           </ul>
           <p className="text-sm leading-relaxed text-muted-foreground">
             It’s built for your busy life, so you can learn anytime.{' '}
-            <span className="font-bold text-foreground">Ready to jump in?</span>{' '}
+            {/*<span className="font-bold text-foreground"></span>{' '}*/}
+            <Button
+              variant="secondary"
+              className="ml-4 font-bold text-foreground"
+              onClick={() => router.push('/#pricing')}
+            >
+              Ready to jump in?
+            </Button>
           </p>
         </div>
       </div>

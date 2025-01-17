@@ -9,6 +9,7 @@ import React, { useContext } from 'react';
 import { AuthContext } from '@/context/auth-context';
 import AuthBanner from '@/components/auth-banner';
 import AuthDialog from '@/components/auth-dialog';
+import SupportDialog from '@/components/support-dialog';
 
 export function LayoutPage({
   children,
