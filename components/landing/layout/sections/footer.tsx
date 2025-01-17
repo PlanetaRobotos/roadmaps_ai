@@ -1,3 +1,5 @@
+'use client';
+
 import { Separator } from '@/components/ui/separator';
 import { ChevronsDownIcon } from 'lucide-react';
 import Link from 'next/link';
@@ -10,8 +12,12 @@ import {
 } from '@/constants/data';
 import { CLIENT_URL } from '@/config/apiConfig';
 import { company } from '@/constants/data';
+import { useContactDialog } from '@/hooks/useContactDialog';
+import { Button } from '@/components/ui/button';
 
 export const FooterSection = () => {
+  const { open } = useContactDialog();
+
   return (
     <footer id="footer" className="container py-24 sm:py-32">
       <div className="rounded-2xl border border-secondary bg-card p-10">
@@ -37,8 +43,7 @@ export const FooterSection = () => {
             <h3 className="text-lg font-bold">Links</h3>
             <div>
               <Link
-                href={`mailto:myrskyi.work@gmail.com`}
-                target="_blank"
+                href={DEFAULT_EMAIL_PATH}
                 className="opacity-60 hover:opacity-100"
               >
                 Support
