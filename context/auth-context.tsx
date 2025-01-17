@@ -6,7 +6,6 @@ import { UserModel } from '@/app/api/client';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ORDER_REF_STORAGE_TITLE } from '@/constants/data';
 import { AnalyticsEvents } from '@/constants/analytics';
-import { useAnalytics } from '@/hooks/useAnalytics';
 import { sendGAEvent } from '@next/third-parties/google';
 
 interface AuthContextType {
@@ -42,7 +41,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { trackEvent } = useAnalytics();
 
   const [user, setUser] = useState<UserModel | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -99,21 +97,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
         const token = response.data.token;
         if (token) {
-          trackEvent({
-            action: AnalyticsEvents.PAYMENT.COMPLETED,
-            category: 'payment',
-            label: 'main_pay_button'
-          });
-
           await login(token);
+          sendGAEvent({ event: AnalyticsEvents.PAYMENT.COMPLETED, value: '' });
         }
       } catch (error) {
-        trackEvent({
-          action: AnalyticsEvents.PAYMENT.FAILED,
-          category: 'payment',
-          label: 'main_pay_button'
-        });
-
+        sendGAEvent({ event: AnalyticsEvents.PAYMENT.FAILED, value: '' });
         console.error('Error logging in by payment details:', error);
       }
     };
@@ -129,11 +117,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
     const login = async (token: string) => {
       sendGAEvent({ event: AnalyticsEvents.AUTH.SIGN_IN });
-      trackEvent({
-        action: AnalyticsEvents.AUTH.SIGN_IN,
-        category: 'auth',
-        label: 'login'
-      });
 
       console.log('Logging in with token:', token);
       localStorage.setItem('token', token);

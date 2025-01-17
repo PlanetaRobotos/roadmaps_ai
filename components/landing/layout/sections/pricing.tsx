@@ -18,7 +18,6 @@ import { submitWayForPayForm } from '@/utils/payment';
 import { useContext } from 'react';
 import { AuthContext } from '@/context/auth-context';
 import { ORDER_REF_STORAGE_TITLE } from '@/constants/data';
-import { useAnalytics } from '@/hooks/useAnalytics';
 import { AnalyticsEvents } from '@/constants/analytics';
 import { sendGAEvent } from '@next/third-parties/google';
 
@@ -84,7 +83,6 @@ const plans: PlanProps[] = [
 export const PricingSection = () => {
   const { user } = useContext(AuthContext);
   const router = useRouter();
-  const { trackPayment } = useAnalytics();
 
   const handleSelectPlan = (plan: string) => async () => {
     console.log(`Selected plan: ${plan}`);
@@ -105,9 +103,10 @@ export const PricingSection = () => {
           }
         );
 
-        trackPayment(response.data.amount, response.data.productName[0]);
-
-        sendGAEvent({ event: AnalyticsEvents.PAYMENT.INITIATED });
+        sendGAEvent({
+          event: AnalyticsEvents.PAYMENT.INITIATED,
+          value: response.data.productPrice
+        });
 
         localStorage.setItem(
           ORDER_REF_STORAGE_TITLE,
