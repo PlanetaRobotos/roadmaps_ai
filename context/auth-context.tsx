@@ -98,10 +98,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         const token = response.data.token;
         if (token) {
           await login(token);
-          sendGAEvent({ event: AnalyticsEvents.PAYMENT.COMPLETED, value: '' });
+          sendGAEvent('event', AnalyticsEvents.PAYMENT.COMPLETED);
         }
       } catch (error) {
-        sendGAEvent({ event: AnalyticsEvents.PAYMENT.FAILED, value: '' });
+        sendGAEvent('event', AnalyticsEvents.PAYMENT.FAILED);
         console.error('Error logging in by payment details:', error);
       }
     };
@@ -116,7 +116,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     };
 
     const login = async (token: string) => {
-      sendGAEvent({ event: AnalyticsEvents.AUTH.SIGN_IN });
+      sendGAEvent('event', AnalyticsEvents.AUTH.SIGN_IN);
 
       console.log('Logging in with token:', token);
       localStorage.setItem('token', token);

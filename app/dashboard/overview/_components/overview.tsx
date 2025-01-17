@@ -2,17 +2,16 @@
 
 import PageContainer from '@/components/layout/page-container';
 import { buttonVariants } from '@/components/ui/button';
-import RoadmapsList from '@/app/dashboard/roadmaps/_components/roadmaps-list';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 // import { useSession } from 'next-auth/react';
-import { sendGAEvent } from '@next/third-parties/google';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function OverViewPage() {
-  // const { data: session } = useSession();
+  const router = useRouter();
 
   return (
     <PageContainer scrollable>
@@ -26,7 +25,7 @@ export default function OverViewPage() {
             className={cn(buttonVariants({ variant: 'default' }))}
             onClick={() => {
               console.log('Clicked');
-              sendGAEvent({ event: 'create_roadmap', value: 'clicked' });
+              router.push('/dashboard/roadmaps/create');
             }}
           >
             <Plus className="mr-2 h-4 w-4" /> Add New

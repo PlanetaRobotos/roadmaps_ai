@@ -103,8 +103,7 @@ export const PricingSection = () => {
           }
         );
 
-        sendGAEvent({
-          event: AnalyticsEvents.PAYMENT.INITIATED,
+        sendGAEvent('event', AnalyticsEvents.PAYMENT.INITIATED, {
           value: response.data.productPrice
         });
 
