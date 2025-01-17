@@ -7,6 +7,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ORDER_REF_STORAGE_TITLE } from '@/constants/data';
 import { AnalyticsEvents } from '@/constants/analytics';
 import { useAnalytics } from '@/hooks/useAnalytics';
+import { sendGAEvent } from '@next/third-parties/google';
 
 interface AuthContextType {
   user: UserModel | null;
@@ -127,6 +128,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     };
 
     const login = async (token: string) => {
+      sendGAEvent({ event: AnalyticsEvents.AUTH.SIGN_IN });
       trackEvent({
         action: AnalyticsEvents.AUTH.SIGN_IN,
         category: 'auth',
