@@ -47,7 +47,7 @@ const plans: PlanProps[] = [
   {
     title: 'Standard',
     popular: 1,
-    price: 45,
+    price: 29,
     description:
       'Upgrade to a robust toolkit with everything you need to share and grow your expertise.',
     buttonText: 'Get Started',
@@ -58,7 +58,7 @@ const plans: PlanProps[] = [
       'Powerful GPT models',
       'Community access'
     ],
-    oldPrice: 55
+    oldPrice: 39
   },
   {
     title: 'Premium',
