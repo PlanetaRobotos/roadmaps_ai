@@ -37,7 +37,8 @@ export const FooterSection = () => {
             <h3 className="text-lg font-bold">Links</h3>
             <div>
               <Link
-                href={DEFAULT_EMAIL_PATH}
+                href={`mailto:myrskyi.work@gmail.com`}
+                target="_blank"
                 className="opacity-60 hover:opacity-100"
               >
                 Support
