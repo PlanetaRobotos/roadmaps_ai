@@ -20,6 +20,7 @@ import { AuthContext } from '@/context/auth-context';
 import { ORDER_REF_STORAGE_TITLE } from '@/constants/data';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { AnalyticsEvents } from '@/constants/analytics';
+import { sendGAEvent } from '@next/third-parties/google';
 
 enum PopularPlan {
   NO = 0,
@@ -105,6 +106,8 @@ export const PricingSection = () => {
         );
 
         trackPayment(response.data.amount, response.data.productName[0]);
+
+        sendGAEvent({ event: AnalyticsEvents.PAYMENT.INITIATED });
 
         localStorage.setItem(
           ORDER_REF_STORAGE_TITLE,
