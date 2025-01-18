@@ -107,7 +107,7 @@ export const PricingSection = () => {
           value: response.data.productPrice
         });
 
-        sendGAEvent('event', 'buttonClicked', { value: 'xyz' });
+        // sendGAEvent('event', 'buttonClicked', { value: 'xyz' });
 
         localStorage.setItem(
           ORDER_REF_STORAGE_TITLE,

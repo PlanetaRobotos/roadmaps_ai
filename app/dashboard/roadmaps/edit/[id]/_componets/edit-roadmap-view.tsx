@@ -101,18 +101,18 @@ export default function EditRoadmapView({ roadmapId }: EditRoadmapViewProps) {
   if (!roadmap) return <div>Course not found. {roadmapId}</div>;
 
   return (
-    <div className="mx-auto flex h-[calc(100vh-80px)] w-full max-w-2xl flex-col p-2 md:px-4">
+    <div className="mx-auto flex h-full w-full max-w-2xl flex-col p-2 md:px-4">
       {/*Page Title */}
       <div className=" flex w-full flex-none justify-center">
         <h1 className="flex items-center border-b-4 border-transparent text-4xl font-extrabold text-gray-800">
-          <Icons.edit className="mr-2 text-blue-500" />
+          {/*<Icons.edit className="mr-2 text-blue-500" />*/}
           Edit Course
         </h1>
       </div>
 
       <Separator className="mx-auto mb-2 flex h-1 w-5/6 flex-none" />
 
-      <div className="relative mx-auto h-16 w-full max-w-2xl flex-1">
+      <div className="relative mx-auto w-full max-w-2xl flex-1">
         <Card className="flex h-full w-full flex-col">
           <CardHeader className="relative w-full grow pb-0 pt-4">
             <CardTitle className="sr-only">Roadmap</CardTitle>
