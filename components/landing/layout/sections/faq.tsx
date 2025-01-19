@@ -5,7 +5,7 @@ import {
   AccordionTrigger
 } from '@/components/ui/accordion';
 import Link from 'next/link';
-import { DEFAULT_EMAIL_PATH, DEFAULT_TWITTER_PATH } from '@/constants/data';
+import { EMAIL_PATH, TWITTER_PATH } from '@/constants/data';
 import { company } from '@/constants/data';
 
 export function HighlightedComment({ comment }: { comment: string }) {
@@ -106,15 +106,12 @@ export const FAQSection = () => {
         <div className="text-center md:text-left">
           <span className="text-muted-foreground">
             Have another question? Contact me on{' '}
-            <Link
-              href={DEFAULT_TWITTER_PATH}
-              className="text-primary underline"
-            >
+            <Link href={TWITTER_PATH} className="text-primary underline">
               Twitter
             </Link>{' '}
             or by{' '}
             <Link
-              href={DEFAULT_EMAIL_PATH}
+              href={EMAIL_PATH}
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary underline"

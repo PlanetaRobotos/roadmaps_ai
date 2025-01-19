@@ -5,11 +5,11 @@ import { ChevronsDownIcon } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
-  DEFAULT_DISCORD_PATH,
-  DEFAULT_EMAIL_PATH,
-  DEFAULT_INSTAGRAM_PATH,
-  DEFAULT_TELEGRAM_PATH,
-  DEFAULT_TWITTER_PATH,
+  DISCORD_PATH,
+  EMAIL_PATH,
+  INSTAGRAM_PATH,
+  TELEGRAM_PATH,
+  TWITTER_PATH,
   FEATURE_FORM_PATH,
   TRELLO_PATH
 } from '@/constants/data';
@@ -45,19 +45,13 @@ export const FooterSection = () => {
           <div className="flex flex-col gap-2">
             <h3 className="text-lg font-bold">Links</h3>
             <div>
-              <Link
-                href={DEFAULT_EMAIL_PATH}
-                className="opacity-60 hover:opacity-100"
-              >
+              <Link href={EMAIL_PATH} className="opacity-60 hover:opacity-100">
                 Support
               </Link>
             </div>
 
             <div>
-              <Link
-                href={DEFAULT_EMAIL_PATH}
-                className="opacity-60 hover:opacity-100"
-              >
+              <Link href={EMAIL_PATH} className="opacity-60 hover:opacity-100">
                 Contact Us
               </Link>
             </div>
@@ -69,10 +63,7 @@ export const FooterSection = () => {
             </div>
 
             <div>
-              <Link
-                href={DEFAULT_EMAIL_PATH}
-                className="opacity-60 hover:opacity-100"
-              >
+              <Link href={EMAIL_PATH} className="opacity-60 hover:opacity-100">
                 Feedback
               </Link>
             </div>
@@ -82,7 +73,7 @@ export const FooterSection = () => {
             <h3 className="text-lg font-bold">Socials</h3>
             <div>
               <Link
-                href={DEFAULT_DISCORD_PATH}
+                href={DISCORD_PATH}
                 className="opacity-60 hover:opacity-100"
               >
                 Discord
@@ -106,7 +97,7 @@ export const FooterSection = () => {
 
             <div>
               <Link
-                href={DEFAULT_TWITTER_PATH}
+                href={TWITTER_PATH}
                 className="opacity-60 hover:opacity-100"
               >
                 Twitter
@@ -115,7 +106,7 @@ export const FooterSection = () => {
 
             <div>
               <Link
-                href={DEFAULT_TELEGRAM_PATH}
+                href={TELEGRAM_PATH}
                 className="opacity-60 hover:opacity-100"
               >
                 Telegram
@@ -124,7 +115,7 @@ export const FooterSection = () => {
 
             <div>
               <Link
-                href={DEFAULT_INSTAGRAM_PATH}
+                href={INSTAGRAM_PATH}
                 className="opacity-60 hover:opacity-100"
               >
                 Instagram

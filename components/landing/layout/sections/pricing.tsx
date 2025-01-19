@@ -454,7 +454,7 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan }) => {
 
 export const PricingSection: React.FC = () => {
   return (
-    <section className="container space-y-8 py-12">
+    <section id="pricing" className="container space-y-8 py-12">
       <div className="space-y-4 text-center">
         <h2 className="text-lg tracking-wider text-primary">Pricing</h2>
         <h3 className="text-3xl font-bold md:text-4xl">

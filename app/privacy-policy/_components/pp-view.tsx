@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import React from 'react';
-import { DEFAULT_EMAIL_PATH } from '@/constants/data';
+import { EMAIL_PATH } from '@/constants/data';
 
 export default function PrivacyPolicyPage() {
   return (
@@ -71,7 +71,7 @@ export default function PrivacyPolicyPage() {
             Our platform is not directed to children under the age of 13. We do
             not knowingly collect personal data from children. If you believe a
             child has provided personal information, please contact us at{' '}
-            <a href={DEFAULT_EMAIL_PATH} className="text-primary underline">
+            <a href={EMAIL_PATH} className="text-primary underline">
               myrskyi.work@gmail.com
             </a>{' '}
             so we can remove it.
@@ -109,7 +109,7 @@ export default function PrivacyPolicyPage() {
             <li>
               <strong>Data Access & Deletion:</strong> If you want to see or
               delete your personal information, email us at{' '}
-              <a href={DEFAULT_EMAIL_PATH} className="text-primary underline">
+              <a href={EMAIL_PATH} className="text-primary underline">
                 myrskyi.work@gmail.com
               </a>{' '}
               .
@@ -122,7 +122,7 @@ export default function PrivacyPolicyPage() {
           <p>
             If you have any questions or concerns about this Privacy Policy,
             please reach out at{' '}
-            <a href={DEFAULT_EMAIL_PATH} className="text-primary underline">
+            <a href={EMAIL_PATH} className="text-primary underline">
               myrskyi.work@gmail.com
             </a>{' '}
             .

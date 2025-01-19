@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import React from 'react';
-import { company, DEFAULT_EMAIL_PATH } from '@/constants/data';
+import { company, EMAIL_PATH } from '@/constants/data';
 
 export default function TermsOfServicesPage() {
   return (
@@ -69,14 +69,14 @@ export default function TermsOfServicesPage() {
               Refunds may be offered under specific conditions (e.g., if less
               than a certain portion of the product or service has been used).
               Please refer to your account dashboard or contact us at{' '}
-              <a href={DEFAULT_EMAIL_PATH} className="text-primary underline">
+              <a href={EMAIL_PATH} className="text-primary underline">
                 myrskyi.work@gmail.com
               </a>{' '}
               to request a refund.
             </li>
             <li>
               If you have questions regarding billing, contact{' '}
-              <a href={DEFAULT_EMAIL_PATH} className="text-primary underline">
+              <a href={EMAIL_PATH} className="text-primary underline">
                 myrskyi.work@gmail.com
               </a>{' '}
               for assistance.
@@ -140,7 +140,7 @@ export default function TermsOfServicesPage() {
           </h2>
           <p>
             If you have questions or concerns, please reach out to us at{' '}
-            <a href={DEFAULT_EMAIL_PATH} className="text-primary underline">
+            <a href={EMAIL_PATH} className="text-primary underline">
               myrskyi.work@gmail.com
             </a>{' '}
             .

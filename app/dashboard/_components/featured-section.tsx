@@ -2,8 +2,8 @@
 import { BsTwitterX, BsTrello, BsDiscord } from 'react-icons/bs';
 import { SiGoogleforms } from 'react-icons/si';
 import {
-  DEFAULT_DISCORD_PATH,
-  DEFAULT_TWITTER_PATH,
+  DISCORD_PATH,
+  TWITTER_PATH,
   FEATURE_FORM_PATH,
   TRELLO_PATH
 } from '@/constants/data';
@@ -13,12 +13,12 @@ const FeaturedSection = () => {
     {
       name: 'X',
       icon: <BsTwitterX className="h-5 w-5" />,
-      href: DEFAULT_TWITTER_PATH
+      href: TWITTER_PATH
     },
     {
       name: 'Discord',
       icon: <BsDiscord className="h-5 w-5" />,
-      href: DEFAULT_DISCORD_PATH
+      href: DISCORD_PATH
     },
     {
       name: 'Project Roadmap',
