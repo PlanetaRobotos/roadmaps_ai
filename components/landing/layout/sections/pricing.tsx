@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Check,
   X,
@@ -38,6 +38,14 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
+import { useRouter } from 'next/navigation';
+import { submitWayForPayForm } from '@/utils/payment';
+import { EMAIL_PATH, ORDER_REF_STORAGE_TITLE } from '@/constants/data';
+import { sendGAEvent } from '@next/third-parties/google';
+import { AnalyticsEvents } from '@/constants/analytics';
+import axios from '@/lib/axios';
+import { WayForPayFormData } from '@/types/wayforpay';
+import { AuthContext } from '@/context/auth-context';
 
 interface Feature {
   text: string;
@@ -74,6 +82,7 @@ interface FeatureDetailsProps {
 
 interface PricingCardProps {
   plan: Plan;
+  onPlanSelected: (plan: Plan) => Promise<void>;
 }
 
 const plans = [
@@ -379,7 +388,7 @@ const PricingFeature: React.FC<PricingFeatureProps> = ({
   </TooltipProvider>
 );
 
-const PricingCard: React.FC<PricingCardProps> = ({ plan }) => {
+const PricingCard: React.FC<PricingCardProps> = ({ plan, onPlanSelected }) => {
   // Get key features (first 4-5 most important features)
   const keyFeatures = plan.features.flatMap(
     (category) =>
@@ -442,6 +451,7 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan }) => {
 
       <CardFooter className="mt-auto flex flex-col">
         <Button
+          onClick={() => onPlanSelected(plan)}
           variant={plan.popular ? 'default' : 'secondary'}
           className="w-full"
         >
@@ -456,6 +466,59 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan }) => {
 };
 
 export const PricingSection: React.FC = () => {
+  const router = useRouter();
+  const { user } = useContext(AuthContext);
+
+  const handleSelectPlan = async (plan: Plan): Promise<void> => {
+    var planTitle = plan.title.toLowerCase();
+
+    console.log(`Selected plan: ${plan}`);
+
+    if (planTitle === 'starter') {
+      router.push('/signin');
+    }
+
+    if (planTitle === 'creator' || planTitle === 'studio') {
+      try {
+        console.log('Creating payment: ', user?.email ?? null);
+        const response = await axios.post<WayForPayFormData>(
+          '/v1/purchase/create',
+          {
+            planType: planTitle,
+            planPrice: plan.price,
+            planDescription: plan.description,
+            email: user?.email ?? null
+          }
+        );
+        sendGAEvent('event', AnalyticsEvents.PAYMENT.INITIATED, {
+          value: response.data.productPrice
+        });
+
+        localStorage.setItem(
+          ORDER_REF_STORAGE_TITLE,
+          response.data.orderReference
+        );
+
+        submitWayForPayForm(response.data);
+      } catch (error) {
+        console.error('Failed to create payment:', error);
+        // Handle error (show toast, error message, etc.)
+      }
+    }
+
+    if (planTitle === 'enterprise') {
+      // const subject = encodeURIComponent('Premium Plan Inquiry');
+      // const body = encodeURIComponent(
+      //   'Hello,\n\nI am interested in the Premium plan. Please provide more details.\n\nThank you.'
+      // );
+      // window.open(
+      //   `mailto:myrskyi.work@gmail.com?subject=${subject}&body=${body}`
+      // );
+
+      window.open(EMAIL_PATH);
+    }
+  };
+
   return (
     <section id="pricing" className="container space-y-8 py-12">
       <div className="space-y-4 text-center">
@@ -473,7 +536,11 @@ export const PricingSection: React.FC = () => {
 
       <div className="mt-5 grid gap-8 md:grid-cols-2 xl:grid-cols-4">
         {plans.map((plan) => (
-          <PricingCard key={plan.title} plan={plan} />
+          <PricingCard
+            key={plan.title}
+            plan={plan}
+            onPlanSelected={() => handleSelectPlan(plan)}
+          />
         ))}
       </div>
     </section>
