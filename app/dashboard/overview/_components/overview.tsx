@@ -7,10 +7,12 @@ import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 // import { useSession } from 'next-auth/react';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useRouter } from 'next/navigation';
+import { AuthContext } from '@/context/auth-context';
 
 export default function OverViewPage() {
+  const { user } = useContext(AuthContext);
   const router = useRouter();
 
   return (
@@ -18,8 +20,9 @@ export default function OverViewPage() {
       <div className="space-y-2">
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-2xl font-bold tracking-tight">
-            Hi, Welcome back 👋
+            Hi, {user?.name} 👋
           </h2>
+          `
           <Link
             href={'/dashboard/roadmaps/create'}
             className={cn(buttonVariants({ variant: 'default' }))}
@@ -28,7 +31,7 @@ export default function OverViewPage() {
               router.push('/dashboard/roadmaps/create');
             }}
           >
-            <Plus className="mr-2 h-4 w-4" /> Add New
+            <Plus className="mr-2 h-4 w-4" /> New Course
           </Link>
         </div>
         {/* Roadmaps List Component */}

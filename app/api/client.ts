@@ -5642,6 +5642,116 @@ export class UsersClient {
   }
 }
 
+export class WelcomeClient {
+  private http: {
+    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
+  };
+  private baseUrl: string;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+    undefined;
+
+  constructor(
+    baseUrl?: string,
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+  ) {
+    this.http = http ? http : (window as any);
+    this.baseUrl = baseUrl ?? '';
+  }
+
+  /**
+   * @param skip (optional)
+   * @param take (optional)
+   * @return OK
+   */
+  welcomeCourses(
+    skip: number | undefined,
+    take: number | undefined
+  ): Promise<WelcomePageModel> {
+    let url_ = this.baseUrl + '/v1/welcome/welcome?';
+    if (skip === null) throw new Error("The parameter 'skip' cannot be null.");
+    else if (skip !== undefined)
+      url_ += 'skip=' + encodeURIComponent('' + skip) + '&';
+    if (take === null) throw new Error("The parameter 'take' cannot be null.");
+    else if (take !== undefined)
+      url_ += 'take=' + encodeURIComponent('' + take) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json'
+      }
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processWelcomeCourses(_response);
+    });
+  }
+
+  protected processWelcomeCourses(
+    response: Response
+  ): Promise<WelcomePageModel> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result200 = WelcomePageModel.fromJS(resultData200);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<WelcomePageModel>(null as any);
+  }
+}
+
 export class AddCategoryRelationRequest implements IAddCategoryRelationRequest {
   order?: number;
 
@@ -8029,6 +8139,50 @@ export interface IUserUpdateRequest {
   id?: number;
   name?: string | undefined;
   bio?: string | undefined;
+}
+
+export class WelcomePageModel implements IWelcomePageModel {
+  welcomeCourses?: RoadmapModel[];
+
+  constructor(data?: IWelcomePageModel) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      if (Array.isArray(_data['welcomeCourses'])) {
+        this.welcomeCourses = [] as any;
+        for (let item of _data['welcomeCourses'])
+          this.welcomeCourses!.push(RoadmapModel.fromJS(item));
+      }
+    }
+  }
+
+  static fromJS(data: any): WelcomePageModel {
+    data = typeof data === 'object' ? data : {};
+    let result = new WelcomePageModel();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    if (Array.isArray(this.welcomeCourses)) {
+      data['welcomeCourses'] = [];
+      for (let item of this.welcomeCourses)
+        data['welcomeCourses'].push(item.toJSON());
+    }
+    return data;
+  }
+}
+
+export interface IWelcomePageModel {
+  welcomeCourses?: RoadmapModel[];
 }
 
 export enum PatchOperationOp {

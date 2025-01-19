@@ -8,7 +8,6 @@ import {
 } from '@/components/carousels/carousel-embla';
 import { CategoryModel } from '@/app/api/client';
 import { Icons } from '@/components/icons';
-import Link from 'next/link';
 import CategoryCard from '@/components/carousels/category-card';
 
 interface CategoryCarouselProps {
@@ -22,19 +21,6 @@ const CategoryCarousel: React.FC<CategoryCarouselProps> = (
   props: CategoryCarouselProps
 ) => {
   const { title, subTitle, categories, path } = props;
-
-  console.log('Categories:', categories);
-
-  // const sortedCategories = categories
-  //   ?.slice() // Create a shallow copy to avoid mutating the original array
-  //   .sort((a, b) => {
-  //     // Handle null values: move items with null position to the end
-  //     if (a.position === undefined) return 1;
-  //     if (b.position === undefined) return -1;
-  //     return a.position - b.position; // Otherwise, sort by position
-  //   });
-
-  // console.log('Sorted Categories:', sortedCategories);
 
   return (
     <div className="my-10 w-full">

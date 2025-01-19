@@ -36,7 +36,7 @@ const CourseCarousel: React.FC<PlayListCarouselProps> = (
               <div className="flex flex-col justify-center">
                 <div className="flex items-center text-xl font-bold leading-[34px]">
                   {title}
-                  <Icons.chevronRight className="h-5 w-5" />
+                  {path && <Icons.chevronRight className="h-5 w-5" />}
                 </div>
                 <div className="">
                   {subTitle && (

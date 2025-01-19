@@ -3,12 +3,12 @@ import { Inter } from 'next/font/google';
 import '@/styles/landing.css';
 import { cn } from '@/lib/utils';
 import { LandingNavbar } from '@/components/landing/layout/landing-navbar';
+import { company } from '@/constants/data';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Shadcn - Landing template',
-  description: 'Landing template from Shadcn'
+  title: `${company.name}`
 };
 
 export default function LandingLayout({
@@ -17,7 +17,7 @@ export default function LandingLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-br" className="landing" suppressHydrationWarning>
+    <html lang="en" className="landing" suppressHydrationWarning>
       <body className={cn('min-h-screen bg-background', inter.className)}>
         <LandingNavbar />
         {children}

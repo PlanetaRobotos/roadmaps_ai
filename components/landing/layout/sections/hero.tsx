@@ -5,12 +5,13 @@ import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import FeaturedSection from '@/app/dashboard/_components/featured-section';
 
 export const HeroSection = () => {
   const router = useRouter();
 
   return (
-    <section className="container w-full">
+    <section className="container relative w-full">
       <div className="mx-auto grid place-items-center gap-8 py-20 md:py-32 lg:max-w-screen-xl">
         <div className="space-y-8 text-center">
           <Badge variant="outline" className="py-2 text-sm">
@@ -73,6 +74,11 @@ export const HeroSection = () => {
               </Link>
             </Button>
           </div>
+        </div>
+
+        {/* Added FeaturedSection here */}
+        <div className="relative mt-16">
+          <FeaturedSection />
         </div>
 
         <div className="group relative mt-14">

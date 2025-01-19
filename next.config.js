@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    domains: ['https://cead-195-113-242-129.ngrok-free.app'],
     remotePatterns: [
       {
         protocol: 'https',

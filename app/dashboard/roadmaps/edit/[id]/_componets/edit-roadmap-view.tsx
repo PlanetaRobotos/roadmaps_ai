@@ -116,7 +116,7 @@ export default function EditRoadmapView({ roadmapId }: EditRoadmapViewProps) {
         <Card className="flex h-full w-full flex-col">
           <CardHeader className="relative w-full grow pb-0 pt-4">
             <CardTitle className="sr-only">Roadmap</CardTitle>
-            <RoadmapView roadmapItems={roadmap} />
+            <RoadmapView isEditable={true} roadmapItems={roadmap} />
           </CardHeader>
 
           <CardContent className="bottom-0 flex w-full flex-none flex-col space-y-1 px-4 py-4 pb-0">

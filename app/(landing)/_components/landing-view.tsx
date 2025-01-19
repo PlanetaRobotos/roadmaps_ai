@@ -11,6 +11,7 @@ export const LandingPageView = () => {
   return (
     <>
       <LandingRedirect />
+
       <HeroSection />
       <FounderSection />
       <FeaturesSection />

@@ -5,10 +5,13 @@ import { ChevronsDownIcon } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
+  DEFAULT_DISCORD_PATH,
   DEFAULT_EMAIL_PATH,
   DEFAULT_INSTAGRAM_PATH,
   DEFAULT_TELEGRAM_PATH,
-  DEFAULT_TWITTER_PATH
+  DEFAULT_TWITTER_PATH,
+  FEATURE_FORM_PATH,
+  TRELLO_PATH
 } from '@/constants/data';
 import { CLIENT_URL } from '@/config/apiConfig';
 import { company } from '@/constants/data';
@@ -77,6 +80,30 @@ export const FooterSection = () => {
 
           <div className="flex flex-col gap-2">
             <h3 className="text-lg font-bold">Socials</h3>
+            <div>
+              <Link
+                href={DEFAULT_DISCORD_PATH}
+                className="opacity-60 hover:opacity-100"
+              >
+                Discord
+              </Link>
+            </div>
+
+            <div>
+              <Link href={TRELLO_PATH} className="opacity-60 hover:opacity-100">
+                Roadmap
+              </Link>
+            </div>
+
+            <div>
+              <Link
+                href={FEATURE_FORM_PATH}
+                className="opacity-60 hover:opacity-100"
+              >
+                Feature Request
+              </Link>
+            </div>
+
             <div>
               <Link
                 href={DEFAULT_TWITTER_PATH}

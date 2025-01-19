@@ -28,11 +28,13 @@ import {
 
 interface RoadmapViewProps {
   roadmapItems: ClientRoadmap;
+  isEditable: boolean;
   onAuthorizeClick?: () => void;
 }
 
 const RoadmapView: React.FC<RoadmapViewProps> = ({
   roadmapItems,
+  isEditable,
   onAuthorizeClick
 }) => {
   const [api, setApi] = React.useState<CarouselApi>();
@@ -141,7 +143,9 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
                   {card.type === 'lesson' && (
                     <LessonCard
                       lesson={card}
-                      isEditable={user?.id === roadmapItems.authorId}
+                      isEditable={
+                        user?.id === roadmapItems.authorId && isEditable
+                      }
                       onUpdate={async (id, newContent) => {
                         // Update lesson content
                         console.log('Updating lesson:', id, newContent);

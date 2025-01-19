@@ -4,9 +4,12 @@ export const DEFAULT_SUGGESTIONS_LIMIT = '7';
 // export const DEFAULT_EMAIL_PATH = `https://mail.google.com/mail/u/0/?fs=1&tf=cm&source=mailto&to=myrskyi.work@gmail.com`;
 export const DEFAULT_EMAIL_PATH = `mailto:myrskyi.work@gmail.com`;
 export const DEFAULT_TWITTER_PATH = 'https://x.com/myrsk_pavlo';
+export const DEFAULT_DISCORD_PATH = 'https://discord.gg/n7mrzyWT';
 export const DEFAULT_TELEGRAM_PATH = 'https://t.me/pavlo_myrskyi';
 export const DEFAULT_INSTAGRAM_PATH =
   'https://www.instagram.com/myrskyi.pavlo/';
+export const TRELLO_PATH = 'https://trello.com/b/TelXBqrK';
+export const FEATURE_FORM_PATH = 'https://forms.gle/dvTboTYzWcmo7iP96';
 
 export const ORDER_REF_STORAGE_TITLE = 'currentOrderReference';
 

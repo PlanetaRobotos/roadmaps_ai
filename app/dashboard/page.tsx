@@ -1,5 +1,7 @@
 import DashboardView from '@/app/dashboard/_components/dashboard-view';
 import { Metadata } from 'next';
+import PageContainer from '@/components/layout/page-container';
+import ScrollablePage from '@/components/ScrollablePage';
 
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -7,5 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default function DashboardPage() {
-  return <DashboardView />;
+  return (
+    <ScrollablePage maxHeight="h-screen" direction="vertical">
+      <DashboardView />
+    </ScrollablePage>
+  );
 }
