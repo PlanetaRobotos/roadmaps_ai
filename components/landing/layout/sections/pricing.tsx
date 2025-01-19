@@ -143,8 +143,8 @@ const plans = [
   {
     title: 'Creator',
     popular: false,
-    price: 15,
-    oldPrice: 29,
+    price: 29,
+    oldPrice: 45,
     description: 'For dedicated course creators',
     features: [
       {
@@ -208,8 +208,8 @@ const plans = [
   {
     title: 'Studio',
     popular: true,
-    price: 39,
-    oldPrice: 49,
+    price: 49,
+    oldPrice: 80,
     description: 'For serious course creators and professionals',
     features: [
       {
@@ -237,7 +237,7 @@ const plans = [
         category: 'Advanced Features',
         icon: Edit,
         items: [
-          { text: 'All Creator tier editing features ✏️', included: true },
+          { text: 'All Creator tier editing features', included: true },
           { text: 'Remove platform branding 🎯', included: true },
           { text: 'Advanced analytics (views + shares) 📊', included: true }
         ]
@@ -409,7 +409,7 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan }) => {
                   ${plan.oldPrice}
                 </span>
               )}
-              <span className="text-sm text-muted-foreground">/month</span>
+              <span className="text-sm text-muted-foreground"></span>
             </>
           ) : (
             <span className="text-3xl font-bold">{plan.price}</span>
@@ -440,13 +440,16 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan }) => {
         </Dialog>
       </CardContent>
 
-      <CardFooter className="mt-auto">
+      <CardFooter className="mt-auto flex flex-col">
         <Button
           variant={plan.popular ? 'default' : 'secondary'}
           className="w-full"
         >
           {plan.buttonText}
         </Button>
+        <span className="mt-2 text-sm text-muted-foreground">
+          Access forever (no subscription)
+        </span>
       </CardFooter>
     </Card>
   );
