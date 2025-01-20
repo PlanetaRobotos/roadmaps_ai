@@ -27,13 +27,9 @@ export const HeroSection = () => {
             <span> By Pavlo Myrskyi </span>
           </Badge>
 
-          <div className="mx-auto max-w-screen-lg text-center text-4xl font-bold md:text-6xl">
-            <h1>
-              Share{' '}
-              {/*<span className="bg-gradient-to-r from-[#D247BF] to-primary bg-clip-text px-2 text-transparent">*/}
-              your ideas
-              {/*</span>*/}
-              <br /> in seconds,{'  '}
+          <div className="mx-auto text-center">
+            <h1 className="text-5xl font-black tracking-tight lg:text-6xl lg:text-[4rem] lg:tracking-[-0.035em] ">
+              Create courses in seconds,{'  '}
               <span className="relative inline-block text-white">
                 <span className="relative z-10 px-1 py-1">not hours</span>
                 <span
@@ -48,8 +44,8 @@ export const HeroSection = () => {
           </div>
 
           <p className="mx-auto max-w-screen-sm text-xl text-muted-foreground">
-            Generate quick, visually engaging courses for any topic <br />
-            no coding or design skills required!
+            Transform any topic into engaging <br />
+            lessons — no skills needed
           </p>
 
           <div className="space-y-4 md:space-x-4 md:space-y-0">
