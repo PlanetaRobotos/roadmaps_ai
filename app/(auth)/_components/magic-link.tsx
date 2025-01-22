@@ -44,21 +44,21 @@ const MagicLinkLogin: React.FC = () => {
         email: data.email
       });
 
-      if (!userResp.data.emailConfirmed) {
-        const redirectLinkResp = await axios.post(
-          `${API_BASE_URL}/v1/auth/send-magic-link`,
-          {
-            userId: userResp.data.id
-          }
-        );
+      // if (!userResp.data.emailConfirmed) {
+      const redirectLinkResp = await axios.post(
+        `${API_BASE_URL}/v1/auth/send-magic-link`,
+        {
+          userId: userResp.data.id
+        }
+      );
 
-        const email = redirectLinkResp.data;
-        router.push(
-          `/verify-request?email=${userResp.data.email}&search=${email}`
-        );
-      } else {
-        window.location.href = `${API_BASE_URL}/v1/auth/redirect?email=${data.email}`;
-      }
+      const email = redirectLinkResp.data;
+      router.push(
+        `/verify-request?email=${userResp.data.email}&search=${email}`
+      );
+      // } else {
+      //   window.location.href = `${API_BASE_URL}/v1/auth/redirect?email=${data.email}`;
+      // }
     } catch (error) {
       console.error('error:', error);
       toast.error('An error occurred while creating the user.');
