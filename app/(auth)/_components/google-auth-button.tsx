@@ -24,7 +24,7 @@ export default function GoogleSignInButton({ redirectPath }: SignInParams) {
   return (
     <Button
       className="w-full"
-      variant="secondary"
+      variant="default"
       type="button"
       onClick={handleGoogleLogin}
     >

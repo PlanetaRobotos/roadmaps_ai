@@ -11,7 +11,7 @@ export default function UserAuthForm({
 }) {
   return (
     <>
-      <MagicLinkLogin />
+      <GoogleSignInButton redirectPath={redirectPath} />
 
       {/*Separator*/}
       <div className="relative">
@@ -25,7 +25,7 @@ export default function UserAuthForm({
         </div>
       </div>
 
-      <GoogleSignInButton redirectPath={redirectPath} />
+      <MagicLinkLogin />
     </>
   );
 }

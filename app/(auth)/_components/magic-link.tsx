@@ -89,7 +89,12 @@ const MagicLinkLogin: React.FC = () => {
           )}
         />
 
-        <Button disabled={loading} className="ml-auto w-full" type="submit">
+        <Button
+          disabled={loading}
+          className="ml-auto w-full"
+          type="submit"
+          variant="secondary"
+        >
           Continue With Email
         </Button>
       </form>
