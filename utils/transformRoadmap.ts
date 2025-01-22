@@ -11,8 +11,8 @@ export const transformRoadmapToItems = (
   if (roadmap.thumbnailUrl) {
     thumbnailUrl = getImageUrl(roadmap.thumbnailUrl);
   } else {
-    const randomIndex = Math.floor(Math.random() * 11) + 1;
-    thumbnailUrl = `/images/roadmaps/roadmap-thumbnail-${randomIndex}.png`;
+    // const randomIndex = Math.floor(Math.random() * 11) + 1;
+    thumbnailUrl = `/images/roadmaps/roadmap-thumbnail-1.png`;
   }
 
   items.push({
