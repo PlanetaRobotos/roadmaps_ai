@@ -44,8 +44,9 @@ export const HeroSection = () => {
           </div>
 
           <p className="mx-auto max-w-screen-sm text-xl text-muted-foreground">
-            Transform any topic into engaging <br />
-            lessons — no skills needed
+            {/*Transform any topic into engaging <br />*/}
+            {/*lessons — no skills needed*/}
+            Like TikTok, but for actual learning
           </p>
 
           <div className="space-y-4 md:space-x-4 md:space-y-0">
