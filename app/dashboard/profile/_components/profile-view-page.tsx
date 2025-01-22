@@ -74,6 +74,8 @@ export default function ProfileViewPage() {
     return null;
   }
 
+  console.log('BIO:', editedBio, 'Name:', editedName);
+
   return (
     <div className="container mx-auto px-4 py-4 md:max-w-2xl md:py-8">
       <Card className="border-0 md:border">

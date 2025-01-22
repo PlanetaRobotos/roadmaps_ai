@@ -188,13 +188,13 @@ export default function DashboardView() {
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-primary">50+</div>
+                  <div className="text-2xl font-bold text-primary">30+</div>
                   <div className="text-sm text-muted-foreground">
                     Categories
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-primary">3000+</div>
+                  <div className="text-2xl font-bold text-primary">1000+</div>
                   <div className="text-sm text-muted-foreground">
                     Active Learners
                   </div>

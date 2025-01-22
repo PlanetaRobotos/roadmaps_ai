@@ -19,6 +19,7 @@ import {
 import Image from 'next/image';
 import { getImageUrl } from '@/lib/utils';
 import { Clock } from 'lucide-react';
+import axios from '@/lib/axios';
 
 const CourseCard2 = (props: IRoadmapModel) => {
   const {
@@ -41,16 +42,19 @@ const CourseCard2 = (props: IRoadmapModel) => {
     isLoading: true,
     error: false
   });
-
-  let finalThumbnailUrl = thumbnailUrl;
-  if (thumbnailUrl) {
-    finalThumbnailUrl = getImageUrl(thumbnailUrl);
-  } else {
-    const randomIndex = Math.floor(Math.random() * 11) + 1;
-    finalThumbnailUrl = `/images/roadmaps/roadmap-thumbnail-${randomIndex}.png`;
-  }
+  const [finalThumbnailUrl, setFinalThumbnailUrl] = useState<string | null>('');
 
   useEffect(() => {
+    if (thumbnailUrl) {
+      setFinalThumbnailUrl(getImageUrl(thumbnailUrl));
+    } else {
+      setFinalThumbnailUrl(`/images/roadmaps/roadmap-thumbnail-1.png`);
+
+      // const result = axios.put(`/v1/roadmaps/${id}/set-default-thumbnail`, {
+      //   thumbnailUrl: finalThumbnailUrl
+      // });
+    }
+
     const loadColors = async () => {
       try {
         const extractedColors = await extractColors(finalThumbnailUrl!);
