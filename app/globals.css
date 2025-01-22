@@ -109,3 +109,45 @@
   justify-content: center;
   align-items: center;
 }
+
+/* Editor content styles */
+.ProseMirror {
+  @apply h-full min-h-[200px] p-4;
+}
+
+.ProseMirror:focus {
+  @apply outline-none;
+}
+
+/* Code block styles */
+.ProseMirror pre {
+  @apply my-2 rounded-md bg-gray-100 p-4 text-sm;
+}
+
+/* Blockquote styles */
+.ProseMirror blockquote {
+  @apply my-4 border-l-4 border-gray-300 pl-4 italic;
+}
+
+/* List styles */
+.ProseMirror ul {
+  @apply my-4 list-disc pl-6;
+}
+
+.ProseMirror ol {
+  @apply my-4 list-decimal pl-6;
+}
+
+/* Heading styles */
+.ProseMirror h1 {
+  @apply mb-4 mt-6 text-3xl font-bold;
+}
+
+.ProseMirror h2 {
+  @apply mb-3 mt-5 text-2xl font-bold;
+}
+
+/* Link styles */
+.ProseMirror a {
+  @apply text-blue-600 hover:underline;
+}

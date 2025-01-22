@@ -67,7 +67,6 @@ export const usePostStore = create<PostStore>((set, get) => ({
     }
   },
 
-  /** Toggle isSaved. Optionally call an API to store bookmark status. */
   toggleSave: async (roadmapId: string, userId: number) => {
     const { isSaved } = get();
 

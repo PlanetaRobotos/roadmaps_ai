@@ -159,7 +159,7 @@ export default function EditRoadmapView({ roadmapId }: EditRoadmapViewProps) {
       </div>
 
       {/* Explore Other Courses (only show if not editing) */}
-      {true && editingState === EditingState.Idle && (
+      {editingState === EditingState.Idle && (
         <div className="flex w-full justify-center pt-3">
           <Button
             type="button"
