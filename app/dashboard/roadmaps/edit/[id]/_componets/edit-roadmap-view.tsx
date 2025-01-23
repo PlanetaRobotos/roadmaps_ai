@@ -8,6 +8,7 @@ import { EditingState } from '@/types/editState';
 
 import { AuthContext } from '@/context/auth-context';
 import { CLIENT_URL } from '@/config/apiConfig';
+import { company } from '@/constants/data';
 import { ClientRoadmap } from '@/types/roadmap-types';
 import Loading from '@/app/dashboard/_components/loading';
 
@@ -41,11 +42,13 @@ export default function EditRoadmapView({ roadmapId }: EditRoadmapViewProps) {
   const [loading, setLoading] = useState(true);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isAuthor, setIsAuthor] = useState(false);
 
   const { user } = useContext(AuthContext);
   const router = useRouter();
 
-  const shareText = `Check out my new course for ${roadmap?.title} at ${CLIENT_URL}/dashboard/roadmaps/${roadmapId}`;
+  const shareUrl = `${CLIENT_URL}/dashboard/roadmaps/${roadmapId}`;
+  const shareText = `Check out my new course for ${roadmap?.title} at ${shareUrl}`;
 
   const { editingState, setEditingState } = useEditStore();
 
@@ -66,6 +69,8 @@ export default function EditRoadmapView({ roadmapId }: EditRoadmapViewProps) {
         const data = await getRoadmapById(roadmapId);
         const cards = transformRoadmapToItems(data);
         setRoadmap(cards);
+
+        setIsAuthor(user?.id === data.authorId);
       } catch (error) {
         console.error('Failed to fetch roadmap:', error);
       } finally {
@@ -77,28 +82,22 @@ export default function EditRoadmapView({ roadmapId }: EditRoadmapViewProps) {
   }, [roadmapId, user]);
 
   const shareRoadmap = () => {
-    const shareMsg = `Check out my new roadmap for ${roadmap?.title}!`;
-    const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+    const shareMsg = `Share course: ${roadmap?.title}!`;
 
     if (navigator.share) {
       navigator.share({
         title: shareMsg,
-        text: `I just created a course to learn ${roadmap?.title} in ${roadmap?.duration} using CourseAI`,
+        text: `I just created a course to learn ${roadmap?.title} in ${roadmap?.duration} using ${company.name}`,
         url: shareUrl
       });
     } else {
-      // Fallback: open Twitter or another share method
-      window.open(
-        `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-          `${shareMsg} ${shareUrl}`
-        )}`,
-        '_blank'
-      );
+      toast.error('Sharing is not supported on this device');
     }
   };
 
   if (loading) return <Loading />;
   if (!roadmap) return <div>Course not found. {roadmapId}</div>;
+  if (!isAuthor) window.location.href = shareUrl;
 
   return (
     <div className="mx-auto flex h-full w-full max-w-2xl flex-col p-2 md:px-4">
