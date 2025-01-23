@@ -101,10 +101,17 @@ export const LandingNavbar = () => {
           >
             <div>
               <SheetHeader className="mb-4 ml-4">
-                <SheetTitle className="flex items-center">
+                <SheetTitle className="flex items-center text-base">
                   <Link href="/" className="flex items-center">
-                    <ChevronsDown className="mr-2 h-9 w-9 rounded-lg border border-secondary bg-gradient-to-tr from-primary via-primary/70 to-primary text-white" />
-                    Shadcn
+                    <Image
+                      className="mr-2 h-9 w-9 rounded-lg border border-secondary"
+                      src="/images/logo.png"
+                      alt="Logo"
+                      width={28}
+                      height={28}
+                    />
+                    {/*<ChevronsDown className="mr-2 h-9 w-9 rounded-lg border border-secondary bg-gradient-to-tr from-primary via-primary/70 to-primary text-white" />*/}
+                    {company.name}
                   </Link>
                 </SheetTitle>
               </SheetHeader>

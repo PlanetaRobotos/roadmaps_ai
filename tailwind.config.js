@@ -12,9 +12,6 @@ module.exports = {
     './app/globals.css'
   ],
   theme: {
-    screens: {
-      xs: '475px'
-    },
     container: {
       center: true,
       padding: '1.5rem',
@@ -23,6 +20,9 @@ module.exports = {
       }
     },
     extend: {
+      screens: {
+        xs: '475px'
+      },
       fontSize: {
         xs: ['0.75rem', { lineHeight: '1rem' }],
         sm: ['0.875rem', { lineHeight: '1.25rem' }],

@@ -14,10 +14,10 @@ export const LandingPageView = () => {
       <LandingRedirect />
 
       <HeroSection />
-      <FounderSection />
       <LearningCycle />
       <InstructionsSection />
       <TestimonialSection />
+      <FounderSection />
       <div className="py-24 sm:py-32">
         <PricingSection />
       </div>
