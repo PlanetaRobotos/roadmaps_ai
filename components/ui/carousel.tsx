@@ -15,6 +15,7 @@ type CarouselOptions = UseCarouselParameters[0];
 type CarouselPlugin = UseCarouselParameters[1];
 
 type CarouselProps = {
+  disableKeyboardNavigation?: boolean;
   opts?: CarouselOptions;
   plugins?: CarouselPlugin;
   orientation?: 'horizontal' | 'vertical';
@@ -22,6 +23,7 @@ type CarouselProps = {
 };
 
 type CarouselContextProps = {
+  disableKeyboardNavigation?: boolean;
   carouselRef: ReturnType<typeof useEmblaCarousel>[0];
   api: ReturnType<typeof useEmblaCarousel>[1];
   scrollPrev: () => void;
@@ -48,6 +50,7 @@ const Carousel = React.forwardRef<
 >(
   (
     {
+      disableKeyboardNavigation = false,
       orientation = 'horizontal',
       opts,
       setApi,
@@ -87,6 +90,8 @@ const Carousel = React.forwardRef<
 
     const handleKeyDown = React.useCallback(
       (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (disableKeyboardNavigation) return;
+
         if (event.key === 'ArrowLeft') {
           event.preventDefault();
           scrollPrev();
@@ -95,7 +100,7 @@ const Carousel = React.forwardRef<
           scrollNext();
         }
       },
-      [scrollPrev, scrollNext]
+      [disableKeyboardNavigation, scrollPrev, scrollNext]
     );
 
     React.useEffect(() => {

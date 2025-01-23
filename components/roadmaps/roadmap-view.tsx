@@ -1,4 +1,6 @@
-﻿import React, { useContext, useEffect, useState } from 'react';
+﻿'use client';
+
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { ClientRoadmap, CardState } from '@/types/roadmap-types';
 import {
   Carousel,
@@ -15,8 +17,6 @@ import QuizCard from '@/components/roadmaps/quiz-card';
 import { AuthContext } from '@/context/auth-context';
 import { getUserQuizzes, updateQuizStatus } from '@/services/roadmapsService';
 import axios from '@/lib/axios';
-import { SwipeTip } from '@/components/helper-icon';
-import { cn, getImageUrl } from '@/lib/utils';
 import ThumbnailCard from '@/components/roadmaps/thumbnail-card';
 import {
   extractColors,
@@ -25,6 +25,9 @@ import {
   RGB,
   DEFAULT_COLORS
 } from '@/utils/colors';
+import { useEditStore } from '@/store/editStore';
+import { EditingState } from '@/types/editState';
+import { EmblaOptionsType } from 'embla-carousel';
 
 interface RoadmapViewProps {
   roadmapItems: ClientRoadmap;
@@ -45,6 +48,11 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
   >({});
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
+
+  const editingState = useEditStore((state) => state.editingState);
+  const isScrollLocked =
+    editingState === EditingState.Editing ||
+    editingState === EditingState.Saving;
 
   const [cardState, setCardState] = useState<{
     colors: RGB[];
@@ -78,13 +86,91 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
     loadColors();
   }, [roadmapItems.thumbnail]);
 
+  const handleSettle = useCallback(() => {
+    if (showSwipeHint) {
+      setShowSwipeHint(false);
+    }
+  }, [showSwipeHint]);
+
+  const handleSelect = useCallback(() => {
+    if (api) {
+      setCurrent(api.selectedScrollSnap());
+    }
+  }, [api]);
+
+  const handlePrevSlide = useCallback(() => {
+    if (api && !isScrollLocked) {
+      api.scrollPrev();
+    }
+  }, [api, isScrollLocked]);
+
+  const handleNextSlide = useCallback(() => {
+    if (api && !isScrollLocked) {
+      api.scrollNext();
+    }
+  }, [api, isScrollLocked]);
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (isScrollLocked) return;
+
+      console.log('Key: scroll', event.key, isScrollLocked);
+
+      switch (event.key) {
+        case 'ArrowLeft':
+          event.preventDefault();
+          handlePrevSlide();
+          break;
+        case 'ArrowRight':
+          event.preventDefault();
+          handleNextSlide();
+          break;
+      }
+    },
+    [handlePrevSlide, handleNextSlide, isScrollLocked]
+  );
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleKeyDown]);
+
   useEffect(() => {
     if (!api) {
       return;
     }
 
+    // const originalCanScrollPrev = api.canScrollPrev;
+    // const originalCanScrollNext = api.canScrollNext;
+
     setCount(api.scrollSnapList().length);
     setCurrent(api.selectedScrollSnap());
+
+    const originalScrollTo = api.scrollTo;
+    api.scrollTo = (index: number, jump?: boolean) => {
+      // Check if the scroll was triggered by keyboard
+      if (window.event?.type === 'keydown') {
+        return; // Prevent scrolling for keyboard events
+      }
+      // Otherwise proceed with normal scrolling
+      originalScrollTo.call(api, index, jump);
+    };
+
+    if (isScrollLocked) {
+      // api.canScrollPrev = () => false;
+      // api.canScrollNext = () => false;
+
+      console.log('Scroll is locked');
+      api.off('settle', handleSettle);
+      api.off('select', handleSelect);
+      return () => {
+        api.scrollTo = originalScrollTo;
+        // api.canScrollPrev = originalCanScrollPrev;
+        // api.canScrollNext = originalCanScrollNext;
+      };
+    }
 
     api.on('settle', () => {
       if (showSwipeHint) {
@@ -95,7 +181,16 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
     api.on('select', () => {
       setCurrent(api.selectedScrollSnap());
     });
-  }, [api, showSwipeHint]);
+
+    return () => {
+      // api.canScrollPrev = originalCanScrollPrev;
+      // api.canScrollNext = originalCanScrollNext;
+
+      api.scrollTo = originalScrollTo;
+      api.off('settle', handleSettle);
+      api.off('select', handleSelect);
+    };
+  }, [api, handleSelect, handleSettle, isScrollLocked, showSwipeHint]);
 
   useEffect(() => {
     if (!user) {
@@ -129,10 +224,19 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
         backgroundColor: 'rgba(0, 0, 0, 0.9)'
       };
 
+  const carouselOptions: EmblaOptionsType = {
+    watchDrag: !isScrollLocked
+  };
+
   return (
     <>
-      <Carousel className="mx-auto mb-4 h-full w-full" setApi={setApi}>
-        <CarouselContent className="h-full">
+      <Carousel
+        opts={carouselOptions}
+        className="mx-auto mb-4 h-full w-full"
+        setApi={setApi}
+        disableKeyboardNavigation={isScrollLocked}
+      >
+        <CarouselContent className="h-full select-none">
           {roadmapItems.cards
             // .filter((card) => card.type == 'lesson')
             .map((card, index) => (
@@ -181,19 +285,16 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
         </CarouselContent>
 
         {/* Arrows only for desktop */}
-        <CarouselPrevious className="hidden md:block" />
-        <CarouselNext
-          className={'hidden md:block'}
-          iconClassName={showSwipeHint ? 'animate-ping' : ''}
-        />
+        {!isScrollLocked && (
+          <>
+            <CarouselPrevious className="md:block hidden" />
+            <CarouselNext
+              className={'md:block hidden'}
+              iconClassName={showSwipeHint ? 'animate-ping' : ''}
+            />
+          </>
+        )}
       </Carousel>
-
-      {showSwipeHint && (
-        <div className="absolute bottom-3 mx-auto block w-full -translate-x-8 transform text-center">
-          <SwipeTip />
-        </div>
-      )}
-
       <Progress
         value={count > 1 ? (current / (count - 1)) * 100 : 0}
         className="mx-auto flex w-5/6 max-w-2xl items-center"

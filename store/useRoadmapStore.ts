@@ -2,9 +2,7 @@
 import create from 'zustand';
 import { ClientRoadmap } from '@/types/roadmap-types';
 import { RoadmapCreateRequest } from '@/app/api/client';
-import { createRoadmap } from '@/services/roadmapsService';
 import { transformRoadmapToItems } from '@/utils/transformRoadmap';
-import { API_BASE_URL } from '@/config/apiConfig';
 import { toast } from 'sonner';
 import axios from '@/lib/axios';
 
@@ -53,7 +51,8 @@ export const useRoadmapStore = create<RoadmapState>((set, get) => ({
         title: title,
         estimatedDuration: selectedTime,
         authorId: userId,
-        price: price
+        price: price,
+        withThumbnail: false
       });
 
       const roadmapModel = await axios.post('v1/roadmaps', requestBody);

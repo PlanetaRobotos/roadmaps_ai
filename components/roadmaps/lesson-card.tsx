@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { AuthContext } from '@/context/auth-context';
 import { ExternalLink } from 'lucide-react';
 import { LessonCard } from '@/types/roadmap-types';
+import { RichTextEditor } from '@/components/RichTextEditor';
 
 interface LessonCardProps {
   lesson: LessonCard;
@@ -69,7 +70,34 @@ const LessonCard: React.FC<LessonCardProps> = ({
   }, [editingState, lesson.id, onUpdate, setEditingState, tempContent]);
 
   const ResourcesList = () => {
-    if (!lesson.resources || lesson.resources.length === 0) return null;
+    if (!lesson.resources?.length) return null;
+
+    const parseResource = (resource: string) => {
+      try {
+        // Handle different formats
+        if (resource.includes(' | ')) {
+          const [title, description, url] = resource.split(' | ');
+          return { title, description, url };
+        }
+
+        if (resource.includes(' - ')) {
+          // Handle "Title - Description - URL" format
+          const parts = resource.split(' - ');
+          if (parts.length === 3) {
+            const [title, description, url] = parts;
+            return { title, description, url };
+          }
+          // Handle "Title - URL" format
+          const [title, url] = parts;
+          return { title, description: title, url };
+        }
+
+        return null;
+      } catch (error) {
+        console.error('Failed to parse resource:', resource);
+        return null;
+      }
+    };
 
     return (
       <div className="mt-8">
@@ -83,27 +111,35 @@ const LessonCard: React.FC<LessonCardProps> = ({
             </span>
           </div>
         </div>
-        <div className="mt-6 space-y-2">
+        <div className="mt-6">
           <ul className="space-y-2">
-            {lesson.resources.map((resource, index) => (
-              <li key={index} className="flex items-center">
-                <ExternalLink className="mr-2 h-4 w-4 text-gray-500" />
-                <a
-                  href={resource}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-800 hover:underline"
-                >
-                  {new URL(resource).hostname}
-                </a>
-              </li>
-            ))}
+            {lesson.resources.map((resource, index) => {
+              const parsed = parseResource(resource);
+              if (!parsed?.url) return null;
+
+              return (
+                <li key={index} className="flex items-center">
+                  <ExternalLink className="mr-2 h-4 w-4 text-gray-500" />
+
+                  <a
+                    href={parsed.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 hover:underline"
+                  >
+                    {parsed.title}
+                    {parsed.description !== parsed.title && (
+                      <span className="">- {parsed.description}</span>
+                    )}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>
     );
   };
-
   return (
     <div className="h-full rounded-xl bg-blue-100 p-1">
       <Card className="flex h-full w-full flex-col bg-white">
@@ -112,39 +148,38 @@ const LessonCard: React.FC<LessonCardProps> = ({
         </CardHeader>
         <Separator className="h-1 bg-blue-100" />
 
-        {editingState === EditingState.Editing && (
-          <CardContent className="flex flex-1 flex-col p-4">
-            <textarea
-              className="h-full w-full resize-none rounded-lg border border-gray-300 bg-white p-2 text-sm text-black"
-              value={tempContent}
-              onChange={(e) => setTempContent(e.target.value)}
-            />
-          </CardContent>
-        )}
+        <ScrollArea className="w-full flex-1 overflow-auto">
+          <CardContent className="flex h-full flex-grow flex-col justify-between px-0">
+            <div className="sm:prose-base lg:prose-lg prose prose-sm h-full max-w-none p-2 px-2 leading-relaxed xs:px-6">
+              {editingState === EditingState.Idle && (
+                <>
+                  {isPaidRole && isEditable && (
+                    <TipButton
+                      disabled={editingState !== EditingState.Idle}
+                      onClick={handleEditClick}
+                    />
+                  )}
 
-        {editingState === EditingState.Idle && (
-          <ScrollArea className="w-full flex-1 overflow-auto">
-            <CardContent className="flex h-full flex-grow flex-col justify-between p-4">
-              <div className="prose h-full max-w-none p-2 leading-relaxed lg:prose-xl md:px-6">
-                {isPaidRole && isEditable && (
-                  <TipButton
-                    disabled={editingState !== EditingState.Idle}
-                    onClick={handleEditClick}
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: lesson.content
+                    }}
+                    className="sm:prose-base lg:prose-lg prose prose-sm mt-4"
                   />
-                )}
 
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: lesson.content.replace(/\n/g, '<br />')
-                  }}
-                  className="mt-4"
+                  <ResourcesList />
+                </>
+              )}
+
+              {editingState === EditingState.Editing && (
+                <RichTextEditor
+                  content={tempContent}
+                  onChange={setTempContent}
                 />
-
-                <ResourcesList />
-              </div>
-            </CardContent>
-          </ScrollArea>
-        )}
+              )}
+            </div>
+          </CardContent>
+        </ScrollArea>
       </Card>
     </div>
   );

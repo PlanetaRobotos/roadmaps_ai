@@ -12,6 +12,9 @@ module.exports = {
     './app/globals.css'
   ],
   theme: {
+    screens: {
+      xs: '475px'
+    },
     container: {
       center: true,
       padding: '1.5rem',

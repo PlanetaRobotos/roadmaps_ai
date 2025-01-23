@@ -112,7 +112,7 @@
 
 /* Editor content styles */
 .ProseMirror {
-  @apply h-full min-h-[200px] p-4;
+  @apply h-full min-h-[200px] p-1;
 }
 
 .ProseMirror:focus {
@@ -121,7 +121,7 @@
 
 /* Code block styles */
 .ProseMirror pre {
-  @apply my-2 rounded-md bg-gray-100 p-4 text-sm;
+  @apply my-2 rounded-md bg-gray-600 p-4 text-sm;
 }
 
 /* Blockquote styles */
