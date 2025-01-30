@@ -4272,6 +4272,81 @@ export class RoadmapsClient {
     }
     return Promise.resolve<void>(null as any);
   }
+
+  setDefaultThumbnail(
+    id: string,
+    thumbnailUrl: string | undefined
+  ): Promise<void> {
+    let url_ = this.baseUrl + '/v1/roadmaps/{id}/set-default-thumbnail?';
+    if (id === undefined || id === null)
+      throw new Error("The parameter 'id' must be defined.");
+    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    if (thumbnailUrl === null)
+      throw new Error("The parameter 'thumbnailUrl' cannot be null.");
+    else if (thumbnailUrl !== undefined)
+      url_ += 'thumbnailUrl=' + encodeURIComponent('' + thumbnailUrl) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'PUT',
+      headers: {}
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processSetDefaultThumbnail(_response);
+    });
+  }
+
+  protected processSetDefaultThumbnail(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
 }
 
 export class ServerInfoClient {
@@ -5667,7 +5742,7 @@ export class WelcomeClient {
     skip: number | undefined,
     take: number | undefined
   ): Promise<WelcomePageModel> {
-    let url_ = this.baseUrl + '/v1/welcome/welcome?';
+    let url_ = this.baseUrl + '/v1/welcome/page?';
     if (skip === null) throw new Error("The parameter 'skip' cannot be null.");
     else if (skip !== undefined)
       url_ += 'skip=' + encodeURIComponent('' + skip) + '&';
@@ -6241,6 +6316,8 @@ export interface ICourseTypeUpdateModel {
 
 export class CreatePaymentRequest implements ICreatePaymentRequest {
   planType?: string;
+  planPrice?: number;
+  planDescription?: string | undefined;
   email?: string | undefined;
 
   constructor(data?: ICreatePaymentRequest) {
@@ -6255,6 +6332,8 @@ export class CreatePaymentRequest implements ICreatePaymentRequest {
   init(_data?: any) {
     if (_data) {
       this.planType = _data['planType'];
+      this.planPrice = _data['planPrice'];
+      this.planDescription = _data['planDescription'];
       this.email = _data['email'];
     }
   }
@@ -6269,6 +6348,8 @@ export class CreatePaymentRequest implements ICreatePaymentRequest {
   toJSON(data?: any) {
     data = typeof data === 'object' ? data : {};
     data['planType'] = this.planType;
+    data['planPrice'] = this.planPrice;
+    data['planDescription'] = this.planDescription;
     data['email'] = this.email;
     return data;
   }
@@ -6276,6 +6357,8 @@ export class CreatePaymentRequest implements ICreatePaymentRequest {
 
 export interface ICreatePaymentRequest {
   planType?: string;
+  planPrice?: number;
+  planDescription?: string | undefined;
   email?: string | undefined;
 }
 
@@ -6384,6 +6467,7 @@ export class ExplorePageModel implements IExplorePageModel {
   newCourses?: RoadmapModel[];
   topCourses?: RoadmapModel[];
   betterYouCourses?: RoadmapModel[];
+  newToLevenueCourses?: RoadmapModel[];
 
   constructor(data?: IExplorePageModel) {
     if (data) {
@@ -6416,6 +6500,11 @@ export class ExplorePageModel implements IExplorePageModel {
         for (let item of _data['betterYouCourses'])
           this.betterYouCourses!.push(RoadmapModel.fromJS(item));
       }
+      if (Array.isArray(_data['newToLevenueCourses'])) {
+        this.newToLevenueCourses = [] as any;
+        for (let item of _data['newToLevenueCourses'])
+          this.newToLevenueCourses!.push(RoadmapModel.fromJS(item));
+      }
     }
   }
 
@@ -6445,6 +6534,11 @@ export class ExplorePageModel implements IExplorePageModel {
       for (let item of this.betterYouCourses)
         data['betterYouCourses'].push(item.toJSON());
     }
+    if (Array.isArray(this.newToLevenueCourses)) {
+      data['newToLevenueCourses'] = [];
+      for (let item of this.newToLevenueCourses)
+        data['newToLevenueCourses'].push(item.toJSON());
+    }
     return data;
   }
 }
@@ -6454,6 +6548,7 @@ export interface IExplorePageModel {
   newCourses?: RoadmapModel[];
   topCourses?: RoadmapModel[];
   betterYouCourses?: RoadmapModel[];
+  newToLevenueCourses?: RoadmapModel[];
 }
 
 export class GenerateImageRequest implements IGenerateImageRequest {
@@ -7133,6 +7228,7 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
   modules?: RoadmapModuleModel[];
   thumbnailUrl?: string | undefined;
   price?: number;
+  withThumbnail?: boolean;
 
   constructor(data?: IRoadmapCreateRequest) {
     if (data) {
@@ -7162,6 +7258,7 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
       }
       this.thumbnailUrl = _data['thumbnailUrl'];
       this.price = _data['price'];
+      this.withThumbnail = _data['withThumbnail'];
     }
   }
 
@@ -7190,6 +7287,7 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
     }
     data['thumbnailUrl'] = this.thumbnailUrl;
     data['price'] = this.price;
+    data['withThumbnail'] = this.withThumbnail;
     return data;
   }
 }
@@ -7205,6 +7303,7 @@ export interface IRoadmapCreateRequest {
   modules?: RoadmapModuleModel[];
   thumbnailUrl?: string | undefined;
   price?: number;
+  withThumbnail?: boolean;
 }
 
 export class RoadmapModel implements IRoadmapModel {

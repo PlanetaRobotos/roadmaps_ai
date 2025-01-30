@@ -17,6 +17,8 @@ const ExploreViewPage = () => {
       try {
         const response = await axios.get<ExplorePageModel>('v1/explore/page');
         setExploreData(response.data);
+
+        console.log('Explore Data ntl:', response.data?.newToLevenueCourses);
       } catch (error) {
         console.error('Error fetching explore data:', error);
       }
@@ -63,6 +65,18 @@ const ExploreViewPage = () => {
               />
             </section>
           )}
+
+          {/* New To Levenue */}
+          {exploreData.newToLevenueCourses &&
+            exploreData.newToLevenueCourses.length > 0 && (
+              <section className="mt-16">
+                <CourseCarousel
+                  roadmaps={exploreData.newToLevenueCourses}
+                  title="New to Levenue?"
+                  // subTitle=""
+                />
+              </section>
+            )}
 
           {/* Better You 2025 */}
           {exploreData.betterYouCourses &&

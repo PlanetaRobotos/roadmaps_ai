@@ -58,7 +58,7 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
 
         const roadmapResp = await getRoadmapById(roadmapId);
 
-        console.log('course', roadmapResp);
+        console.log('course', roadmapResp.modules?.[0]?.lessons?.[0]);
         const cards = transformRoadmapToItems(roadmapResp);
         console.log('cards', cards);
         setRoadmap(cards);

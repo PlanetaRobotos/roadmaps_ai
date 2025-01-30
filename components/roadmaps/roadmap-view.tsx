@@ -114,8 +114,6 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
     (event: KeyboardEvent) => {
       if (isScrollLocked) return;
 
-      console.log('Key: scroll', event.key, isScrollLocked);
-
       switch (event.key) {
         case 'ArrowLeft':
           event.preventDefault();
@@ -142,33 +140,23 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
       return;
     }
 
-    // const originalCanScrollPrev = api.canScrollPrev;
-    // const originalCanScrollNext = api.canScrollNext;
-
     setCount(api.scrollSnapList().length);
     setCurrent(api.selectedScrollSnap());
 
     const originalScrollTo = api.scrollTo;
     api.scrollTo = (index: number, jump?: boolean) => {
-      // Check if the scroll was triggered by keyboard
       if (window.event?.type === 'keydown') {
-        return; // Prevent scrolling for keyboard events
+        return;
       }
-      // Otherwise proceed with normal scrolling
       originalScrollTo.call(api, index, jump);
     };
 
     if (isScrollLocked) {
-      // api.canScrollPrev = () => false;
-      // api.canScrollNext = () => false;
-
       console.log('Scroll is locked');
       api.off('settle', handleSettle);
       api.off('select', handleSelect);
       return () => {
         api.scrollTo = originalScrollTo;
-        // api.canScrollPrev = originalCanScrollPrev;
-        // api.canScrollNext = originalCanScrollNext;
       };
     }
 
@@ -183,9 +171,6 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
     });
 
     return () => {
-      // api.canScrollPrev = originalCanScrollPrev;
-      // api.canScrollNext = originalCanScrollNext;
-
       api.scrollTo = originalScrollTo;
       api.off('settle', handleSettle);
       api.off('select', handleSelect);
@@ -287,9 +272,9 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
         {/* Arrows only for desktop */}
         {!isScrollLocked && (
           <>
-            <CarouselPrevious className="md:block hidden" />
+            <CarouselPrevious className="hidden md:block" />
             <CarouselNext
-              className={'md:block hidden'}
+              className={'hidden md:block'}
               iconClassName={showSwipeHint ? 'animate-ping' : ''}
             />
           </>
