@@ -17,7 +17,7 @@ export const AISection = () => {
       <Card className="mx-auto max-w-6xl bg-gradient-to-br from-blue-50/80 via-white to-purple-50/80 p-6 md:p-12">
         {/* Header Section */}
         <div className="mb-16 text-center">
-          <h2 className="mb-6 text-2xl font-bold tracking-tight md:text-4xl ">
+          <h2 className="mb-6 text-2xl font-bold tracking-tight md:text-4xl">
             AI that enhances your expertise
           </h2>
           <div className="mx-auto max-w-xl space-y-4">
@@ -29,14 +29,14 @@ export const AISection = () => {
         </div>
 
         <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
-          {/* Content Column */}
+          {/* First Row */}
           <div className="flex flex-col space-y-6 md:pl-8">
             <span
               className={`max-w-40 text-sm font-normal uppercase leading-4 tracking-wider text-blue-600 ${jetBrainsMono.className}`}
             >
               AI-powered microlearning Designer
             </span>
-            <h5 className="text-xl leading-tight  md:text-4xl">
+            <h5 className="text-xl leading-tight md:text-4xl">
               Microlearning
               <br />
               Copilot
@@ -50,10 +50,8 @@ export const AISection = () => {
             </p>
           </div>
 
-          {/* Image Column */}
           <div className="group relative flex items-center justify-center p-4">
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/80 to-purple-100/30 shadow-lg blur transition-all duration-300 ease-in-out group-hover:rotate-0"></div>
-
             <div className="relative transition-all duration-300 ease-in-out [transform:perspective(1000px)_rotateY(-10deg)] group-hover:[transform:perspective(1000px)_rotateY(0deg)]">
               <Image
                 src="/images/landing/file_copilot.png"
@@ -66,10 +64,9 @@ export const AISection = () => {
             </div>
           </div>
 
-          {/* Image Column */}
-          <div className="group relative flex items-center justify-center p-4">
+          {/* Second Row - Image first on desktop */}
+          <div className="group relative order-4 flex items-center justify-center p-4 md:order-none">
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/80 to-purple-100/30 shadow-lg blur transition-all duration-300 ease-in-out group-hover:rotate-0"></div>
-
             <div className="relative transition-all duration-300 ease-in-out [transform:perspective(1000px)_rotateY(10deg)] group-hover:[transform:perspective(1000px)_rotateY(0deg)]">
               <Image
                 src="/images/landing/file_transform.png"
@@ -82,14 +79,13 @@ export const AISection = () => {
             </div>
           </div>
 
-          {/* Content Column */}
-          <div className="flex flex-col space-y-6 md:pl-8">
+          <div className="order-3 flex flex-col space-y-6 md:order-none">
             <span
               className={`max-w-40 text-sm font-normal uppercase leading-4 tracking-wider text-blue-600 ${jetBrainsMono.className}`}
             >
               AI-powered Content Converter
             </span>
-            <h5 className="text-xl leading-tight  md:text-4xl">
+            <h5 className="text-xl leading-tight md:text-4xl">
               Microlearning <br />
               Transformer
             </h5>
