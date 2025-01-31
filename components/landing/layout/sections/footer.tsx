@@ -22,7 +22,7 @@ export const FooterSection = () => {
   const { open } = useContactDialog();
 
   return (
-    <footer id="footer" className="container py-24 sm:py-32">
+    <footer id="footer" className="container pt-24 sm:py-32">
       <div className="rounded-2xl border border-secondary bg-card p-10">
         <div className="grid grid-cols-2 gap-x-12 gap-y-8 md:grid-cols-4 xl:grid-cols-6">
           <div className="col-span-full xl:col-span-2">
