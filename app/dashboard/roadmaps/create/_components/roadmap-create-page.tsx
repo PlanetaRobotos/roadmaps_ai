@@ -50,28 +50,38 @@ export default function RoadmapCreatePage() {
   } = useRoadmapStore();
 
   const onSubmit: SubmitHandler<RoadmapFormData> = async (data) => {
-    if (!user) {
-      // openAuthDialog();
+    try {
+      if (!user) {
+        // openAuthDialog();
 
-      const newRoadmap = await generateRoadmap(undefined);
-    } else {
-      console.log(`tokens:, ${tokens}, price: ${price}`);
-      if (tokens !== -1 && tokens < price) {
-        toast.error(`You need more coins to generate this roadmap.`);
+        const newRoadmap = await generateRoadmap(undefined);
+        console.log('newRoadmap:', newRoadmap);
 
-        router.push('/pricing');
-        return;
+        if (newRoadmap) {
+          router.push(`/dashboard/roadmaps/edit/${newRoadmap.id}`);
+        }
+      } else {
+        console.log(`tokens:, ${tokens}, price: ${price}`);
+        if (tokens !== -1 && tokens < price) {
+          toast.error(`You need more coins to generate this roadmap.`);
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          router.push('/pricing');
+          return;
+        }
+
+        updateTokens(tokens - price);
+        const newRoadmap = await generateRoadmap(user?.id);
+        console.log('newRoadmap:', newRoadmap);
+
+        if (newRoadmap) {
+          await axios.post(`/v1/users/${user?.id}/roadmaps/${newRoadmap.id}`);
+
+          router.push(`/dashboard/roadmaps/edit/${newRoadmap.id}`);
+        }
       }
-
-      updateTokens(tokens - price);
-      const newRoadmap = await generateRoadmap(user?.id);
-      console.log('newRoadmap:', newRoadmap);
-
-      if (newRoadmap) {
-        await axios.post(`/v1/users/${user?.id}/roadmaps/${newRoadmap.id}`);
-
-        router.push(`/dashboard/roadmaps/edit/${newRoadmap.id}`);
-      }
+    } catch (error) {
+      console.error('Error generating roadmap:', error);
+      toast('Failed to generate roadmap. Please try again.');
     }
   };
 

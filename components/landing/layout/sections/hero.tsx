@@ -61,17 +61,14 @@ export const HeroSection = () => {
             </Button>
 
             <Button
-              asChild
+              onClick={() => router.push('/dashboard/roadmaps/explore')}
               variant="secondary"
               className="w-5/6 font-bold md:w-1/4"
             >
-              <Link
-                // href="/dashboard/roadmaps/43d09926-a08b-4566-8b36-74aa689d100a"
-                href="/dashboard/roadmaps/explore"
-                target="_blank"
-              >
-                Explore courses
-              </Link>
+              {/*<Link*/}
+              {/*  // href="/dashboard/roadmaps/43d09926-a08b-4566-8b36-74aa689d100a"*/}
+              Explore courses
+              {/*</Link>*/}
             </Button>
           </div>
         </div>
