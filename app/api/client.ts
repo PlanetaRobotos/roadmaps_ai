@@ -3872,10 +3872,6 @@ export class RoadmapsClient {
         result201 = RoadmapModel.fromJS(resultData201);
         return result201;
       });
-    } else if (status === 403) {
-      return response.text().then((_responseText) => {
-        return throwException('Forbidden', status, _responseText, _headers);
-      });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
         return throwException(
@@ -7228,6 +7224,7 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
   modules?: RoadmapModuleModel[];
   thumbnailUrl?: string | undefined;
   price?: number;
+  isTest?: boolean;
   withThumbnail?: boolean;
 
   constructor(data?: IRoadmapCreateRequest) {
@@ -7258,6 +7255,7 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
       }
       this.thumbnailUrl = _data['thumbnailUrl'];
       this.price = _data['price'];
+      this.isTest = _data['isTest'];
       this.withThumbnail = _data['withThumbnail'];
     }
   }
@@ -7287,6 +7285,7 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
     }
     data['thumbnailUrl'] = this.thumbnailUrl;
     data['price'] = this.price;
+    data['isTest'] = this.isTest;
     data['withThumbnail'] = this.withThumbnail;
     return data;
   }
@@ -7303,6 +7302,7 @@ export interface IRoadmapCreateRequest {
   modules?: RoadmapModuleModel[];
   thumbnailUrl?: string | undefined;
   price?: number;
+  isTest?: boolean;
   withThumbnail?: boolean;
 }
 

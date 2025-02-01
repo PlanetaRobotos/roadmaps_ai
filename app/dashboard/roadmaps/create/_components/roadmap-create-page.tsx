@@ -54,7 +54,7 @@ export default function RoadmapCreatePage() {
       if (!user) {
         // openAuthDialog();
 
-        const newRoadmap = await generateRoadmap(undefined);
+        const newRoadmap = await generateRoadmap(undefined, true);
         console.log('newRoadmap:', newRoadmap);
 
         if (newRoadmap) {
@@ -70,7 +70,7 @@ export default function RoadmapCreatePage() {
         }
 
         updateTokens(tokens - price);
-        const newRoadmap = await generateRoadmap(user?.id);
+        const newRoadmap = await generateRoadmap(user?.id, false);
         console.log('newRoadmap:', newRoadmap);
 
         if (newRoadmap) {
