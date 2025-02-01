@@ -1,6 +1,4 @@
 ﻿import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import { ThumbnailCard } from '@/types/roadmap-types';
 import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';

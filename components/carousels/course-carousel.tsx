@@ -30,7 +30,10 @@ const CourseCarousel: React.FC<PlayListCarouselProps> = (
     <div className="w-full">
       <Carousel className="w-full">
         <div className="my-2 flex flex-row items-end justify-between">
-          <Link href={`/dashboard/roadmaps/room/${path}`}>
+          <Link
+            className={!path ? 'pointer-events-none' : ''}
+            href={`/dashboard/roadmaps/room/${path}`}
+          >
             <article className="flex flex-row gap-3">
               {Thumbnail}
               <div className="flex flex-col justify-center">

@@ -46,15 +46,17 @@ export const HeroSection = () => {
           <p className="mx-auto max-w-screen-sm text-xl text-muted-foreground">
             {/*Transform any topic into engaging <br />*/}
             {/*lessons — no skills needed*/}
-            Like TikTok, but for actual learning
+            Interactive mini-courses are great for using them as educational
+            lead magnets, workshop enrichment assets, micro-learning materials
+            to educate community or to get paid.
           </p>
 
           <div className="space-y-4 md:space-x-4 md:space-y-0">
             <Button
-              onClick={() => router.push('/signin')}
+              onClick={() => router.push('/dashboard/roadmaps/create')}
               className="group/arrow w-5/6 font-bold md:w-1/4"
             >
-              Claim My Course
+              Create course
               <ArrowRight className="ml-2 size-5 transition-transform group-hover/arrow:translate-x-1" />
             </Button>
 
@@ -64,10 +66,11 @@ export const HeroSection = () => {
               className="w-5/6 font-bold md:w-1/4"
             >
               <Link
-                href="/dashboard/roadmaps/43d09926-a08b-4566-8b36-74aa689d100a"
+                // href="/dashboard/roadmaps/43d09926-a08b-4566-8b36-74aa689d100a"
+                href="/dashboard/roadmaps/explore"
                 target="_blank"
               >
-                View Examples
+                Explore courses
               </Link>
             </Button>
           </div>

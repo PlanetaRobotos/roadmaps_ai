@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { ClientRoadmap, CardState } from '@/types/roadmap-types';
+import { ClientRoadmap, CardState, RoadmapCard } from '@/types/roadmap-types';
 import {
   Carousel,
   CarouselApi,
@@ -14,6 +14,8 @@ import { Progress } from '@/components/ui/progress';
 import HeroCard from '@/components/roadmaps/hero-card';
 import LessonCard from '@/components/roadmaps/lesson-card';
 import QuizCard from '@/components/roadmaps/quiz-card';
+import LoginCard from '@/components/roadmaps/login-card';
+import OutroCard from '@/components/roadmaps/outro-card';
 import { AuthContext } from '@/context/auth-context';
 import { getUserQuizzes, updateQuizStatus } from '@/services/roadmapsService';
 import axios from '@/lib/axios';
@@ -48,6 +50,7 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
   >({});
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
+  const [displayCards, setDisplayCards] = useState<RoadmapCard[]>([]);
 
   const editingState = useEditStore((state) => state.editingState);
   const isScrollLocked =
@@ -136,11 +139,22 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
   }, [handleKeyDown]);
 
   useEffect(() => {
+    setDisplayCards(
+      user
+        ? roadmapItems.cards.slice(0, -1)
+        : [
+            ...roadmapItems.cards.slice(0, 4),
+            roadmapItems.cards[roadmapItems.cards.length - 1]
+          ]
+    );
+    setCount(roadmapItems.cards.length - 1);
+  }, [roadmapItems.cards, user]);
+
+  useEffect(() => {
     if (!api) {
       return;
     }
 
-    setCount(api.scrollSnapList().length);
     setCurrent(api.selectedScrollSnap());
 
     const originalScrollTo = api.scrollTo;
@@ -222,13 +236,15 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
         disableKeyboardNavigation={isScrollLocked}
       >
         <CarouselContent className="h-full select-none">
-          {roadmapItems.cards
-            // .filter((card) => card.type == 'lesson')
+          {displayCards
+            // .filter((card) => card.type == 'outro')
             .map((card, index) => (
               <CarouselItem key={index}>
                 <div className="fixed h-full w-[94%]">
                   {card.type === 'thumbnail' && <ThumbnailCard props={card} />}
+                  {card.type === 'login' && <LoginCard props={card} />}
                   {card.type === 'hero' && <HeroCard hero={card} />}
+                  {card.type === 'outro' && <OutroCard outro={card} />}
                   {card.type === 'lesson' && (
                     <LessonCard
                       lesson={card}

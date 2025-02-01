@@ -8,7 +8,7 @@ export const metadata = {
 
 export default async function Page() {
   return (
-    <ScrollablePage maxHeight="h-screen" direction="vertical">
+    <ScrollablePage>
       <ExploreViewPage />
     </ScrollablePage>
   );

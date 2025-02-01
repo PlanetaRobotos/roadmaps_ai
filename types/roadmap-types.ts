@@ -17,7 +17,19 @@ export interface Quiz {
   correctAnswer: number;
 }
 
-export type RoadmapCard = HeroCard | ThumbnailCard | LessonCard | QuizCard;
+export type RoadmapCard =
+  | HeroCard
+  | ThumbnailCard
+  | LessonCard
+  | QuizCard
+  | LoginCard
+  | OutroCard;
+
+export interface OutroCard {
+  id: string;
+  type: 'outro';
+  title: string;
+}
 
 export interface HeroCard {
   id: string;
@@ -25,6 +37,13 @@ export interface HeroCard {
   title: string;
   contentTop?: string;
   contentBottom?: string;
+}
+
+export interface LoginCard {
+  id: string;
+  type: 'login';
+  title: string;
+  thumbnail: string;
 }
 
 export interface ThumbnailCard {

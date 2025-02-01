@@ -67,12 +67,17 @@ export const transformRoadmapToItems = (
 
   console.log('Items:', items);
 
-  // Optional: Add an Outro Hero Card
   items.push({
-    id: 'outro',
-    type: 'hero',
-    title: `Congratulations on Completing "${roadmap.title}"!`,
-    contentBottom: "You've successfully navigated through the course."
+    id: roadmap.id!,
+    type: 'outro',
+    title: `Congratulations on Completing "${roadmap.title}"!`
+  });
+
+  items.push({
+    id: roadmap.id!,
+    type: 'login',
+    title: `${roadmap.title}`,
+    thumbnail: thumbnailUrl
   });
 
   console.log('Items end:', items);

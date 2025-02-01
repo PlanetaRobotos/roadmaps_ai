@@ -5,9 +5,9 @@ import CourseCarousel from '@/components/carousels/course-carousel';
 import axios from '@/lib/axios';
 import { ExplorePageModel } from '@/app/api/client';
 import { ExploreViewSkeleton } from '@/app/dashboard/roadmaps/explore/_components/sceleton';
-import { debounce } from 'lodash';
 import DashboardFooter from '@/app/dashboard/_components/dashboard-footer';
 import CategoryCarousel from '@/components/carousels/category-carousel';
+import { debounce } from 'lodash';
 
 const ExploreViewPage = () => {
   const [exploreData, setExploreData] = useState<ExplorePageModel>();

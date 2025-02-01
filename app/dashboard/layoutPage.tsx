@@ -26,12 +26,14 @@ export function LayoutPage({
         <SidebarProvider defaultOpen={user ? defaultOpen : false}>
           {user && <AppSidebar />}
           <SidebarInset>
-            <Header />
-            {children}
-            <AuthBanner />
-            <AuthDialog />
+            <div className="flex h-screen flex-col">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <AuthDialog />
+            </div>
           </SidebarInset>
         </SidebarProvider>
+        <AuthBanner />
       </KBar>
     </ProtectedRoute>
   );

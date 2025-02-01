@@ -51,34 +51,29 @@ export default function RoadmapCreatePage() {
 
   const onSubmit: SubmitHandler<RoadmapFormData> = async (data) => {
     if (!user) {
-      openAuthDialog();
-      return;
-    }
+      // openAuthDialog();
 
-    console.log(`tokens:, ${tokens}, price: ${price}`);
-    if (tokens !== -1 && tokens < price) {
-      toast.error(`You need more coins to generate this roadmap.`);
-      return;
-    }
+      const newRoadmap = await generateRoadmap(undefined);
+    } else {
+      console.log(`tokens:, ${tokens}, price: ${price}`);
+      if (tokens !== -1 && tokens < price) {
+        toast.error(`You need more coins to generate this roadmap.`);
 
-    updateTokens(tokens - price);
-    const newRoadmap = await generateRoadmap(user?.id);
-    console.log('newRoadmap:', newRoadmap);
+        router.push('/pricing');
+        return;
+      }
 
-    if (newRoadmap) {
-      await axios.post(`/v1/users/${user?.id}/roadmaps/${newRoadmap.id}`);
+      updateTokens(tokens - price);
+      const newRoadmap = await generateRoadmap(user?.id);
+      console.log('newRoadmap:', newRoadmap);
 
-      router.push(`/dashboard/roadmaps/edit/${newRoadmap.id}`);
+      if (newRoadmap) {
+        await axios.post(`/v1/users/${user?.id}/roadmaps/${newRoadmap.id}`);
+
+        router.push(`/dashboard/roadmaps/edit/${newRoadmap.id}`);
+      }
     }
   };
-  // return (
-  //   <Button
-  //     onClick={() => {
-  //       updateTokens(5);
-  //       console.log('here');
-  //     }}
-  //   />
-  // );
 
   return (
     <>

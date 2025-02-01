@@ -10,7 +10,7 @@ interface ScrollablePageProps {
 const ScrollablePage = ({
   children,
   className = '',
-  maxHeight = 'h-screen',
+  maxHeight = 'h-[calc(100vh-58px)]',
   direction = 'vertical'
 }: ScrollablePageProps) => {
   const getScrollClass = () => {
