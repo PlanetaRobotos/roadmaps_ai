@@ -4,13 +4,16 @@ import { company } from '@/constants/data';
 
 export const metadata = {
   title: company.name,
-  description: `${company.name} - is the easiest way to create and deliver mini-courses & micro-learning materials. Save time with the AI Course Creator.
-`,
+  description: `${company.name} - is the easiest way to create and deliver mini-courses & micro-learning materials. Save time with the AI Course Creator.`,
+  metadataBase: new URL('https://levenue.tech'),
+  alternates: {
+    canonical: '/'
+  },
   openGraph: {
     type: 'website',
     url: `${CLIENT_URL}`,
     title: company.name,
-    description: 'Free Shadcn landing page for developers',
+    description: `Design and publish your own mini-courses effortlessly with ${company.name}.`,
     images: [
       {
         url: `/images/default-course-og.png`,
@@ -26,6 +29,17 @@ export const metadata = {
     title: company.name,
     description: `Design and publish your own mini-courses effortlessly with our ${company.name} platform.`,
     images: [`/images/default-course-og.png`]
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1
+    }
   }
 };
 
