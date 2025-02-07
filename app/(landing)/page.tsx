@@ -4,7 +4,8 @@ import { company } from '@/constants/data';
 
 export const metadata = {
   title: company.name,
-  description: `${company.name} - Landing page`,
+  description: `${company.name} - is the easiest way to create and deliver mini-courses & micro-learning materials. Save time with the AI Course Creator.
+`,
   openGraph: {
     type: 'website',
     url: `${CLIENT_URL}`,
