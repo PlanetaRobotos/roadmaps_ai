@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function DashboardPage() {
   return (
-    <ScrollablePage maxHeight="h-screen" direction="vertical">
+    <ScrollablePage>
       <DashboardView />
     </ScrollablePage>
   );

@@ -1,25 +1,26 @@
 'use client';
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { IRoadmapModel } from '@/app/api/client';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import TimerDial from '@/components/ui/timer-dial';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
-  DEFAULT_COLORS,
   extractColors,
   getRGBA,
   isLightColor,
-  RGB
+  RGB,
+  DEFAULT_COLORS
 } from '@/utils/colors';
+import Image from 'next/image';
 import { getImageUrl } from '@/lib/utils';
-import { AuthContext } from '@/context/auth-context';
-import { useRouter } from 'next/navigation';
+import { Clock } from 'lucide-react';
 
 const CourseCard2 = (props: IRoadmapModel) => {
-  const router = useRouter();
   const {
     id,
     tags,
@@ -40,20 +41,16 @@ const CourseCard2 = (props: IRoadmapModel) => {
     isLoading: true,
     error: false
   });
-  const [finalThumbnailUrl, setFinalThumbnailUrl] = useState<string | null>('');
-  const { user, openAuthDialog } = useContext(AuthContext);
+
+  let finalThumbnailUrl = thumbnailUrl;
+  if (thumbnailUrl) {
+    finalThumbnailUrl = getImageUrl(thumbnailUrl);
+  } else {
+    const randomIndex = Math.floor(Math.random() * 11) + 1;
+    finalThumbnailUrl = `/images/roadmaps/roadmap-thumbnail-${randomIndex}.png`;
+  }
 
   useEffect(() => {
-    if (thumbnailUrl) {
-      setFinalThumbnailUrl(getImageUrl(thumbnailUrl));
-    } else {
-      setFinalThumbnailUrl(`/images/roadmaps/roadmap-thumbnail-1.png`);
-
-      // const result = axios.put(`/v1/roadmaps/${id}/set-default-thumbnail`, {
-      //   thumbnailUrl: finalThumbnailUrl
-      // });
-    }
-
     const loadColors = async () => {
       try {
         const extractedColors = await extractColors(finalThumbnailUrl!);
@@ -124,16 +121,8 @@ const CourseCard2 = (props: IRoadmapModel) => {
     );
   }
 
-  const handleClick = () => {
-    // if (user) {
-    router.push(`/dashboard/roadmaps/${id}`);
-    // } else {
-    //   openAuthDialog();
-    // }
-  };
-
   return (
-    <div onClick={handleClick} className="cursor-pointer">
+    <Link href={`/dashboard/roadmaps/${id}`}>
       <Card className="group relative h-80 w-full overflow-hidden rounded-lg bg-card transition-all duration-200 hover:scale-[1.02] hover:shadow-xl">
         {/* Image Container */}
         <div className="relative aspect-square w-full overflow-hidden bg-muted">
@@ -203,7 +192,7 @@ const CourseCard2 = (props: IRoadmapModel) => {
           </p>
         </div>
       </Card>
-    </div>
+    </Link>
   );
 };
 

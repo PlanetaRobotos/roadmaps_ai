@@ -25,7 +25,11 @@ const formSchema = z.object({
 
 type UserFormValue = z.infer<typeof formSchema>;
 
-const MagicLinkLogin: React.FC = () => {
+interface MagicLinkLoginProps {
+  appSumoKey: string | null;
+}
+
+const MagicLinkLogin: React.FC<MagicLinkLoginProps> = ({ appSumoKey }) => {
   const [loading, setLoading] = useState(false);
   const defaultValues = {
     email: 'demo@gmail.com'
@@ -52,6 +56,14 @@ const MagicLinkLogin: React.FC = () => {
         }
       );
 
+      // If AppSumo key exists, complete AppSumo registration
+      if (appSumoKey) {
+        await axios.post(`${API_BASE_URL}/v1/license/complete-registration`, {
+          email: data.email,
+          tempKey: appSumoKey
+        });
+      }
+
       const email = redirectLinkResp.data;
       router.push(
         `/verify-request?email=${userResp.data.email}&search=${email}`
@@ -75,7 +87,9 @@ const MagicLinkLogin: React.FC = () => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>
+                {appSumoKey ? 'Complete Your AppSumo Registration' : 'Email'}
+              </FormLabel>
               <FormControl>
                 <Input
                   type="email"

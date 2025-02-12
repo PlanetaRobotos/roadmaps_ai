@@ -7,9 +7,13 @@ import { API_BASE_URL, CLIENT_URL } from '@/config/apiConfig';
 
 interface SignInParams {
   redirectPath?: string | null;
+  appSumoKey?: string | null;
 }
 
-export default function GoogleSignInButton({ redirectPath }: SignInParams) {
+export default function GoogleSignInButton({
+  redirectPath,
+  appSumoKey
+}: SignInParams) {
   const handleGoogleLogin = async () => {
     try {
       window.location.href = `${API_BASE_URL}/v1/auth/external-login/google?returnUrl=${CLIENT_URL}${
