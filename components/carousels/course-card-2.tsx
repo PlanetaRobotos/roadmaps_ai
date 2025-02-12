@@ -46,8 +46,8 @@ const CourseCard2 = (props: IRoadmapModel) => {
   if (thumbnailUrl) {
     finalThumbnailUrl = getImageUrl(thumbnailUrl);
   } else {
-    const randomIndex = Math.floor(Math.random() * 11) + 1;
-    finalThumbnailUrl = `/images/roadmaps/roadmap-thumbnail-${randomIndex}.png`;
+    // const randomIndex = Math.floor(Math.random() * 11) + 1;
+    finalThumbnailUrl = `/images/roadmaps/roadmap-thumbnail-1.png`;
   }
 
   useEffect(() => {
