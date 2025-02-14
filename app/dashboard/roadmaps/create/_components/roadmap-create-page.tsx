@@ -135,7 +135,7 @@ export default function RoadmapCreatePage() {
                       className="w-18 rounded-full"
                       aria-label="Quick Start - 15 minutes"
                     >
-                      <span className="text-lg font-semibold">15m</span>
+                      <span className="text-lg font-semibold">Express</span>
                     </Button>
 
                     {/* 30 Minutes Button */}
@@ -149,7 +149,7 @@ export default function RoadmapCreatePage() {
                       className="w-18 rounded-full"
                       aria-label="Overview - 30 minutes"
                     >
-                      <span className="text-lg font-semibold">30m</span>
+                      <span className="text-lg font-semibold">Voyage</span>
                     </Button>
 
                     {/* 1 Hour Button */}
@@ -163,7 +163,7 @@ export default function RoadmapCreatePage() {
                       className="w-18 rounded-full"
                       aria-label="Deep Dive - 1 hour"
                     >
-                      <span className="text-lg font-semibold">1h</span>
+                      <span className="text-lg font-semibold">Excellence</span>
                     </Button>
                   </div>
                   <div className="mt-2 flex justify-center opacity-50">

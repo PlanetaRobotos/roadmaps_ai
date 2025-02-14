@@ -2,14 +2,29 @@
 import { Badge } from '@/components/ui/badge';
 import { Clock } from 'lucide-react';
 
-const TimerDial = ({ duration }: { duration: number }) => {
+type Duration = 15 | 30 | 60;
+
+const getDurationText = (duration: Duration): string => {
+  switch (duration) {
+    case 15:
+      return 'Express';
+    case 30:
+      return 'Voyage';
+    case 60:
+      return 'Excellence';
+    default:
+      return `${duration}m`;
+  }
+};
+
+const TimerDial = ({ duration }: { duration: Duration }) => {
   return (
     <Badge
       variant="secondary"
       className="flex items-center gap-1.5 bg-black/50 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm"
     >
       <Clock className="h-3 w-3" />
-      {duration}m
+      {getDurationText(duration)}
     </Badge>
   );
 };

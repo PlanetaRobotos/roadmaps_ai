@@ -53,8 +53,7 @@ export const useRoadmapStore = create<RoadmapState>((set, get) => ({
         estimatedDuration: selectedTime,
         authorId: userId,
         price: price,
-        isTest: isTest,
-        withThumbnail: false
+        isTest: isTest
       });
 
       const roadmapModel = await axios.post('v1/roadmaps', requestBody);
