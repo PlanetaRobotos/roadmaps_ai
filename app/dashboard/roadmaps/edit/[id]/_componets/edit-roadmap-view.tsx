@@ -62,6 +62,10 @@ export default function EditRoadmapView({ roadmapId }: EditRoadmapViewProps) {
     setEditingState(EditingState.Idle);
   };
 
+  const handlePreview = () => {
+    router.push(`/dashboard/roadmaps/${roadmapId}`);
+  };
+
   // Fetch roadmap data
   useEffect(() => {
     const fetchData = async () => {
@@ -126,11 +130,19 @@ export default function EditRoadmapView({ roadmapId }: EditRoadmapViewProps) {
                   <Button
                     type="button"
                     variant="secondary"
-                    onClick={() => setIsDialogOpen(true)}
+                    onClick={handlePreview}
                     className="w-1/3 px-6 py-3"
                   >
-                    Copy Link
+                    Preview
                   </Button>
+                  {/*<Button*/}
+                  {/*  type="button"*/}
+                  {/*  variant="secondary"*/}
+                  {/*  onClick={() => setIsDialogOpen(true)}*/}
+                  {/*  className="w-1/5 px-6 py-3"*/}
+                  {/*>*/}
+                  {/*  Copy Link*/}
+                  {/*</Button>*/}
                   <Button
                     type="button"
                     variant="default"

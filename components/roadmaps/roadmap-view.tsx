@@ -30,6 +30,7 @@ import {
 import { useEditStore } from '@/store/editStore';
 import { EditingState } from '@/types/editState';
 import { EmblaOptionsType } from 'embla-carousel';
+import { Button } from '@/components/ui/button';
 
 interface RoadmapViewProps {
   roadmapItems: ClientRoadmap;

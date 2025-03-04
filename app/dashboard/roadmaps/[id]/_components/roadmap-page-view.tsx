@@ -15,6 +15,7 @@ import ShareButton from '@/app/dashboard/roadmaps/_components/share-button';
 import Loading from '@/app/dashboard/_components/loading';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { UserModel } from '@/app/api/client';
+import { useRouter } from 'next/navigation';
 
 interface RoadmapViewPageProps {
   roadmapId: string;
@@ -22,6 +23,7 @@ interface RoadmapViewPageProps {
 
 export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
   const { user, openAuthDialog } = useContext(AuthContext);
+  const router = useRouter();
 
   const {
     isLiked,
@@ -49,6 +51,10 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
       return;
     }
     await toggleSave(roadmapId, user.id!);
+  };
+
+  const editCourse = () => {
+    router.push(`/dashboard/roadmaps/edit/${roadmap?.id}`);
   };
 
   useEffect(() => {
@@ -105,9 +111,18 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
         <CardHeader className="relative w-full flex-1">
           <RoadmapView
             roadmapItems={roadmap}
-            isEditable={false}
+            isEditable={true}
             onAuthorizeClick={() => openAuthDialog()}
           />
+          {
+            <Button
+              variant="secondary"
+              className="mx-auto w-48"
+              onClick={editCourse}
+            >
+              Edit Course
+            </Button>
+          }
         </CardHeader>
         <CardContent className="bottom-0 flex w-full flex-col space-y-1 px-4 py-4">
           <div className="flex items-center gap-2 px-1 text-left text-sm">
