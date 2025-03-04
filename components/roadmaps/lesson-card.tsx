@@ -155,7 +155,7 @@ const LessonCard: React.FC<LessonCardProps> = ({
             <div className="prose prose-sm h-full max-w-none p-2 px-2 leading-relaxed sm:prose-base lg:prose-lg xs:px-6">
               {editingState === EditingState.Idle && (
                 <>
-                  {isPaidRole && isEditable && (
+                  {isEditable && (
                     <TipButton
                       disabled={editingState !== EditingState.Idle}
                       onClick={handleEditClick}
