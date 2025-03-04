@@ -35,6 +35,8 @@ const LessonCard: React.FC<LessonCardProps> = ({
     }
   };
 
+  console.log('isEditable lesson: ', isEditable);
+
   const wasEditingRef = useRef<EditingState>(editingState);
 
   useEffect(() => {
@@ -150,7 +152,7 @@ const LessonCard: React.FC<LessonCardProps> = ({
 
         <ScrollArea className="w-full flex-1 overflow-auto">
           <CardContent className="flex h-full flex-grow flex-col justify-between px-0">
-            <div className="sm:prose-base lg:prose-lg prose prose-sm h-full max-w-none p-2 px-2 leading-relaxed xs:px-6">
+            <div className="prose prose-sm h-full max-w-none p-2 px-2 leading-relaxed sm:prose-base lg:prose-lg xs:px-6">
               {editingState === EditingState.Idle && (
                 <>
                   {isPaidRole && isEditable && (
@@ -164,7 +166,7 @@ const LessonCard: React.FC<LessonCardProps> = ({
                     dangerouslySetInnerHTML={{
                       __html: lesson.content
                     }}
-                    className="sm:prose-base lg:prose-lg prose prose-sm mt-4"
+                    className="prose prose-sm mt-4 sm:prose-base lg:prose-lg"
                   />
 
                   <ResourcesList />

@@ -18,7 +18,8 @@ interface AuthContextType {
   handleLogin: () => void;
   handleSignUp: () => void;
   isPaidRole: boolean;
-  isStandardRole: boolean;
+  isCreatorRole: boolean;
+  isStudioRole: boolean;
   isEnterpriseRole: boolean;
 }
 
@@ -32,7 +33,8 @@ export const AuthContext = createContext<AuthContextType>({
   handleLogin: () => {},
   handleSignUp: () => {},
   isPaidRole: false,
-  isStandardRole: false,
+  isCreatorRole: false,
+  isStudioRole: false,
   isEnterpriseRole: false
 });
 
@@ -47,7 +49,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isAuthDialogOpen, setIsAuthDialogOpen] = useState<boolean>(false);
 
   const [isPaidRole, setIsPaidRole] = useState<boolean>(false);
-  const [isStandardRole, setStandardRole] = useState<boolean>(false);
+  const [isCreatorRole, setCreatorRole] = useState<boolean>(false);
+  const [isStudioRole, setIsStudioRole] = useState<boolean>(false);
   const [isEnterpriseRole, setIsEnterpriseRole] = useState<boolean>(false);
 
   const router = useRouter();
@@ -73,8 +76,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       const roles = response.data.roles;
       console.log('Roles:', response.data.roles);
 
-      setIsPaidRole(roles?.includes('standard' || 'enterprise'));
-      setStandardRole(!!roles?.includes('standard'));
+      setIsPaidRole(
+        roles?.includes('creator' || 'studio' || 'AppSumo_1' || 'enterprise')
+      );
+      setCreatorRole(!!roles?.includes('creator'));
+      setIsStudioRole(!!roles?.includes('studio'));
       setIsEnterpriseRole(!!roles?.includes('enterprise'));
     } catch (error) {
       console.error('Error fetching roles:', error);
@@ -178,7 +184,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         handleLogin,
         handleSignUp,
         isPaidRole,
-        isStandardRole,
+        isCreatorRole,
+        isStudioRole,
         isEnterpriseRole
       }}
     >
