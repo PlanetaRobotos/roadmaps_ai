@@ -111,7 +111,7 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
         <CardHeader className="relative w-full flex-1">
           <RoadmapView
             roadmapItems={roadmap}
-            isEditable={true}
+            isEditable={false}
             onAuthorizeClick={() => openAuthDialog()}
           />
           {

@@ -68,6 +68,8 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
     error: false
   });
 
+  console.log('isEditable roadmap-view', isEditable);
+
   useEffect(() => {
     const loadColors = async () => {
       try {
