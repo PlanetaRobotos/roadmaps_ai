@@ -2,9 +2,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Clock } from 'lucide-react';
 
-type Duration = 15 | 30 | 60;
-
-const getDurationText = (duration: Duration): string => {
+const getDurationText = (duration: number): string => {
   switch (duration) {
     case 15:
       return 'Express';
@@ -17,7 +15,7 @@ const getDurationText = (duration: Duration): string => {
   }
 };
 
-const TimerDial = ({ duration }: { duration: Duration }) => {
+const TimerDial = ({ duration }: { duration: number }) => {
   return (
     <Badge
       variant="secondary"
