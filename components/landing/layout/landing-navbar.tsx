@@ -22,6 +22,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { company } from '@/constants/data';
+import { useRouter } from 'next/navigation';
 
 // import { ToggleTheme } from "./toogle-theme";
 
@@ -73,6 +74,14 @@ const featureList: FeatureProps[] = [
 
 export const LandingNavbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const router = useRouter();
+
+  const handleSignIn = () => {
+    console.log('Sign in');
+
+    router.push('/signin');
+  };
+
   return (
     <header className="sticky top-5 z-40 mx-auto flex w-[90%] items-center justify-between rounded-2xl border border-secondary bg-card bg-opacity-15 p-2 shadow-inner md:w-[70%] lg:w-[75%] lg:max-w-screen-xl">
       <Link href="/" className="flex items-center text-lg font-bold">
@@ -134,7 +143,9 @@ export const LandingNavbar = () => {
             <SheetFooter className="flex-col items-start justify-start sm:flex-col">
               <Separator className="mb-2" />
 
-              {/*<ToggleTheme />*/}
+              <div className="">
+                <Button onClick={handleSignIn}>Sign In</Button>
+              </div>
             </SheetFooter>
           </SheetContent>
         </Sheet>
@@ -151,23 +162,14 @@ export const LandingNavbar = () => {
                 </Link>
               </NavigationMenuLink>
             ))}
+            {/*Add sign in button here*/}
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
 
-      {/*<div className="hidden lg:flex">*/}
-      {/*<ToggleTheme />*/}
-
-      {/*<Button asChild size="sm" variant="ghost" aria-label="View on GitHub">*/}
-      {/*  <Link*/}
-      {/*    aria-label="View on GitHub"*/}
-      {/*    href="https://github.com/nobruf/shadcn-landing-page.git"*/}
-      {/*    target="_blank"*/}
-      {/*  >*/}
-      {/*    <Github className="size-5" />*/}
-      {/*  </Link>*/}
-      {/*</Button>*/}
-      {/*</div>*/}
+      <div className="mr-5 hidden lg:flex">
+        <Button onClick={handleSignIn}>Sign In</Button>
+      </div>
     </header>
   );
 };

@@ -14,18 +14,18 @@ export const HeroSection = () => {
     <section className="container relative w-full">
       <div className="mx-auto grid place-items-center gap-8 py-20 md:py-32 lg:max-w-screen-xl">
         <div className="space-y-8 text-center">
-          <Badge variant="outline" className="py-2 text-sm">
-            <span className="mr-2 text-primary">
-              <Image
-                className="rounded-full"
-                src="/images/logo.png"
-                alt="Logo"
-                width={28}
-                height={28}
-              />
-            </span>
-            <span> By Pavlo Myrskyi </span>
-          </Badge>
+          {/*<Badge variant="outline" className="py-2 text-sm">*/}
+          {/*  <span className="mr-2 text-primary">*/}
+          {/*    <Image*/}
+          {/*      className="rounded-full"*/}
+          {/*      src="/images/logo.png"*/}
+          {/*      alt="Logo"*/}
+          {/*      width={28}*/}
+          {/*      height={28}*/}
+          {/*    />*/}
+          {/*  </span>*/}
+          {/*  <span> By Pavlo Myrskyi </span>*/}
+          {/*</Badge>*/}
 
           <div className="mx-auto text-center">
             <h1 className="text-5xl font-black tracking-tight lg:text-6xl lg:text-[4rem] lg:tracking-[-0.035em] ">
