@@ -4,7 +4,8 @@ export const AnalyticsEvents = {
     SIGN_IN: 'sign_in',
     SIGN_OUT: 'sign_out',
     SIGN_UP: 'sign_up',
-    UPDATE_PROFILE: 'update_profile'
+    UPDATE_PROFILE: 'update_profile',
+    SIGN_IN_FROM_LOGIN_CARD: 'sign_in_from_login_card'
   },
 
   // Payment Events

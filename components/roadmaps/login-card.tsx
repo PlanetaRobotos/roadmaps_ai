@@ -9,6 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
+import { sendGAEvent } from '@next/third-parties/google';
+import { AnalyticsEvents } from '@/constants/analytics';
 
 interface LoginCardProps {
   props: LoginCard;
@@ -19,8 +21,12 @@ const LoginCard: React.FC<LoginCardProps> = ({ props }) => {
   const { title, thumbnail: thumbnailUrl } = props;
 
   const onLoginClick = () => {
-    console.log('Login clicked');
-    router.push('/signin');
+    console.log('Login clicked in LoginCard');
+    router.push(`/signin?redirect=/dashboard/roadmaps/${props.id}`);
+
+    sendGAEvent('event', AnalyticsEvents.AUTH.SIGN_IN_FROM_LOGIN_CARD, {
+      value: props.id
+    });
   };
 
   return (
