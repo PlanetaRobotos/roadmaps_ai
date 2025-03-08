@@ -263,16 +263,94 @@ export class AuthClient {
     return Promise.resolve<string>(null as any);
   }
 
+  passwordLogin(body: PasswordLoginRequest | undefined): Promise<void> {
+    let url_ = this.baseUrl + '/v1/auth/password-login';
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(body);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processPasswordLogin(_response);
+    });
+  }
+
+  protected processPasswordLogin(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+
   /**
    * @param token (optional)
+   * @param returnUrl (optional)
    * @return OK
    */
-  verifyEmail(token: string | undefined): Promise<string> {
+  verifyEmail(
+    token: string | undefined,
+    returnUrl: string | undefined
+  ): Promise<VerifyEmailRequest> {
     let url_ = this.baseUrl + '/v1/auth/VerifyEmail?';
     if (token === null)
       throw new Error("The parameter 'token' cannot be null.");
     else if (token !== undefined)
       url_ += 'token=' + encodeURIComponent('' + token) + '&';
+    if (returnUrl === null)
+      throw new Error("The parameter 'returnUrl' cannot be null.");
+    else if (returnUrl !== undefined)
+      url_ += 'returnUrl=' + encodeURIComponent('' + returnUrl) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -287,7 +365,9 @@ export class AuthClient {
     });
   }
 
-  protected processVerifyEmail(response: Response): Promise<string> {
+  protected processVerifyEmail(
+    response: Response
+  ): Promise<VerifyEmailRequest> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -332,8 +412,7 @@ export class AuthClient {
           _responseText === ''
             ? null
             : JSON.parse(_responseText, this.jsonParseReviver);
-        result200 = resultData200 !== undefined ? resultData200 : <any>null;
-
+        result200 = VerifyEmailRequest.fromJS(resultData200);
         return result200;
       });
     } else if (status !== 200 && status !== 204) {
@@ -346,7 +425,7 @@ export class AuthClient {
         );
       });
     }
-    return Promise.resolve<string>(null as any);
+    return Promise.resolve<VerifyEmailRequest>(null as any);
   }
 
   initiateGoogleLogin(returnUrl: string | undefined): Promise<void> {
@@ -2292,6 +2371,233 @@ export class LessonsClient {
       });
     }
     return Promise.resolve<LessonModel>(null as any);
+  }
+}
+
+export class LicenseClient {
+  private http: {
+    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
+  };
+  private baseUrl: string;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+    undefined;
+
+  constructor(
+    baseUrl?: string,
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }
+  ) {
+    this.http = http ? http : (window as any);
+    this.baseUrl = baseUrl ?? '';
+  }
+
+  handleOAuthRedirect(code: string | undefined): Promise<void> {
+    let url_ = this.baseUrl + '/v1/license/oauth/redirect?';
+    if (code === null) throw new Error("The parameter 'code' cannot be null.");
+    else if (code !== undefined)
+      url_ += 'code=' + encodeURIComponent('' + code) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {}
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processHandleOAuthRedirect(_response);
+    });
+  }
+
+  protected processHandleOAuthRedirect(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+
+  completeRegistration(
+    body: CompleteRegistrationRequest | undefined
+  ): Promise<void> {
+    let url_ = this.baseUrl + '/v1/license/complete-registration';
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(body);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processCompleteRegistration(_response);
+    });
+  }
+
+  protected processCompleteRegistration(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+
+  handleWebhook(body: AppSumoWebhookRequest | undefined): Promise<void> {
+    let url_ = this.baseUrl + '/v1/license/appsumo/webhook';
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(body);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processHandleWebhook(_response);
+    });
+  }
+
+  protected processHandleWebhook(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 400) {
+      return response.text().then((_responseText) => {
+        let result400: any = null;
+        let resultData400 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result400 = ErrorDto.fromJS(resultData400);
+        return throwException(
+          'Bad Request',
+          status,
+          _responseText,
+          _headers,
+          result400
+        );
+      });
+    } else if (status === 401) {
+      return response.text().then((_responseText) => {
+        let result401: any = null;
+        let resultData401 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result401 = ErrorDto.fromJS(resultData401);
+        return throwException(
+          'Unauthorized',
+          status,
+          _responseText,
+          _headers,
+          result401
+        );
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers
+        );
+      });
+    }
+    return Promise.resolve<void>(null as any);
   }
 }
 
@@ -5859,6 +6165,80 @@ export interface IAddCategoryRelationRequest {
   order?: number;
 }
 
+export class AppSumoWebhookRequest implements IAppSumoWebhookRequest {
+  license_key?: string;
+  prev_license_key?: string | undefined;
+  plan_id?: string;
+  event?: string;
+  license_status?: string;
+  event_timestamp?: number;
+  created_at?: number;
+  tier?: number | undefined;
+  test?: boolean;
+  extra?: WebhookExtra;
+
+  constructor(data?: IAppSumoWebhookRequest) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.license_key = _data['license_key'];
+      this.prev_license_key = _data['prev_license_key'];
+      this.plan_id = _data['plan_id'];
+      this.event = _data['event'];
+      this.license_status = _data['license_status'];
+      this.event_timestamp = _data['event_timestamp'];
+      this.created_at = _data['created_at'];
+      this.tier = _data['tier'];
+      this.test = _data['test'];
+      this.extra = _data['extra']
+        ? WebhookExtra.fromJS(_data['extra'])
+        : <any>undefined;
+    }
+  }
+
+  static fromJS(data: any): AppSumoWebhookRequest {
+    data = typeof data === 'object' ? data : {};
+    let result = new AppSumoWebhookRequest();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['license_key'] = this.license_key;
+    data['prev_license_key'] = this.prev_license_key;
+    data['plan_id'] = this.plan_id;
+    data['event'] = this.event;
+    data['license_status'] = this.license_status;
+    data['event_timestamp'] = this.event_timestamp;
+    data['created_at'] = this.created_at;
+    data['tier'] = this.tier;
+    data['test'] = this.test;
+    data['extra'] = this.extra ? this.extra.toJSON() : <any>undefined;
+    return data;
+  }
+}
+
+export interface IAppSumoWebhookRequest {
+  license_key?: string;
+  prev_license_key?: string | undefined;
+  plan_id?: string;
+  event?: string;
+  license_status?: string;
+  event_timestamp?: number;
+  created_at?: number;
+  tier?: number | undefined;
+  test?: boolean;
+  extra?: WebhookExtra;
+}
+
 export class BuyPlanRequest implements IBuyPlanRequest {
   plan?: string;
 
@@ -6220,6 +6600,48 @@ export interface ICategoryUpdateModel {
   description?: string | undefined;
   colorHex?: string;
   order?: number;
+}
+
+export class CompleteRegistrationRequest
+  implements ICompleteRegistrationRequest
+{
+  licenseKey?: string;
+  email?: string;
+
+  constructor(data?: ICompleteRegistrationRequest) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.licenseKey = _data['licenseKey'];
+      this.email = _data['email'];
+    }
+  }
+
+  static fromJS(data: any): CompleteRegistrationRequest {
+    data = typeof data === 'object' ? data : {};
+    let result = new CompleteRegistrationRequest();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['licenseKey'] = this.licenseKey;
+    data['email'] = this.email;
+    return data;
+  }
+}
+
+export interface ICompleteRegistrationRequest {
+  licenseKey?: string;
+  email?: string;
 }
 
 export class CourseTypeCreateModel implements ICourseTypeCreateModel {
@@ -6927,6 +7349,46 @@ export interface ILessonUpdateRequest {
   lessonCompleted?: boolean | undefined;
 }
 
+export class PasswordLoginRequest implements IPasswordLoginRequest {
+  email?: string;
+  password?: string;
+
+  constructor(data?: IPasswordLoginRequest) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.email = _data['email'];
+      this.password = _data['password'];
+    }
+  }
+
+  static fromJS(data: any): PasswordLoginRequest {
+    data = typeof data === 'object' ? data : {};
+    let result = new PasswordLoginRequest();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['email'] = this.email;
+    data['password'] = this.password;
+    return data;
+  }
+}
+
+export interface IPasswordLoginRequest {
+  email?: string;
+  password?: string;
+}
+
 export class PatchOperation implements IPatchOperation {
   op?: PatchOperationOp;
   path?: string;
@@ -7225,7 +7687,6 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
   thumbnailUrl?: string | undefined;
   price?: number;
   isTest?: boolean;
-  withThumbnail?: boolean;
 
   constructor(data?: IRoadmapCreateRequest) {
     if (data) {
@@ -7256,7 +7717,6 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
       this.thumbnailUrl = _data['thumbnailUrl'];
       this.price = _data['price'];
       this.isTest = _data['isTest'];
-      this.withThumbnail = _data['withThumbnail'];
     }
   }
 
@@ -7286,7 +7746,6 @@ export class RoadmapCreateRequest implements IRoadmapCreateRequest {
     data['thumbnailUrl'] = this.thumbnailUrl;
     data['price'] = this.price;
     data['isTest'] = this.isTest;
-    data['withThumbnail'] = this.withThumbnail;
     return data;
   }
 }
@@ -7303,7 +7762,6 @@ export interface IRoadmapCreateRequest {
   thumbnailUrl?: string | undefined;
   price?: number;
   isTest?: boolean;
-  withThumbnail?: boolean;
 }
 
 export class RoadmapModel implements IRoadmapModel {
@@ -7594,6 +8052,7 @@ export interface IRoadmapUpdateRequest {
 
 export class SendMagicLinkRequest implements ISendMagicLinkRequest {
   userId?: number;
+  returnUrl?: string;
 
   constructor(data?: ISendMagicLinkRequest) {
     if (data) {
@@ -7607,6 +8066,7 @@ export class SendMagicLinkRequest implements ISendMagicLinkRequest {
   init(_data?: any) {
     if (_data) {
       this.userId = _data['userId'];
+      this.returnUrl = _data['returnUrl'];
     }
   }
 
@@ -7620,12 +8080,14 @@ export class SendMagicLinkRequest implements ISendMagicLinkRequest {
   toJSON(data?: any) {
     data = typeof data === 'object' ? data : {};
     data['userId'] = this.userId;
+    data['returnUrl'] = this.returnUrl;
     return data;
   }
 }
 
 export interface ISendMagicLinkRequest {
   userId?: number;
+  returnUrl?: string;
 }
 
 export class ServerInfoModel implements IServerInfoModel {
@@ -8238,6 +8700,82 @@ export interface IUserUpdateRequest {
   id?: number;
   name?: string | undefined;
   bio?: string | undefined;
+}
+
+export class VerifyEmailRequest implements IVerifyEmailRequest {
+  token?: string;
+  returnUrl?: string | undefined;
+
+  constructor(data?: IVerifyEmailRequest) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.token = _data['token'];
+      this.returnUrl = _data['returnUrl'];
+    }
+  }
+
+  static fromJS(data: any): VerifyEmailRequest {
+    data = typeof data === 'object' ? data : {};
+    let result = new VerifyEmailRequest();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['token'] = this.token;
+    data['returnUrl'] = this.returnUrl;
+    return data;
+  }
+}
+
+export interface IVerifyEmailRequest {
+  token?: string;
+  returnUrl?: string | undefined;
+}
+
+export class WebhookExtra implements IWebhookExtra {
+  reason?: string | undefined;
+
+  constructor(data?: IWebhookExtra) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.reason = _data['reason'];
+    }
+  }
+
+  static fromJS(data: any): WebhookExtra {
+    data = typeof data === 'object' ? data : {};
+    let result = new WebhookExtra();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['reason'] = this.reason;
+    return data;
+  }
+}
+
+export interface IWebhookExtra {
+  reason?: string | undefined;
 }
 
 export class WelcomePageModel implements IWelcomePageModel {

@@ -75,6 +75,8 @@ export default function RoadmapViewPage({ roadmapId }: RoadmapViewPageProps) {
           );
           console.log('author', authorResp);
           setAuthor(authorResp?.data);
+
+          console.log('author name', author?.name);
         }
 
         if (user) {

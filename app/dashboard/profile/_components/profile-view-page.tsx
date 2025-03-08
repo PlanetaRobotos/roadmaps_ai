@@ -25,6 +25,7 @@ import axios from '@/lib/axios';
 import { capitalize } from '@/utils/shared';
 import { API_BASE_URL } from '@/config/apiConfig';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 export default function ProfileViewPage() {
   const router = useRouter();
@@ -63,6 +64,8 @@ export default function ProfileViewPage() {
         bio: editedBio
       });
       setIsEditing(false);
+
+      toast.success('Profile updated successfully!');
     } catch (error) {
       console.error('Error updating profile:', error);
     } finally {
