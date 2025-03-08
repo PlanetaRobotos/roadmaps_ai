@@ -55,7 +55,7 @@ export default function UserAuthForm() {
             </div>
           </div>
 
-          <MagicLinkLogin appSumoKey={appSumoKey} />
+          <MagicLinkLogin appSumoKey={appSumoKey} redirectPath={redirectPath} />
         </>
       )}
     </>

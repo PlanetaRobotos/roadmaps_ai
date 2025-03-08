@@ -27,9 +27,13 @@ type UserFormValue = z.infer<typeof formSchema>;
 
 interface MagicLinkLoginProps {
   appSumoKey: string | null;
+  redirectPath?: string | null;
 }
 
-const MagicLinkLogin: React.FC<MagicLinkLoginProps> = ({ appSumoKey }) => {
+const MagicLinkLogin: React.FC<MagicLinkLoginProps> = ({
+  redirectPath,
+  appSumoKey
+}) => {
   const [loading, setLoading] = useState(false);
   const defaultValues = {
     email: 'demo@gmail.com'
@@ -44,6 +48,8 @@ const MagicLinkLogin: React.FC<MagicLinkLoginProps> = ({ appSumoKey }) => {
   const onSubmit = async (data: UserFormValue) => {
     setLoading(true);
     try {
+      console.log('redirectPath:', redirectPath);
+
       const userResp = await axios.post(`${API_BASE_URL}/v1/users`, {
         email: data.email
       });
@@ -52,7 +58,8 @@ const MagicLinkLogin: React.FC<MagicLinkLoginProps> = ({ appSumoKey }) => {
       const redirectLinkResp = await axios.post(
         `${API_BASE_URL}/v1/auth/send-magic-link`,
         {
-          userId: userResp.data.id
+          userId: userResp.data.id,
+          returnUrl: redirectPath
         }
       );
 

@@ -142,15 +142,33 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({
   }, [handleKeyDown]);
 
   useEffect(() => {
-    setDisplayCards(
-      user
-        ? roadmapItems.cards.slice(0, -1)
-        : [
-            ...roadmapItems.cards.slice(0, 4),
-            roadmapItems.cards[roadmapItems.cards.length - 1]
-          ]
-    );
-    setCount(roadmapItems.cards.length - 1);
+    if (!roadmapItems?.cards?.length) return;
+
+    let cardsToSequence: RoadmapCard[];
+
+    if (user) {
+      // For logged-in users, exclude the outro card
+      cardsToSequence = roadmapItems.cards.slice(0, -1);
+    } else {
+      // For guests, take the first four cards and later append the outro
+      cardsToSequence = roadmapItems.cards.slice(0, 4);
+    }
+
+    // Reorder cards so that lessons come before quizzes.
+    // This simple sort only swaps lesson and quiz positions if necessary.
+    const reorderedCards = [...cardsToSequence].sort((a, b) => {
+      if (a.type === 'lesson' && b.type === 'quiz') return -1;
+      if (a.type === 'quiz' && b.type === 'lesson') return 1;
+      return 0;
+    });
+
+    // For non-logged in users, add the outro card at the end.
+    if (!user) {
+      reorderedCards.push(roadmapItems.cards[roadmapItems.cards.length - 1]);
+    }
+
+    setDisplayCards(reorderedCards);
+    setCount(reorderedCards.length);
   }, [roadmapItems.cards, user]);
 
   useEffect(() => {

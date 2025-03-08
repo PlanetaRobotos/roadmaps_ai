@@ -16,7 +16,7 @@ export default function GoogleSignInButton({
 }: SignInParams) {
   const handleGoogleLogin = async () => {
     try {
-      window.location.href = `${API_BASE_URL}/v1/auth/external-login/google?returnUrl=${CLIENT_URL}${
+      window.location.href = `${API_BASE_URL}/v1/auth/external-login/google?returnUrl=${
         redirectPath || ''
       }`;
     } catch (error: any) {
