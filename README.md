@@ -6,7 +6,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-06B6D4?logo=tailwind-css)](https://tailwindcss.com/)
 [![shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-Latest-000000)](https://ui.shadcn.com/)
 
-![App Preview](images/full_shorten_big.gif)
+![App Preview](public/images/full_shorten_big.gif)
 
 ## Executive Summary
 
